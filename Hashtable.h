@@ -15,7 +15,5 @@ typedef struct hashtable {
 }hashtable;
 
 unsigned long hash(unsigned char *str);
-	buckets *bucket;	
-}hashtable;
 
 #endif/*HASHTABLE*/
