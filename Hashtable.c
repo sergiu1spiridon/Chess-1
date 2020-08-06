@@ -44,6 +44,7 @@ hashtable initHashtable(int size) {
 		(hash->bucket + i) = (hash->bucket + i - 1) + sizeof(List*);
 
 		hash->bucket[i]->head = NULL;
+		hash->bucket[i]->tail = NULL;
 		hash->bucket[i]->size = 0;
 	}
 
