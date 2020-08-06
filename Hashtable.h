@@ -3,13 +3,16 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "Linked_List.h"
 
-typedef struct buckets {
-	int numberOfTimesInChecks;
-}buckets;
+typedef struct Node
+{
+	void *info;
+	struct Node *next;
+}Node;
 
 typedef struct hashtable {
-	buckets *bucket;
+	list *bucket;
 	int size;
 	unsigned long (*hashFunction)(unsigned char*);
 }hashtable;
