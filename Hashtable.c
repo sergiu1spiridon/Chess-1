@@ -12,8 +12,8 @@ hash(unsigned char *str) {
     return hash;
 }
 
-void addToHash(hashtable *hash,unsigned char *key, void *info) {
-	unsigned long indexOfElement = hash->hashFunction(key) % hash->size;
+void addToHash(hashtable *hash, void *info) {
+	unsigned long indexOfElement = hash->hashFunction(info->key) % hash->size;
 
 	push(hash->bucket[indexOfElement], info);
 }
