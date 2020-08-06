@@ -1,1 +1,5 @@
-#pragma once
+#ifndef HEAP
+#define HEAP
+
+
+#endif/*HEAP*/
