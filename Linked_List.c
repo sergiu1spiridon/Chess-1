@@ -26,10 +26,10 @@ void deleteList(List** currentList){
 
 // manipulate data from front
 void push(List* currentList, InfoNode* info){
-    Node* newHead = malloc(sizeof(Node));
+    Node* newHead = (Node*)malloc(sizeof(Node));
 
     if(NULL == newHead)
-        return NULL;
+        return;
 
     newHead->info = info;
     newHead->next = currentList->head;
@@ -41,7 +41,7 @@ void push(List* currentList, InfoNode* info){
 
 // manipulate data from rear
 void insertRear(List* currentList, InfoNode* info){
-    Node* currentNode = malloc(sizeof(Node));
+    Node* currentNode = (Node*)malloc(sizeof(Node));
     currentNode->next = NULL;
 
     currentNode->info = info;
@@ -55,7 +55,7 @@ void insertRear(List* currentList, InfoNode* info){
 
 // manipulate at index
 Node* getElementByKey(List* currentList, unsigned char *key){
-    Node* currentElement = malloc(sizeof(Node));
+    Node* currentElement = (Node*)malloc(sizeof(Node));
     currentElement = currentList->head;
     while(currentElement->info->key != key){
         currentElement = currentElement->next;
