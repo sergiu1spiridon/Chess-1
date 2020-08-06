@@ -18,10 +18,10 @@ void addToHash(hashtable *hash,unsigned char *key, void *info) {
 	push(hash->bucket[indexOfElement], info);
 }
 
-void *getFromHash(hashtable *hash, unsigned char *key) {
+Node *getFromHash(hashtable *hash, unsigned char *key) {
 	unsigned long indexOfElement = hash->hashFunction(key) % hash->size;
 
-	return pop(hash[indexOfElement]);
+	return getElementBykey(hash[indexOfElement], key);
 }
 
 hashtable initHashtable(int size) {
