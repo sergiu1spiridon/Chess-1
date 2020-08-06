@@ -5,12 +5,6 @@
 #include <stdlib.h>
 #include "Linked_List.h"
 
-typedef struct Node
-{
-	void *info;
-	struct Node *next;
-}Node;
-
 typedef struct hashtable {
 	list *bucket;
 	int size;
