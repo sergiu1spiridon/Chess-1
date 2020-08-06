@@ -1,4 +1,5 @@
-#pragma once
+#ifndef HASHTABLE
+#define HASHTABLE
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,3 +11,4 @@ typedef struct buckets {
 typedef struct hashtable {
 	buckets *bucket;	
 }hashtable;
+#endif/*HASHTABLE*/
