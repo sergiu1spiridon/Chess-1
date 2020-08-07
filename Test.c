@@ -1,26 +1,47 @@
 #include "common.h"
-#include "Heap.h"
+#include "Game_Logic.h"
+
+unsigned char *pieceValue[8]
+
+={ "PEGMGEG",
+"P010101",
+"k030405",
+"B030405",
+"R050607",
+"Q091013",
+"K000101"};
+
+/*
+ * Initial chess matrix
+*/
+unsigned char *initialChessMatrix[8]
+  ={"RkBQKBkR",
+    "PPPPPPPP",
+    "********",
+    "********",
+    "********",
+    "********",
+    "PPPPPPPP",
+    "RkBQKBkR"};
+
 
 int main(int argc, char const *argv[])
 {
-	Heap *heap = createHeap();
 
-	for (int i = 0; i < 10; ++i)
-	{
-		HeapNode *nod = malloc(sizeof(HeapNode));
-		nod->key = malloc(sizeof(char) * 1000);
-		
-		//printf("get key: ");
-		scanf("%s", nod->key);
+	unsigned char* key = (unsigned char*)getKeyFromChessTable(initialChessMatrix);
+	Heap* newHeap = createHeap();
 
-		//printf("get score: ");
-		scanf("%d", &nod->score);
+	InfoNode * myNode = malloc(sizeof(InfoNode));
+	//myNode->key = malloc(sizeof(char) * 192);
 
-		addInHeap(heap, nod);
-	}
+	printf("%s\n", key);
 
-	printf("%s\n", getExtreme(heap));
+	myNode->key = key;
+	myNode->heap = newHeap;
 
-	deleteHeap(heap);
+	hashtable* hash = initHashtable(100);
+
+	addToHash(hash,myNode);
+
 	return 0;
 }

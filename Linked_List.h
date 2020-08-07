@@ -10,7 +10,7 @@
 
 typedef struct InfoNode{
     unsigned char* key;
-    HeapNode* heap;
+    Heap* heap;
 }InfoNode;
 
 typedef struct Node
