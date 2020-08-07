@@ -1,8 +1,11 @@
 #include "Hashtable.h"
-#include "LinkedList.h"
+#include "Linked_List.h"
+#include "common.h"
 
+
+// The hashing function used on state to get index
 unsigned long
-hash(unsigned char *str) {
+hashfct(unsigned char *str) {
     unsigned long hash = 5381;
     int c;
 
@@ -12,20 +15,26 @@ hash(unsigned char *str) {
     return hash;
 }
 
+// Put a new state in the hashtable
 void addToHash(hashtable *hash, void *info) {
-	unsigned long indexOfElement = hash->hashFunction(info->key) % hash->size;
-
+	unsigned long indexOfElement = hash->hashFunction(((InfoNode *)(info))->key) % hash->size;
+	
 	push(hash->bucket[indexOfElement], info);
 }
 
+// Get a state from the hashtable
 Node *getFromHash(hashtable *hash, unsigned char *key) {
 	unsigned long indexOfElement = hash->hashFunction(key) % hash->size;
 
-	return getElementBykey(hash[indexOfElement], key);
+	return getElementByKey(hash->bucket[indexOfElement], key);
 }
 
-hashtable initHashtable(int size) {
+// Create and initialize the hashtable
+hashtable *initHashtable(int size) {
+	
 	hashtable *hash = malloc(sizeof(hashtable));
+	hash->size = size;
+	hash->hashFunction = &hashfct;
 
 	if (!hash)
 	{
@@ -41,7 +50,7 @@ hashtable initHashtable(int size) {
 	}
 
 	for (int i = 0; i < size; i++) {
-		(hash->bucket + i) = (hash->bucket + i - 1) + sizeof(List*);
+		hash->bucket[i] = malloc(sizeof(List));
 
 		hash->bucket[i]->head = NULL;
 		hash->bucket[i]->tail = NULL;
@@ -49,4 +58,24 @@ hashtable initHashtable(int size) {
 	}
 
 	return hash;
+}
+
+void deleteHash(hashtable *hash) {
+	if(!hash) {
+		printf("Hashtable is already NULL\n");
+		return; 
+	}
+
+	for (int i = 0; i < hash->size; i++)
+	{
+		if (hash->bucket[i]->head)
+		{
+			printf("%d\n", hash->bucket[i]->head->info->score);
+			deleteList(hash->bucket[i]);
+		}
+		free(hash->bucket[i]);
+	}
+
+	free(hash->bucket);
+	free(hash);
 }

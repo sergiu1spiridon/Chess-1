@@ -20,7 +20,7 @@ typedef struct List
 
 // create and delete the list
 List* createList();
-void deleteList(List** currentList);
+void deleteList(List* currentList);
 
 // manipulate data from front
 void push(List* currentList, InfoNode*info);

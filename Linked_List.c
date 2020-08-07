@@ -1,4 +1,5 @@
 #include "Linked_List.h"
+#include <string.h>
 
 // create and delete the list
 List* createList(){
@@ -15,13 +16,19 @@ List* createList(){
     return tempList;
 }
 
-void deleteList(List** currentList){
-    while(NULL != currentList){
-        Node* currentNode = (*currentList)->head;
-        (*currentList)->head = (*currentList)->head->next;
+void deleteList(List* currentList){
+
+    if (!currentList)
+    {
+        printf("List it  on existent\n");
+        return;
+    }
+
+    while(NULL != currentList->head){
+        Node* currentNode = currentList->head;
+        currentList->head = currentList->head->next;
         free(currentNode);
     }
-    free(currentList);
 }
 
 // manipulate data from front
@@ -36,7 +43,7 @@ void push(List* currentList, InfoNode* info){
     currentList->head = newHead;
     currentList->size++;
 
-    free(newHead);
+
 }
 
 // manipulate data from rear
@@ -55,9 +62,9 @@ void insertRear(List* currentList, InfoNode* info){
 
 // manipulate at index
 Node* getElementByKey(List* currentList, unsigned char *key){
-    Node* currentElement = (Node*)malloc(sizeof(Node));
-    currentElement = currentList->head;
-    while(currentElement->info->key != key){
+    Node* currentElement = currentList->head;
+
+    while(strcmp(currentElement->info->key, key) != 0){
         currentElement = currentElement->next;
     }
     return currentElement;

@@ -11,7 +11,8 @@ typedef struct HeapNode{
 
 typedef struct InfoNode{
     unsigned char* key;
-    HeapNode* heap;
+    // HeapNode* heap;
+    int score;
 }InfoNode;
 
 HeapNode* createHeap();
