@@ -1,7 +1,4 @@
 #include "Hashtable.h"
-#include "Linked_List.h"
-#include "common.h"
-
 
 // The hashing function used on state to get index
 unsigned long

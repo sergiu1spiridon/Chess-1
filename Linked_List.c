@@ -1,13 +1,26 @@
 #include "Linked_List.h"
-#include <string.h>
 
-// create the list
+// create and delete the list
+List* createList()
+{
+    List* currentList = (List*)malloc(sizeof(List));
+    currentList->head = NULL;
+    currentList->tail = NULL;
+    currentList->size = 0;
+
+    if (!currentList)
+    {
+        printf("List is non-existent\n");
+        return;
+    }
+    return currentList;
+}
 
 void deleteList(List* currentList){
 
     if (!currentList)
     {
-        printf("List it  on existent\n");
+        printf("List is non-existent\n");
         return;
     }
 
