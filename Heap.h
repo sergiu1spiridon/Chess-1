@@ -8,16 +8,23 @@
 
 //custom made libraries
 
-typedef struct HeapNode{
+typedef struct HeapNode {
     unsigned char* key;
     int score;
 }HeapNode;
 
-HeapNode* createHeap();
+typedef struct Heap {
+	int size;
+	HeapNode **myHeap;
+}Heap;
 
-void heapify(HeapNode* heap);
+Heap* createHeap();
 
-unsigned char* getExtreme(HeapNode* heap);
-void addInHeap(HeapNode*heap, HeapNode*heapNode);
+void heapify(Heap*heap);
+
+unsigned char* getExtreme(Heap*heap);
+void addInHeap(Heap *heap, HeapNode *heapNode);
+
+void deleteHeap(Heap*heap);
 
 #endif /* HEAP */
