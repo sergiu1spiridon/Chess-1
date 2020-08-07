@@ -11,7 +11,7 @@ List* createList()
     if (!currentList)
     {
         printf("List is non-existent\n");
-        return;
+        return NULL;
     }
     return currentList;
 }

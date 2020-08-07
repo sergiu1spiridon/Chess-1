@@ -47,11 +47,7 @@ hashtable *initHashtable(int size) {
 	}
 
 	for (int i = 0; i < size; i++) {
-		hash->bucket[i] = malloc(sizeof(List));
-
-		hash->bucket[i]->head = NULL;
-		hash->bucket[i]->tail = NULL;
-		hash->bucket[i]->size = 0;
+		hash->bucket[i] = createList();
 	}
 
 	return hash;

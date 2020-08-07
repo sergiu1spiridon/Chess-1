@@ -1,7 +1,12 @@
 #ifndef HEAP
 #define HEAP
 
-#include "common.h"
+// general use libraries
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+//custom made libraries
 
 typedef struct HeapNode{
     unsigned char* key;
