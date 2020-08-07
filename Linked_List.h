@@ -17,6 +17,7 @@ typedef struct List
 }List;
 
 // create and delete the list
+List* createList();
 void deleteList(List* currentList);
 
 // manipulate data from front
