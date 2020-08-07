@@ -1,25 +1,18 @@
 #ifndef COMMON
 #define COMMON
 
+// general use libraries
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct HeapNode{
-    unsigned char* key;
-    int score;
-}HeapNode;
+//custom made libraries
+#include "Hashtable.h"
+#include "Linked_List.h"
+#include "Heap.h"
 
 typedef struct InfoNode{
     unsigned char* key;
-    // HeapNode* heap;
-    int score;
+    HeapNode* heap;
 }InfoNode;
-
-HeapNode* createHeap();
-
-void heapify(HeapNode* heap);
-
-unsigned char* getExtreme(HeapNode* heap);
-void addInHeap(HeapNode*heap, HeapNode*heapNode);
 
 #endif /* COMMON */

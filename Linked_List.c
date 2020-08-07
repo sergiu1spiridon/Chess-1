@@ -1,20 +1,7 @@
 #include "Linked_List.h"
 #include <string.h>
 
-// create and delete the list
-List* createList(){
-    List* tempList = (List*)malloc(sizeof(List*));
-    tempList->size = 0;
-    tempList->head = NULL;
-
-    if(NULL == tempList)
-        return NULL;
-    
-    if(NULL == tempList->head)
-        return NULL;
-
-    return tempList;
-}
+// create the list
 
 void deleteList(List* currentList){
 

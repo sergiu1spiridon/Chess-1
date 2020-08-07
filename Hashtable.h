@@ -1,9 +1,7 @@
 #ifndef HASHTABLE
 #define HASHTABLE
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "Linked_List.h"
+#include "common.h"
 
 typedef struct hashtable {
 	List **bucket;
@@ -12,7 +10,7 @@ typedef struct hashtable {
 }hashtable;
 
 unsigned long hash(unsigned char *str);
-void addToHash(hashtable *hash, void *info);
+void addToHash(hashtable *hash, InfoNode *info);
 Node *getFromHash(hashtable *hash, unsigned char *key);
 hashtable *initHashtable(int size);
 void deleteHash(hashtable *);

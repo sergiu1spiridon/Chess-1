@@ -1,8 +1,6 @@
 #ifndef LINKED_LIST
 #define LINKED_LIST
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "common.h"
 
 typedef struct Node
@@ -19,7 +17,6 @@ typedef struct List
 }List;
 
 // create and delete the list
-List* createList();
 void deleteList(List* currentList);
 
 // manipulate data from front

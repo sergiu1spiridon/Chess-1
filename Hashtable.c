@@ -16,8 +16,8 @@ hashfct(unsigned char *str) {
 }
 
 // Put a new state in the hashtable
-void addToHash(hashtable *hash, void *info) {
-	unsigned long indexOfElement = hash->hashFunction(((InfoNode *)(info))->key) % hash->size;
+void addToHash(hashtable *hash, InfoNode *info) {
+	unsigned long indexOfElement = hash->hashFunction(info->key) % hash->size;
 	
 	push(hash->bucket[indexOfElement], info);
 }
@@ -70,7 +70,6 @@ void deleteHash(hashtable *hash) {
 	{
 		if (hash->bucket[i]->head)
 		{
-			printf("%d\n", hash->bucket[i]->head->info->score);
 			deleteList(hash->bucket[i]);
 		}
 		free(hash->bucket[i]);
