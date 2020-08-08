@@ -53,6 +53,36 @@ hashtable *initHashtable(int size) {
 	return hash;
 }
 
+void printAll(hashtable *hash) {
+	if(!hash) {
+		printf("Hash nonexistent\n");
+		return;
+	}
+	Node *currentNode;
+	for (int i = 0; i < hash->size; ++i)
+	{	
+		currentNode = hash->bucket[i]->head;
+		while (currentNode)
+		{
+			printf("in bucket[%d] is %s with score: %d\n", i, 
+				currentNode->info->key, currentNode->info->score);
+
+			printf("its parents are:\n");
+			for (int i = 0; i < curentNode->info->numberOfParents; i++)
+			{
+				printf("%s\n", currentNode->info->parents[i]);
+			}
+
+			printf("its children are:\n");
+			for (int i = 0; i < curentNode->info->heap->size; i++)
+			{
+				printf("%s with score: %d\n", currentNode->info->heap->myHeap[i]->key, 
+					currentNode->info->heap->myHeap[i]->score);
+			}
+		}
+	}
+}
+
 void deleteHash(hashtable *hash) {
 	if(!hash) {
 		printf("Hashtable is already NULL\n");

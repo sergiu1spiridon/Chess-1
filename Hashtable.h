@@ -19,6 +19,7 @@ unsigned long hash(unsigned char *str);
 void addToHash(hashtable *hash, InfoNode *info);
 Node *getFromHash(hashtable *hash, unsigned char *key);
 hashtable *initHashtable(int size);
+void printAll(hashtable *hash);
 void deleteHash(hashtable *);
 
 #endif/*HASHTABLE*/
