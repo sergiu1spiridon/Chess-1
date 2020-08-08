@@ -252,14 +252,14 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
 // get the best piece for the next move
 unsigned char* getPieceFromChessTable(unsigned char** chessMatrix)
 {
-    char pieceValue[7][8]
-    ={ "PEGMGEG",
-    "P010101",
-    "H030405",
-    "B030405",
-    "R050607",
-    "Q091013",
-    "K000101"};
+    // char pieceValue[7][8]
+    // ={ "PEGMGEG",
+    // "P010101",
+    // "H030405",
+    // "B030405",
+    // "R050607",
+    // "Q091013",
+    // "K000101"};
 
     int diffCount = diffStates(chessMatrix);
     int totalPieces = countPieces(chessMatrix);

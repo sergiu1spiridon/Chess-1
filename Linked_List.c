@@ -31,6 +31,22 @@ void deleteList(List* currentList){
     }
 }
 
+// manipulate at index
+Node* getElementByKey(List* currentList, unsigned char *key){
+    if(NULL == currentList )
+        return NULL;
+
+    if(NULL == key)
+        return NULL;
+
+    Node* currentElement = currentList->head;
+
+    while(currentElement != NULL && strcmp((const char *)(currentElement->info->key), (const char *)key) != 0){
+        currentElement = currentElement->next;
+    }
+    return currentElement;
+}
+
 // manipulate data from front
 void push(List* currentList, InfoNode* info){
     if(NULL == currentList)
@@ -42,11 +58,14 @@ void push(List* currentList, InfoNode* info){
     if(NULL == newHead)
         return;
 
-    newHead->info = info;
-    newHead->next = currentList->head;
-    currentList->head = newHead;
-    currentList->size++;
 
+    if (!getElementByKey(currentList,info->key))
+    {
+        newHead->info = info;
+        newHead->next = currentList->head;
+        currentList->head = newHead;
+        currentList->size++;
+    }
 
 }
 InfoNode * popList(List* currentList)
@@ -54,7 +73,7 @@ InfoNode * popList(List* currentList)
     if(NULL == currentList)
         return NULL;
 
-    InfoNode* newInfo = currentList->head;
+    InfoNode* newInfo = currentList->head->info;
     currentList->head = currentList->head->next;
     currentList->size--;
 
@@ -77,21 +96,4 @@ void insertRear(List* currentList, InfoNode* info){
     currentList->size ++;
 
     free(currentNode); 
-}
-
-
-// manipulate at index
-Node* getElementByKey(List* currentList, unsigned char *key){
-    if(NULL == currentList )
-        return NULL;
-
-    if(NULL == key)
-        return NULL;
-
-    Node* currentElement = currentList->head;
-
-    while(currentElement != NULL && strcmp((const char *)(currentElement->info->key), (const char *)key) != 0){
-        currentElement = currentElement->next;
-    }
-    return currentElement;
 }
