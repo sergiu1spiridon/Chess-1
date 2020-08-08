@@ -17,7 +17,7 @@ unsigned char* getKeyFromChessTable(unsigned char**chessMatrix);
 // get the current state from the hashtable
 unsigned char** getChessTableFromKey(unsigned char* key);
 // get the score of the state from the table
-int getScoreFromChessTable(unsigned char* chessMatrixKey);
+int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned char* parentKey);
 // get the best piece for the next move
 unsigned char* getPieceFromChessTable(unsigned char** chessMatrix);
 
