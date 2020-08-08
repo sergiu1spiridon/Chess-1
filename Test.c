@@ -2,7 +2,19 @@
 #include "Game_Logic.h"
 
 unsigned char *pieceValue[8]
-
+/*
+* Score value is calculated by the formula: 
+* 
+* Chess encoding:
+* P/p - Pawn
+* H/h - knight
+* B/b - bishop
+* R/r - rook
+* Q/q - queen
+* K/k - king
+* 
+* 
+*/
 ={ "PEGMGEG",
 "P010101",
 "k030405",
@@ -15,14 +27,14 @@ unsigned char *pieceValue[8]
  * Initial chess matrix
 */
 unsigned char *initialChessMatrix[8]
-  ={"RkBQKBkR",
+  ={"RHBQKBHR",
     "PPPPPPPP",
     "********",
     "********",
     "********",
     "********",
-    "PPPPPPPP",
-    "RkBQKBkR"};
+    "pppppppp",
+    "rhbqkbhr"};
 
 
 int main(int argc, char const *argv[])

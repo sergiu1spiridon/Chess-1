@@ -10,14 +10,14 @@ int diffStates(unsigned char**currentMatrix)
 {
 
     char initialChessMatrix[8][8]
-  ={"RkBQKBkR",
+  ={"RHBQKBHR",
     "PPPPPPPP",
     "********",
     "********",
     "********",
     "********",
-    "PPPPPPPP",
-    "RkBQKBkR"};
+    "pppppppp",
+    "rhbqkbhr"};
 
     // the difference between the two Matrices
     int diffCount = 0;
