@@ -1,59 +1,95 @@
 #include "common.h"
+#include <time.h>
+#include <string.h>
+#include "Hashtable.h"
 #include "Game_Logic.h"
 
-unsigned char *pieceValue[8]
-/*
-* Score value is calculated by the formula: 
-* 
-* Chess encoding:
-* P/p - Pawn
-* H/h - knight
-* B/b - bishop
-* R/r - rook
-* Q/q - queen
-* K/k - king
-* 
-* 
-*/
-={ "PEGMGEG",
-"P010101",
-"k030405",
-"B030405",
-"R050607",
-"Q091013",
-"K000101"};
+unsigned char** randomMatrix()
+{
+	unsigned char** matrix = (unsigned char**)malloc(sizeof(unsigned char*)*8);
+	for(int i=0;i<8;i++)
+	{
+			matrix[i] = (unsigned char*)malloc(sizeof(unsigned char)*8);
+			for(int j=0;j<8;j++)
+			{
+					matrix[i][j] = '*';
+			}
+	}
 
-/*
- * Initial chess matrix
-*/
-unsigned char *initialChessMatrix[8]
-  ={"RHBQKBHR",
-    "PPPPPPPP",
-    "********",
-    "********",
-    "********",
-    "********",
-    "pppppppp",
-    "rhbqkbhr"};
+	char pieces[] = "PPPPPPPPRHBQKBHRpppppppprhbqkbhr";
 
+	int i=0;
+	while(pieces[i])
+	{
+		if(rand()%2 == 0)
+		{
+			strncpy(pieces+i,pieces+i+1,strlen(pieces+i));
+		}
+		i++;
+	}
 
+	i=0;
+	while(pieces[i])
+	{
+		int col,row;	
+		col = rand()%8;
+		row = rand()%8;
+		while(matrix[col][row]!='*')
+		{
+			col = rand()%8;
+			row = rand()%8;
+			
+		}
+		matrix[col][row] = pieces[i];
+		strncpy(pieces+i,pieces+i+1,strlen(pieces+i));
+	}
+
+	return matrix;
+
+}
+void printMatrix(unsigned char** matrix)
+{
+		printf("\n\n");
+		for(int col = 0;col < 8; col++)
+		{
+			for(int row = 0;row <8;row ++)
+			{
+				printf("%c ",matrix[col][row]);
+			}
+			printf("\n");
+		}
+		printf("\n\n");
+}
 int main(int argc, char const *argv[])
 {
+	srand(time(0));
 
-	unsigned char* key = (unsigned char*)getKeyFromChessTable(initialChessMatrix);
-	Heap* newHeap = createHeap();
+	unsigned char** newMatrix;
 
-	InfoNode * myNode = malloc(sizeof(InfoNode));
-	//myNode->key = malloc(sizeof(char) * 192);
+	for(int i=0;i<10;i++)
+	{
+			newMatrix = randomMatrix();
+			printMatrix(newMatrix);
+			unsigned char* key = (unsigned char*)getKeyFromChessTable(newMatrix);
 
-	printf("%s\n", key);
+			Heap* newHeap = createHeap();
 
-	myNode->key = key;
-	myNode->heap = newHeap;
+			InfoNode * myNode = (InfoNode*)malloc(sizeof(InfoNode));
+			//myNode->key = malloc(sizeof(char) * 192);
 
-	hashtable* hash = initHashtable(100);
+			printf("%s\n", key);
 
-	addToHash(hash,myNode);
+			myNode->key = key;
+			myNode->heap = newHeap;
+
+			hashtable* hash = initHashtable(100);
+
+			addToHash(hash,myNode);
+
+			printMatrix(getChessTableFromKey(key));
+			
+	}
+	
 
 	return 0;
 }
