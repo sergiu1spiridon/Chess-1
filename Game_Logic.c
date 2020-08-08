@@ -169,6 +169,8 @@ int getStateScore(unsigned char *chessMatrixKey) {
         free(matrix[i]);
     }
     free(matrix);
+
+    return result;
 }
 
 int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned char* parentKey)
