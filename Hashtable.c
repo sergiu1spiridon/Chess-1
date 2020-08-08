@@ -79,6 +79,7 @@ void printAll(hashtable *hash) {
 				printf("%s with score: %d\n", currentNode->info->heap->myHeap[i]->key, 
 					currentNode->info->heap->myHeap[i]->score);
 			}
+			currentNode = currentNode->next;
 		}
 	}
 }
