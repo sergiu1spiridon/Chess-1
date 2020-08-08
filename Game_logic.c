@@ -51,9 +51,8 @@ int countPieces(unsigned char**currentMatrix)
 // get the key for the hashtable from the current state
 unsigned char* getKeyFromChessTable(unsigned char**chessMatrix)
 {
-    unsigned char* local_key = calloc(sizeof(unsigned char),195);
+    unsigned char* local_key = calloc(sizeof(unsigned char),192);
 
-    unsigned char* tempChar = malloc(sizeof(unsigned char)*3);
     int k = 0;
     for(unsigned int i = 0;i<8;i++)
     {
@@ -77,16 +76,40 @@ unsigned char** getChessTableFromKey(unsigned char* key)
     for(int i= 0;i<8;i++)
     {
         chessMatrix[i] = malloc(sizeof(unsigned char)*8);
-        for(int j=0;j<24;j+=3)
-        {
-            chessMatrix[j+1][j+2] = (unsigned char)j;
-        }
+    }
+    for(int j=0;j<192;j+=3)
+    {
+        chessMatrix[key[j+1]-'0'][key[j+2]-'0'] = (unsigned char)key[j];
     }
     return chessMatrix;
 }
 // get the score of the state from the table
-int getScoreFromChessTable(unsigned char* chessMatrixKey)
+int valuePiecesScore(unsigned char *chessMatrixKey) {
+    return 20;
+}
+
+int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned char* parentKey)
 {
+    Node *nodeForKey = getFromHash(hash, chessMatrixKey);
+
+    if(nodeForKey == NULL) {
+        InfoNode *newNode = malloc(sizeof(InfoNode));
+
+        newNode->key = chessMatrixKey;
+        newNode->score = valuePiecesScore(chessMatrixKey);
+        newNode->parents = malloc(sizeof(unsigned char *) * 1);
+        newNode->numberOfParents = 1;
+        newNode->parents[0] = parentKey;
+
+        HeapNode *newHeapNode = malloc(sizeof(HeapNode));
+
+        newHeapNode->key = chessMatrixKey;
+        newHeapNode->score = newNode->score;
+
+        addInHeap(getFromHash(hash, parentKey)->info->heap, newHeapNode);
+
+        addToHash(hash, newNode);
+    } 
     return 0;
 }
 // get the best piece for the next move
