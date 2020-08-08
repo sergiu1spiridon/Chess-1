@@ -109,7 +109,46 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
         addInHeap(getFromHash(hash, parentKey)->info->heap, newHeapNode);
 
         addToHash(hash, newNode);
-    } 
+    } else {
+         InfoNode *newNode = nodeForKey->info;
+         for (int i = 0; i < newNode->numberOfParents; i++)
+         {
+             if (strcmp(newNode->parents[i],parentKey) == 0)
+             {
+                 return NULL;
+             }
+             
+         }
+         
+         newNode->parents[newNode->numberOfParents] = parentKey;
+         newNode->numberOfParents ++;
+
+        HeapNode *newHeapNode = malloc(sizeof(HeapNode));
+
+        newHeapNode->key = chessMatrixKey;
+        newHeapNode->score = newNode->score;
+
+         InfoNode *currentNode = getFromHash(hash, parentKey)->info;
+         addInHeap(currentNode->heap, newHeapNode);
+         Node *currentParent;
+         Queue *myQueue = createQueue();
+         addToQueue(myQueue, currentNode);
+         while (!isEmpty(myQueue))
+         {
+             currentNode = popQueue(myQueue)->info;
+             newHeapNode->key = currentNode->key;
+             newHeapNode->score = currentNode->score;
+             for (int i = 0; i < currentNode->numberOfParents; i++)
+             {
+               currentParent = getFromHash(hash,currentNode->parents[i]);
+               currentParent->info->score += newNode->score;
+               addInHeap(currentParent->info->heap, newHeapNode);
+               addToQueue(myQueue, currentParent);
+             }
+         }
+         
+         
+    }
     return 0;
 }
 // get the best piece for the next move
