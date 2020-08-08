@@ -131,11 +131,11 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
          InfoNode *currentNode = getFromHash(hash, parentKey)->info;
          addInHeap(currentNode->heap, newHeapNode);
          Node *currentParent;
-         Queue *myQueue = createQueue();
-         addToQueue(myQueue, currentNode);
+         List *myQueue = createList();
+         insertRear(myQueue, currentNode);
          while (!isEmpty(myQueue))
          {
-             currentNode = popQueue(myQueue)->info;
+             currentNode = popList(myQueue);
              newHeapNode->key = currentNode->key;
              newHeapNode->score = currentNode->score;
              for (int i = 0; i < currentNode->numberOfParents; i++)
@@ -143,7 +143,7 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
                currentParent = getFromHash(hash,currentNode->parents[i]);
                currentParent->info->score += newNode->score;
                addInHeap(currentParent->info->heap, newHeapNode);
-               addToQueue(myQueue, currentParent);
+               insertRear(myQueue, currentParent);
              }
          }
          
@@ -157,7 +157,7 @@ unsigned char* getPieceFromChessTable(unsigned char** chessMatrix)
     char pieceValue[7][8]
     ={ "PEGMGEG",
     "P010101",
-    "k030405",
+    "H030405",
     "B030405",
     "R050607",
     "Q091013",

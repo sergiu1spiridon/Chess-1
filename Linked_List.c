@@ -33,6 +33,10 @@ void deleteList(List* currentList){
 
 // manipulate data from front
 void push(List* currentList, InfoNode* info){
+    if(NULL == currentList)
+        return;
+    if(NULL == info)
+        return;
     Node* newHead = (Node*)malloc(sizeof(Node));
 
     if(NULL == newHead)
@@ -45,9 +49,25 @@ void push(List* currentList, InfoNode* info){
 
 
 }
+InfoNode * popList(List* currentList)
+{
+    if(NULL == currentList)
+        return NULL;
 
+    InfoNode* newInfo = currentList->head;
+    currentList->head = currentList->head->next;
+    currentList->size--;
+
+    return newInfo;
+}
 // manipulate data from rear
 void insertRear(List* currentList, InfoNode* info){
+    if(NULL == currentList)
+        return;
+
+    if(NULL == info)
+        return;
+
     Node* currentNode = (Node*)malloc(sizeof(Node));
     currentNode->next = NULL;
 
@@ -62,6 +82,12 @@ void insertRear(List* currentList, InfoNode* info){
 
 // manipulate at index
 Node* getElementByKey(List* currentList, unsigned char *key){
+    if(NULL == currentList )
+        return NULL;
+
+    if(NULL == key)
+        return NULL;
+
     Node* currentElement = currentList->head;
 
     while(strcmp(currentElement->info->key, key) != 0){

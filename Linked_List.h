@@ -35,7 +35,7 @@ void deleteList(List* currentList);
 
 // manipulate data from front
 void push(List* currentList, InfoNode*info);
-
+InfoNode * popList(List* currentList);
 // manipulate data from rear
 void insertRear(List* currentList, InfoNode*info);
 

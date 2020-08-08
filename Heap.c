@@ -10,6 +10,9 @@ Heap* createHeap() {
 }
 
 void heapify(Heap* heap) {
+	if(NULL == heap)
+		return;
+
 	int k = heap->size - 1, parent;
 	HeapNode *aux;
 
@@ -27,6 +30,11 @@ void heapify(Heap* heap) {
 }
 
 void addInHeap(Heap *heap, HeapNode *heapNode) {
+	if(NULL == heap)
+		return;
+	if(NULL == heapNode)
+		return;
+		
 	heap->myHeap = realloc(heap->myHeap, sizeof(HeapNode *) * (heap->size + 1));
 
 	//heap->myHeap[heap->size] = malloc(sizeof(HeapNode *));
