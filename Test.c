@@ -68,27 +68,40 @@ int main(int argc, char const *argv[])
 	srand(time(0));
 
 	unsigned char** newMatrix;
+	hashtable* hash = initHashtable(100);
+	InfoNode * myNode;
+	newMatrix = randomMatrix();
+	unsigned char* parentKey = (unsigned char*)getKeyFromChessTable(newMatrix);
+	Heap* newHeap = createHeap();
+
+	myNode = (InfoNode*)malloc(sizeof(InfoNode));
+	myNode->parents = malloc(sizeof(unsigned char *) * 1);
+    myNode->numberOfParents = 0;
+	myNode->key = parentKey;
+	myNode->heap = newHeap;
+	myNode->score = getStateScore(parentKey);
+	addToHash(hash,myNode);
+	
 
 	for(int i=0;i<10;i++)
 	{
 			newMatrix = randomMatrix();
 			unsigned char* key = (unsigned char*)getKeyFromChessTable(newMatrix);
+			// unsigned char* key = "aana";
+			addChildToParent(hash, key, parentKey);
+			// Heap* newHeap = createHeap();
 
-			Heap* newHeap = createHeap();
+			// myNode = (InfoNode*)malloc(sizeof(InfoNode));
 
-			InfoNode * myNode = (InfoNode*)malloc(sizeof(InfoNode));
-
-			myNode->key = key;
-			myNode->heap = newHeap;
-
-			hashtable* hash = initHashtable(100);
-
-			addToHash(hash,myNode);
+			// myNode->key = key;
+			// myNode->heap = newHeap;
+			// myNode->score = getStateScore(key);
+			// addToHash(hash,myNode);
 
 			printMatrix(getChessTableFromKey(key));
-			
+			parentKey = key;
 	}
-	
+	printAll(hash);
 
 	return 0;
 }

@@ -68,13 +68,13 @@ void printAll(hashtable *hash) {
 				currentNode->info->key, currentNode->info->score);
 
 			printf("its parents are:\n");
-			for (int i = 0; i < curentNode->info->numberOfParents; i++)
+			for (int i = 0; i < currentNode->info->numberOfParents; i++)
 			{
 				printf("%s\n", currentNode->info->parents[i]);
 			}
 
 			printf("its children are:\n");
-			for (int i = 0; i < curentNode->info->heap->size; i++)
+			for (int i = 0; i < currentNode->info->heap->size; i++)
 			{
 				printf("%s with score: %d\n", currentNode->info->heap->myHeap[i]->key, 
 					currentNode->info->heap->myHeap[i]->score);

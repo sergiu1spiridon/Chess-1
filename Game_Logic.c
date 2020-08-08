@@ -51,7 +51,7 @@ int countPieces(unsigned char**currentMatrix)
 // get the key for the hashtable from the current state
 unsigned char* getKeyFromChessTable(unsigned char**chessMatrix)
 {
-    unsigned char* local_key = calloc(sizeof(unsigned char),192);
+    unsigned char* local_key = calloc(sizeof(unsigned char),193);
 
     int k = 0;
     for(unsigned int i = 0;i<8;i++)
@@ -65,7 +65,7 @@ unsigned char* getKeyFromChessTable(unsigned char**chessMatrix)
             //printf("%s\n", local_key);
         }
     }
-
+    local_key[192] = '\0';
     return local_key;
 }
 // get the current state from the hashtable
@@ -166,7 +166,7 @@ int getStateScore(unsigned char *chessMatrixKey) {
                 break;
             }
         }
-        free(matrix[i]);
+        //free(matrix[i]);
     }
     free(matrix);
 
@@ -181,16 +181,21 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
         InfoNode *newNode = malloc(sizeof(InfoNode));
 
         newNode->key = chessMatrixKey;
-        newNode->score = valuePiecesScore(chessMatrixKey);
+        newNode->score = getStateScore(chessMatrixKey);
         newNode->parents = malloc(sizeof(unsigned char *) * 1);
         newNode->numberOfParents = 1;
         newNode->parents[0] = parentKey;
+        Heap* newHeap = createHeap();
+        newNode->heap = newHeap;
 
         HeapNode *newHeapNode = malloc(sizeof(HeapNode));
 
         newHeapNode->key = chessMatrixKey;
         newHeapNode->score = newNode->score;
-
+        if (!getFromHash(hash, parentKey))
+        {
+            printf("Returns null\n");
+        }
         addInHeap(getFromHash(hash, parentKey)->info->heap, newHeapNode);
 
         addToHash(hash, newNode);
@@ -198,15 +203,15 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
          InfoNode *newNode = nodeForKey->info;
          for (int i = 0; i < newNode->numberOfParents; i++)
          {
-             if (strcmp(newNode->parents[i],parentKey) == 0)
+             if (strcmp((char *)newNode->parents[i],(char *)parentKey) == 0)
              {
-                 return NULL;
+                 return 0;
              }
              
          }
          
-         newNode->parents[newNode->numberOfParents] = parentKey;
-         newNode->numberOfParents ++;
+        newNode->parents[newNode->numberOfParents] = parentKey;
+        newNode->numberOfParents ++;
 
         HeapNode *newHeapNode = malloc(sizeof(HeapNode));
 
@@ -214,21 +219,29 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
         newHeapNode->score = newNode->score;
 
          InfoNode *currentNode = getFromHash(hash, parentKey)->info;
+
          addInHeap(currentNode->heap, newHeapNode);
+         
          Node *currentParent;
+         
          List *myQueue = createList();
+         
          insertRear(myQueue, currentNode);
-         while (!isEmpty(myQueue))
+         
+         while (!(myQueue->size))
          {
              currentNode = popList(myQueue);
+             
              newHeapNode->key = currentNode->key;
              newHeapNode->score = currentNode->score;
+             
              for (int i = 0; i < currentNode->numberOfParents; i++)
              {
                currentParent = getFromHash(hash,currentNode->parents[i]);
                currentParent->info->score += newNode->score;
+               
                addInHeap(currentParent->info->heap, newHeapNode);
-               insertRear(myQueue, currentParent);
+               insertRear(myQueue, currentParent->info);
              }
          }
          
@@ -267,5 +280,5 @@ unsigned char* getPieceFromChessTable(unsigned char** chessMatrix)
     {
         //end game
     }
-    
+    return 0;
 }

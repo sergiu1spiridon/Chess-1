@@ -90,7 +90,7 @@ Node* getElementByKey(List* currentList, unsigned char *key){
 
     Node* currentElement = currentList->head;
 
-    while(strcmp(currentElement->info->key, key) != 0){
+    while(currentElement != NULL && strcmp((const char *)(currentElement->info->key), (const char *)key) != 0){
         currentElement = currentElement->next;
     }
     return currentElement;
