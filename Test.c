@@ -29,34 +29,34 @@ unsigned char** randomMatrix()
 	}
 
 	const char pieces[] = "PPPPPPPPRHBQKBHRpppppppprhbqkbhr";
-	char *newPieces;
+	char *newPieces = malloc(sizeof(char)*32);
+	int size_newPieces = 0;
 	int i=0;
 	while(pieces[i+1] != '\0')
 	{
 		if(rand()%2 == 0)
 		{
-			newPieces[strlen(newPieces)+1] = pieces[i];
+			newPieces[size_newPieces++] = pieces[i];
 		}
 		i++;	
 		
 	}
-	printf("%s\n", pieces);
+	newPieces[size_newPieces]='\0';
+
 	i=0;
-	while(pieces[i])
+	while(newPieces[i])
 	{
 		int col,row;	
 		col = rand()%8;
 		row = rand()%8;
-		printMatrix(matrix);
 		while(matrix[col][row]!='*')
 		{
-			printf("%d %d %c\n",col,row,matrix[col][row]);
 			col = rand()%8;
 			row = rand()%8;
 			
 		}
-		matrix[col][row] = pieces[i];
-		*(pieces+i)=*(&(pieces[i+1]));
+		matrix[col][row] = newPieces[i];
+		i++;
 	}
 
 	return matrix;
@@ -72,15 +72,11 @@ int main(int argc, char const *argv[])
 	for(int i=0;i<10;i++)
 	{
 			newMatrix = randomMatrix();
-			printMatrix(newMatrix);
 			unsigned char* key = (unsigned char*)getKeyFromChessTable(newMatrix);
 
 			Heap* newHeap = createHeap();
 
 			InfoNode * myNode = (InfoNode*)malloc(sizeof(InfoNode));
-			//myNode->key = malloc(sizeof(char) * 192);
-
-			printf("%s\n", key);
 
 			myNode->key = key;
 			myNode->heap = newHeap;
