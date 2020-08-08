@@ -83,9 +83,92 @@ unsigned char** getChessTableFromKey(unsigned char* key)
     }
     return chessMatrix;
 }
-// get the score of the state from the table
-int valuePiecesScore(unsigned char *chessMatrixKey) {
-    return 20;
+// get the score of the state from the key of the table
+int getStateScore(unsigned char *chessMatrixKey) {
+    if( NULL == chessMatrixKey)
+    {
+        return -1;
+    }
+
+    unsigned char** matrix = getChessTableFromKey(chessMatrixKey);
+
+    int result = 0;
+
+    int pieceValue[6][3] = {{1,1,1},{3,4,5},{3,4,5},{5,6,7},{9,10,13},{0,1,1}};
+
+    int diffCount = diffStates(matrix);
+    int totalPieces = countPieces(matrix);
+
+    // early game is defined as diffCount < 16
+    // middle game is defined as diffCount >= 16 and total pieces >=8
+    // end game is otherwise
+    int typeGame;
+    if(diffCount < 16)
+    {
+        //early game
+        typeGame = 0;
+    }
+    else if(diffCount >=16 && totalPieces >=8)
+    {
+        //middle game
+        typeGame = 1;
+    }
+    else
+    {
+        //end game
+        typeGame = 2;
+    } 
+
+    //calculate the result
+    for(int i=0;i<8;i++)
+    {
+        for(int j=0;j<8;j++)
+        {
+            switch (matrix[i][j])
+            {
+            case 'P':
+                result += pieceValue[0][typeGame];
+                break;
+            case 'H':
+                result += pieceValue[1][typeGame];
+                break;
+            case 'B':
+                result += pieceValue[2][typeGame];
+                break;
+            case 'R':
+                result += pieceValue[3][typeGame];
+                break;
+            case 'Q':
+                result += pieceValue[4][typeGame];
+                break;
+            case 'K':
+                result += pieceValue[5][typeGame];
+                break;
+            case 'p':
+                result -= pieceValue[0][typeGame];
+                break;
+            case 'h':
+                result -= pieceValue[1][typeGame];
+                break;
+            case 'b':
+                result -= pieceValue[2][typeGame];
+                break;
+            case 'r':
+                result -= pieceValue[3][typeGame];
+                break;
+            case 'q':
+                result -= pieceValue[4][typeGame];
+                break;
+            case 'k':
+                result -= pieceValue[5][typeGame];
+                break;
+            default:
+                break;
+            }
+        }
+        free(matrix[i]);
+    }
+    free(matrix);
 }
 
 int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned char* parentKey)
