@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "Hashtable.h"
+#include "Pieces_Moves.h"
 /* 
  * Legend for encryption of pieces:
  * P - AI pawn
