@@ -11,6 +11,9 @@
 typedef struct InfoNode{
     unsigned char* key;
     Heap* heap;
+    int score;
+    unsigned char **parents;
+    int numberOfParents;
 }InfoNode;
 
 typedef struct Node

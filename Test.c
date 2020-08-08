@@ -3,50 +3,6 @@
 #include <string.h>
 #include "Hashtable.h"
 #include "Game_Logic.h"
-
-unsigned char** randomMatrix()
-{
-	unsigned char** matrix = (unsigned char**)malloc(sizeof(unsigned char*)*8);
-	for(int i=0;i<8;i++)
-	{
-			matrix[i] = (unsigned char*)malloc(sizeof(unsigned char)*8);
-			for(int j=0;j<8;j++)
-			{
-					matrix[i][j] = '*';
-			}
-	}
-
-	char pieces[] = "PPPPPPPPRHBQKBHRpppppppprhbqkbhr";
-
-	int i=0;
-	while(pieces[i])
-	{
-		if(rand()%2 == 0)
-		{
-			strncpy(pieces+i,pieces+i+1,strlen(pieces+i));
-		}
-		i++;
-	}
-
-	i=0;
-	while(pieces[i])
-	{
-		int col,row;	
-		col = rand()%8;
-		row = rand()%8;
-		while(matrix[col][row]!='*')
-		{
-			col = rand()%8;
-			row = rand()%8;
-			
-		}
-		matrix[col][row] = pieces[i];
-		strncpy(pieces+i,pieces+i+1,strlen(pieces+i));
-	}
-
-	return matrix;
-
-}
 void printMatrix(unsigned char** matrix)
 {
 		printf("\n\n");
@@ -60,6 +16,53 @@ void printMatrix(unsigned char** matrix)
 		}
 		printf("\n\n");
 }
+unsigned char** randomMatrix()
+{
+	unsigned char** matrix = (unsigned char**)malloc(sizeof(unsigned char*)*8);
+	for(int i=0;i<8;i++)
+	{
+			matrix[i] = (unsigned char*)malloc(sizeof(unsigned char)*8);
+			for(int j=0;j<8;j++)
+			{
+					matrix[i][j] = '*';
+			}
+	}
+
+	const char pieces[] = "PPPPPPPPRHBQKBHRpppppppprhbqkbhr";
+	char *newPieces;
+	int i=0;
+	while(pieces[i+1] != '\0')
+	{
+		if(rand()%2 == 0)
+		{
+			newPieces[strlen(newPieces)+1] = pieces[i];
+		}
+		i++;	
+		
+	}
+	printf("%s\n", pieces);
+	i=0;
+	while(pieces[i])
+	{
+		int col,row;	
+		col = rand()%8;
+		row = rand()%8;
+		printMatrix(matrix);
+		while(matrix[col][row]!='*')
+		{
+			printf("%d %d %c\n",col,row,matrix[col][row]);
+			col = rand()%8;
+			row = rand()%8;
+			
+		}
+		matrix[col][row] = pieces[i];
+		*(pieces+i)=*(&(pieces[i+1]));
+	}
+
+	return matrix;
+
+}
+
 int main(int argc, char const *argv[])
 {
 	srand(time(0));
