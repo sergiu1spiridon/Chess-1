@@ -1,9 +1,12 @@
-#ifndef PIECES_MOVES
-#define PIECES_MOVES
+#ifndef AI_Moves
+#define AI_Moves
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "common.h"
+
 typedef struct Point
 {
     int posX;
@@ -32,6 +35,9 @@ coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix);
 coord* pawnMovement(int posX, int posY, unsigned char** matrix);
 // knight movement
 coord* knightMovement(int posX, int posY, unsigned char** matrix);
+//get all the coordonates of the pieces of type "piece"
+coord** getCoordPieces(unsigned char** matrix,unsigned char piece);
+// function that interprets and returns the new state from the AI
+unsigned char** getGeneralMatrixMove(unsigned char** matrix);
 
-
-#endif /* PIECES_MOVES*/
+#endif /* AI_Moves*/
