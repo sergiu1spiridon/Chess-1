@@ -7,7 +7,8 @@
 #include <string.h>
 
 #include "Hashtable.h"
-#include "Pieces_Moves.h"
+#include "AI_Moves.h"
+#include "common.h"
 /* 
  * Legend for encryption of pieces:
  * P - AI pawn
@@ -34,10 +35,7 @@
  * |K(king)  |    00   |    01    |   01  |
  *  
 */
-// get the difference between the current and initial states
-int diffStates(unsigned char**currentMatrix);
-// get the total number of pieces in game
-int countPieces(unsigned char**currentMatrix);
+
 // get the key for the hashtable from the current state
 unsigned char* getKeyFromChessTable(unsigned char**chessMatrix);
 // get the current state from the hashtable
