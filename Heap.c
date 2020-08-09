@@ -6,6 +6,8 @@ Heap* createHeap() {
 	heap->size = 0;
 	heap->myHeap = malloc(sizeof(HeapNode *) * 1);
 
+	heap->myHeap[0] = NULL;
+
 	return heap;
 }
 
