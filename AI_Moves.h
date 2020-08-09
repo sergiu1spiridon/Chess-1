@@ -11,17 +11,20 @@ typedef struct Point
 {
     int posX;
     int posY;
+    int posX_initial;
+    int posY_initial;
+    char typePiece;
 }coord;
 /*
  * All functions will be called in:
- * getNextCoordForPiece()
+ * getGeneralMatrixMove()
  * functions for each piece:
  * Pawn -> pawnMovement
  * Knight -> knightMovement
  * Rook -> vertivalMove + horizontal
  * Bishop -> mainDiagonalMove
  * Queen -> secondaryDiagonalMove
- * King ->  getNextCoordForPiece
+ * King ->  kingMovement
  * the functions will return the number of positions that change
  * 
  */ 
@@ -35,8 +38,13 @@ coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix);
 coord* pawnMovement(int posX, int posY, unsigned char** matrix);
 // knight movement
 coord* knightMovement(int posX, int posY, unsigned char** matrix);
+// king movement
+coord* kingMovement(int posX,int posY,unsigned** matrix);
 //get all the coordonates of the pieces of type "piece"
 coord** getCoordPieces(unsigned char** matrix,unsigned char piece);
+// returns the set of identifiers of pieces
+void switchPieces(coord** allPieces, unsigned char piece, int *nrOfPieces,
+                 coord*currentPieceLocation,unsigned char** matrix,int typeGame);
 // function that interprets and returns the new state from the AI
 unsigned char** getGeneralMatrixMove(unsigned char** matrix);
 
