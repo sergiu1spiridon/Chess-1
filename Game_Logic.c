@@ -282,3 +282,9 @@ unsigned char* getPieceFromChessTable(unsigned char** chessMatrix)
     }
     return 0;
 }
+
+unsigned char* getNextMove(hashtable *hash, unsigned char* currentMoveKey) {
+	Node *currentNode = getFromHash(hash, currentMoveKey);
+
+	return getExtreme(currentNode->info->heap);
+}
