@@ -44,8 +44,6 @@ unsigned char** getChessTableFromKey(unsigned char* key);
 int getStateScore(unsigned char *chessMatrixKey);
 // get the score of the state from the table
 int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned char* parentKey);
-// get the best piece for the next move
-unsigned char* getPieceFromChessTable(unsigned char** chessMatrix);
 // get the move thats on top of the heap of curent one
 unsigned char* getNextMove(hashtable *hash, unsigned char* currentMoveKey);
 

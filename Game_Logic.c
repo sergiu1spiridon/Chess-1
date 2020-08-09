@@ -206,39 +206,6 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
     }
     return 0;
 }
-// get the best piece for the next move
-unsigned char* getPieceFromChessTable(unsigned char** chessMatrix)
-{
-    // char pieceValue[7][8]
-    // ={ "PEGMGEG",
-    // "P010101",
-    // "H030405",
-    // "B030405",
-    // "R050607",
-    // "Q091013",
-    // "K000101"};
-
-    int diffCount = diffStates(chessMatrix);
-    int totalPieces = countPieces(chessMatrix);
-
-    // early game is defined as diffCount < 16
-    // middle game is defined as diffCount >= 16 and total pieces >=8
-    // end game is otherwise
-
-    if(diffCount < 16)
-    {
-        //early game
-    }
-    else if(diffCount >=16 && totalPieces >=8)
-    {
-        //middle game
-    }
-    else
-    {
-        //end game
-    }
-    return 0;
-}
 
 unsigned char* getNextMove(hashtable *hash, unsigned char* currentMoveKey) {
 	Node *currentNode = getFromHash(hash, currentMoveKey);
