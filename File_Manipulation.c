@@ -20,7 +20,7 @@ void readFromFile(hashtable *hash) {
         addChildToParent(hash, child, parent);
     }
     
-    fclose;
+    fclose(file);
 }
 
 void writeToFile(hashtable *hash) {
