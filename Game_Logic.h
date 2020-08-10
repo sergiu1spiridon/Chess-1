@@ -2,13 +2,9 @@
 #define GAME_LOGIC
 
 // general use libraries
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "Hashtable.h"
-#include "AI_Moves.h"
-#include "common.h"
+#include "AI_Move.h"
+#include "User_Move.h"
 /* 
  * Legend for encryption of pieces:
  * P - AI pawn

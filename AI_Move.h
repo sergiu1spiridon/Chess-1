@@ -1,10 +1,6 @@
 #ifndef AI_Moves
 #define AI_Moves
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "common.h"
 
 typedef struct Point
@@ -46,6 +42,6 @@ coord** getCoordPieces(unsigned char** matrix,unsigned char piece);
 void switchPieces(coord** allPieces, unsigned char piece, int *nrOfPieces,
                  coord*currentPieceLocation,unsigned char** matrix,int typeGame);
 // function that interprets and returns the new state from the AI
-unsigned char** getGeneralMatrixMove(unsigned char** matrix);
+unsigned char** getAIMove(unsigned char** matrix);
 
 #endif /* AI_Moves*/

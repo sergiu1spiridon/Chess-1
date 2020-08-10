@@ -1,4 +1,4 @@
-#include "AI_Moves.h"
+#include "AI_Move.h"
 
 coord* horizontalMove(int posX, int posY, unsigned char** matrix)
 {
@@ -448,7 +448,7 @@ void switchPieces(coord** allPieces, unsigned char piece, int *nrOfPieces,
     *nrOfPieces = currentNrOfPieces;
 }
 // function that interprets and returns the new state from the AI
-unsigned char** getGeneralMatrixMove(unsigned char** matrix)
+unsigned char** getAIMove(unsigned char** matrix)
 {
     // check for check and try to find a solution
 

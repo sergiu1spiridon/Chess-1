@@ -11,8 +11,8 @@ default: test
 # To create the executable file count we need the object files
 # Heap.o, LinkedList.o, and Hashtable.o:
 #
-test:  Heap.o Linked_List.o Hashtable.o Game_Logic.o Test.o Pieces_Moves.o
-	$(CC) $(CFLAGS) -o test Heap.o Linked_List.o Hashtable.o Game_Logic.o Test.o Pieces_Moves.o
+test:  Heap.o Linked_List.o Hashtable.o Game_Logic.o Test.o User_Move.o common.o AI_Move.o
+	$(CC) $(CFLAGS) -o test Heap.o Linked_List.o Hashtable.o Game_Logic.o Test.o User_Move.o common.o AI_Move.o
 
 # To create the object file Heap.o, we need the source
 # files Heap.c, Heap.h:
@@ -35,8 +35,20 @@ Hashtable.o:  Hashtable.c Hashtable.h
 # To create the object file Pieces_Moves.o, we need the source files
 # Pieces_Moves.c and Pieces_Moves.h:
 #
-Pieces_Moves.o: Pieces_Moves.c Pieces_Moves.h
-	$(CC) $(CFLAGS) -c Pieces_Moves.c
+common.o: common.c common.h
+	$(CC) $(CFLAGS) -c common.c
+
+# To create the object file Pieces_Moves.o, we need the source files
+# Pieces_Moves.c and Pieces_Moves.h:
+#
+AI_Move.o: AI_Move.c AI_Move.h
+	$(CC) $(CFLAGS) -c AI_Move.c
+
+# To create the object file Pieces_Moves.o, we need the source files
+# Pieces_Moves.c and Pieces_Moves.h:
+#
+User_Move.o: User_Move.c User_Move.h
+	$(CC) $(CFLAGS) -c User_Move.c
 
 # To create the object file Game_Logic.o, we need the source files
 # Game_Logic.c and Game_Logic.h:

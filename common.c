@@ -1,5 +1,18 @@
 #include "common.h"
-
+// print the current matrix
+void printMatrix(unsigned char** matrix)
+{
+		printf("\n\n");
+		for(int col = 0;col < 8; col++)
+		{
+			for(int row = 0;row <8;row ++)
+			{
+				printf("%c ",matrix[col][row]);
+			}
+			printf("\n");
+		}
+		printf("\n\n");
+}
 // get the difference between the current and initial states
 int diffStates(unsigned char**currentMatrix)
 {

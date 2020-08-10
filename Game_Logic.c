@@ -1,9 +1,5 @@
 #include "Game_Logic.h"
 
-/*
- * Initial chess matrix
-*/
-
 
 // get the key for the hashtable from the current state
 unsigned char* getKeyFromChessTable(unsigned char**chessMatrix)
