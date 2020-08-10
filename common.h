@@ -9,6 +9,13 @@
 
 typedef enum {false,true}bool;
 
+typedef struct pieceCoordonate
+{
+	char piece;
+	int x;
+	int y;
+}pieceCoordonate;
+
 
 // print the current matrix
 void printMatrix(unsigned char** matrix);
@@ -16,5 +23,9 @@ void printMatrix(unsigned char** matrix);
 int diffStates(unsigned char**currentMatrix);
 // get the total number of pieces in game
 int countPieces(unsigned char**currentMatrix);
+
+bool isNotInCheckPlayer(unsigned char**currentMatrix);
+
+bool isNotInCheckAI(unsigned char**currentMatrix);
 
 #endif /* COMMON */
