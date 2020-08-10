@@ -4,7 +4,7 @@ void printMatrix(unsigned char** matrix)
 {
 		printf("\n\n");
         printf("  | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7");
-        printf("\n--------------------------------\n");
+        printf("\n-----------------------------------\n");
 		for(int col = 0;col < 8; col++)
 		{
             printf("%d | ",col);
@@ -22,7 +22,7 @@ void printMatrix(unsigned char** matrix)
                     printf("\033[0m| ");
                 }
 			}
-			printf("\n--------------------------------\n");
+			printf("\n-----------------------------------\n");
 		}
 		printf("\n\n");
 }
