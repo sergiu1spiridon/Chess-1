@@ -3,15 +3,26 @@
 void printMatrix(unsigned char** matrix)
 {
 		printf("\n\n");
-        printf("  0 1 2 3 4 5 6 7\n");
+        printf("  | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7");
+        printf("\n--------------------------------\n");
 		for(int col = 0;col < 8; col++)
 		{
-            printf("%d ",col);
+            printf("%d | ",col);
 			for(int row = 0;row <8;row ++)
 			{
-				printf("%c ",matrix[col][row]);
+                if(matrix[col][row]=='*')
+                    printf("  | ");
+                else
+                {   
+                    if(matrix[col][row]<'a')
+                    {
+                        printf("\033[0;31m");
+                    }
+				    printf("%c ",matrix[col][row]);
+                    printf("\033[0m| ");
+                }
 			}
-			printf("\n");
+			printf("\n--------------------------------\n");
 		}
 		printf("\n\n");
 }
@@ -60,13 +71,15 @@ int countPieces(unsigned char**currentMatrix)
 }
 
 bool isCheckPlayerFromPawn(unsigned char **currentMatrix, pieceCoordonate *king) {
-    return currentMatrix[king->y-1][king->x-1] == 'P' || 
-        currentMatrix[king->y-1][king->x+1] == 'P';
+    return (!(king->y-1 < 0 || king->y+1 > 7 || king->x-1 < 0 || king->x+1 > 7))
+        && (currentMatrix[king->y-1][king->x-1] == 'P' || 
+        currentMatrix[king->y-1][king->x+1] == 'P');
 }
 
 bool isCheckAIFromPawn(unsigned char **currentMatrix, pieceCoordonate *king) {
-    return currentMatrix[king->y+1][king->x+1] == 'p' || 
-        currentMatrix[king->y+1][king->x+1] == 'p';
+    return (!(king->y-1 < 0 || king->y+1 > 7 || king->x-1 < 0 || king->x+1 > 7))
+        && (currentMatrix[king->y+1][king->x+1] == 'p' || 
+        currentMatrix[king->y+1][king->x+1] == 'p');
 }
 
 bool isCheckFromRook(unsigned char **currentMatrix, pieceCoordonate *king, char c) {
@@ -156,7 +169,10 @@ bool isCheckFromKnight(unsigned char **currentMatrix, pieceCoordonate *king, cha
     {
             y = king->y + sgny[i];
             x = king->x + sgnx[i];
-
+            if (y > 7 || y < 0 || x > 7 || x < 0)
+            {
+                continue;
+            }
             if (currentMatrix[y][x] != '*')
             {
                 if (currentMatrix[y][x] == c)

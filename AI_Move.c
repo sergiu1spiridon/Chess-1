@@ -3,16 +3,21 @@
 
 unsigned char** getFutureMatrix(coord* position, unsigned char** currentMatrix)
 {
-    unsigned char** futureMatrix = currentMatrix;
+    unsigned char** futureMatrix = malloc(sizeof(unsigned char*) * 8); 
+    for(int i=0;i<8;i++)
+    {
+        futureMatrix[i] = malloc(sizeof(unsigned char)*8);
+        memcpy(futureMatrix[i],currentMatrix[i],8);
+    }
+    
     futureMatrix[position->posY][position->posX] = position->typePiece;
-    futureMatrix[position->posY_initial][position->posX] = position->typePiece;
-
+    futureMatrix[position->posY_initial][position->posX_initial] = '*';
     return futureMatrix;
 }
 
 coord* horizontalMove(int posX, int posY, unsigned char** matrix,unsigned char typePiece)
 {
-    char* userPieces = "rhbqkp";
+    char* userPieces = "rhbqkp*";
 
     coord* returnValue = malloc(sizeof(coord));
     returnValue->posX = posX;
@@ -27,8 +32,7 @@ coord* horizontalMove(int posX, int posY, unsigned char** matrix,unsigned char t
     //right movement
     for(int i = posX+1 ; i<=7;i++)
     {
-        if(strchr(userPieces,matrix[posX][i]) || 
-            matrix[posX][i]=='*')
+        if(strchr(userPieces,matrix[posY][i]))
         {
             if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
             {
@@ -36,11 +40,15 @@ coord* horizontalMove(int posX, int posY, unsigned char** matrix,unsigned char t
                 possibleMovement[sizePossible++] = i;
             }
         }
+        else
+        {
+            break;
+        }
     }
     //left movement
     for(int i = posX-1 ; i>=0;i--)
     {
-        if((strchr(userPieces,matrix[posX][i]) || 
+        if((strchr(userPieces,matrix[posY][i]) || 
             matrix[posX][i]=='*'))
         {
             if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
@@ -49,7 +57,12 @@ coord* horizontalMove(int posX, int posY, unsigned char** matrix,unsigned char t
                 possibleMovement[sizePossible++] = i;
             }
         }
+        else
+        {
+            break;
+        }
     }
+
     srand(sizePossible);
     if(sizePossible==0)
         return NULL;
@@ -84,6 +97,10 @@ coord* verticalMove(int posX, int posY, unsigned char** matrix,unsigned char typ
                 possibleMovement[sizePossible++] = i;
             }
         }
+        else
+        {
+            break;
+        }
     }
     //up movement
     for(int i = posY-1 ; i>=0;i--)
@@ -96,6 +113,10 @@ coord* verticalMove(int posX, int posY, unsigned char** matrix,unsigned char typ
                 possibleMovement[sizePossible++] = i;
                 possibleMovement[sizePossible++] = i;
             }
+        }
+        else
+        {
+            break;
         }
     }
 
@@ -143,6 +164,10 @@ coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix,unsigned char
                 possibleMovement[sizePossible++] = i;
                 possibleMovement[sizePossible++] = i;
             }
+        }
+        else
+        {
+            break;
         }
     }
 
@@ -192,8 +217,10 @@ coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix, unsigne
                 possibleMovement[sizePossible++] = i;
                 possibleMovement[sizePossible++] = i;
             }
-            
-
+        }
+        else
+        {
+            break;
         }
     }
 
@@ -236,7 +263,7 @@ coord* pawnMovement(int posX, int posY, unsigned char** matrix)
             
     }
     // left attack
-    if(!(posY + 1 > 7 || posX - 1 > 7) && strchr(userPieces,matrix[posY+1][posX-1]))
+    if(!(posY + 1 > 7 || posX - 1<0 ) && strchr(userPieces,matrix[posY+1][posX-1]))
     {
             returnValue->posX --;
             returnValue->posY ++;
@@ -593,7 +620,7 @@ unsigned char** getAIMove(unsigned char** matrix)
         free(currentPieceLocation);
     }
 
-    srand(nrOfMoves);
+    srand(time(0));
     if(NULL == allPieces[0])
     {
         return matrix;
@@ -601,6 +628,6 @@ unsigned char** getAIMove(unsigned char** matrix)
     coord* aiMove = allPieces[rand()%nrOfMoves];
 
     matrix[aiMove->posY_initial][aiMove->posX_initial]='*';
-
+    matrix[aiMove->posY][aiMove->posX]=aiMove->typePiece;
     return matrix;
 }
