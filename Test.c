@@ -63,7 +63,7 @@ int main(int argc, char const *argv[])
 	for(int i=0;i<8;i++)
 	{
 		chessMatrix[i] = malloc(sizeof(unsigned char)*8);
-		strcpy((char*)chessMatrix[i],(const char*)initialChessMatrix[i]);
+		chessMatrix[i] = initialChessMatrix[i];
 	}
 
 	//create the hashtable
@@ -84,19 +84,19 @@ int main(int argc, char const *argv[])
 	
 	while(true)
 	{
+		printf("\n\nThis is the current state of the game:\n");
+
+		printMatrix(chessMatrix);
+
 		if(userTurn == true)
 		{
 			chessMatrix = getPlayerMove(chessMatrix);
 		}
 		else
 		{
-			unsigned char** newChessMatrix = getAIMove(chessMatrix);
-			if(chessMatrix == newChessMatrix)
-			{
-				printf("Check Mate! Player wins!");
-				break;
-			}
-			free(newChessMatrix);
+
+			chessMatrix = getAIMove(chessMatrix);
+
 		}
 		unsigned char* key = (unsigned char*)getKeyFromChessTable(chessMatrix);
 		addChildToParent(hash, key, parentKey);

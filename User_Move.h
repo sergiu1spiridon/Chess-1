@@ -19,7 +19,8 @@ int validRook(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 int validBishop(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		pieceCoordonate *pieceToMove);
 
-int validMove(unsigned char **currentMatrix,pieceCoordonate *pieceToMove);
+int validMove(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
+		 pieceCoordonate *pieceToMove) ;
 
 unsigned char** getPlayerMove(unsigned char** currentMatrix);
 

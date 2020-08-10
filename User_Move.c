@@ -4,7 +4,7 @@ int validPion(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 		pieceCoordonate *pieceToMove) {
 
 	int prevPos = (pieceCurrentPosition->piece == pieceToMove->piece);
-	int thisPos = (pieceCurrentPosition->y == (pieceToMove->y - 1));
+	int thisPos = (pieceCurrentPosition->y == (pieceToMove->y + 1));
 
 	return (prevPos && thisPos && (currentMatrix[pieceToMove->y][pieceToMove->x] == '*'));
 }
@@ -177,21 +177,24 @@ int validMove(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 
 unsigned char** getPlayerMove(unsigned char** currentMatrix) {
 
-	pieceCoordonate *pieceToMove = malloc(sizeof(pieceToMove));
-	pieceCoordonate *pieceToMovePos = malloc(sizeof(pieceToMove));
+	pieceCoordonate *pieceToMove = malloc(sizeof(pieceCoordonate));
+	pieceCoordonate *pieceToMovePos = malloc(sizeof(pieceCoordonate));
 
-	printf("This is the current state of the game:\n");
+	printf("Enter your next move\nPiece and current location: ");
+	scanf("%c %d %d", &(pieceToMovePos->piece), 
+					   &(pieceToMovePos->y), 
+					   &(pieceToMovePos->x));
 
-	printMatrix(currentMatrix);
+	pieceToMove->piece = pieceToMovePos->piece;
 
-	printf("Enter your next move\n");
-	scanf("%c %d %d ", &(pieceToMovePos->piece), &(pieceToMovePos->y), &(pieceToMovePos->x));
-	scanf("%c %d %d ", &(pieceToMove->piece), &(pieceToMove->y), &(pieceToMove->x));
-
+	printf("New location: ");
+	scanf("%d %d", &(pieceToMove->y), &(pieceToMove->x));
+	//printf("%d %d %d %d",pieceToMovePos->y,pieceToMovePos->x,
+	//					 pieceToMove->y,   pieceToMove->x);
 	if (validMove(currentMatrix,pieceToMovePos, pieceToMove))
 	{
-		unsigned char **nextMatrix;
-		memcpy(nextMatrix,currentMatrix,sizeof(currentMatrix));
+		unsigned char **nextMatrix = malloc(sizeof(unsigned char*)*8);
+		memcpy(nextMatrix,currentMatrix,sizeof(unsigned char*)*8);
 
 		nextMatrix[pieceToMovePos->y][pieceToMovePos->x] = '*';
 		nextMatrix[pieceToMove->y][pieceToMove->x] = pieceToMove->piece;

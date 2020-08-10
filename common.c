@@ -3,8 +3,10 @@
 void printMatrix(unsigned char** matrix)
 {
 		printf("\n\n");
+        printf("  0 1 2 3 4 5 6 7\n");
 		for(int col = 0;col < 8; col++)
 		{
+            printf("%d ",col);
 			for(int row = 0;row <8;row ++)
 			{
 				printf("%c ",matrix[col][row]);
