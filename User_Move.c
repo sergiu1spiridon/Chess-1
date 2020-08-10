@@ -4,7 +4,8 @@ int validPion(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 		pieceCoordonate *pieceToMove) {
 
 	int prevPos = (pieceCurrentPosition->piece == pieceToMove->piece);
-	int thisPos = (pieceCurrentPosition->y == (pieceToMove->y + 1));
+	int thisPos = (pieceCurrentPosition->y == (pieceToMove->y + 1) 
+		|| ((pieceCurrentPosition->y == (pieceToMove->y + 2)) && pieceCurrentPosition->y == 6));
 
 	return (prevPos && thisPos && (currentMatrix[pieceToMove->y][pieceToMove->x] == '*'));
 }
@@ -12,17 +13,20 @@ int validPion(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 int validPionAttack(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		pieceCoordonate *pieceToMove) {
 
-	int prevPos = (((pieceCurrentPosition->y+1) == pieceToMove->y) && 
+	int prevPos = (((pieceCurrentPosition->y-1) == pieceToMove->y) && 
 					(((pieceCurrentPosition->x+1) == pieceToMove->x) || 
 					((pieceCurrentPosition->x-1) == pieceToMove->x)));
-	int thisPos = (strchr("PHBRQ",currentMatrix[(pieceToMove->y)][pieceToMove->x]) != 0);
+	int thisPos = (strchr("PHBRQ",currentMatrix[(pieceToMove->y)][pieceToMove->x]) != NULL);
 
 	return (prevPos && thisPos);
 }
 
 int validKnight(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		pieceCoordonate *pieceToMove) {
-
+	if (strchr("PHBRQ*",currentMatrix[pieceToMove->y][pieceToMove->x]) == NULL)
+	{
+		return 0;
+	}
 	int valid1 = (((pieceCurrentPosition->y == (pieceToMove->y + 2)) ||
 		(pieceCurrentPosition->y == (pieceToMove->y - 2))) &&
 		((pieceCurrentPosition->x == (pieceToMove->x + 1)) ||
@@ -40,7 +44,7 @@ int validRook(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 		pieceCoordonate *pieceToMove) {
 
 	int sgn = -1,i;
-	if (strchr("PHBRQ*",currentMatrix[pieceToMove->y][pieceToMove->x]) == 0)
+	if (strchr("PHBRQ*",currentMatrix[pieceToMove->y][pieceToMove->x]) == NULL)
 	{
 		return 0;
 	}
@@ -95,7 +99,7 @@ int validBishop(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosit
 		pieceCoordonate *pieceToMove) {
 
 	int sgny = 1,sgnx = 1,i,j;
-	if (strchr("PHBRQ*",currentMatrix[pieceToMove->y][pieceToMove->x]) == 0)
+	if (strchr("PHBRQ*",currentMatrix[pieceToMove->y][pieceToMove->x]) == NULL)
 	{
 		return 0;
 	}
@@ -128,12 +132,20 @@ int validBishop(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosit
 
 int validQueen(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		 pieceCoordonate *pieceToMove) {
+	if (strchr("PHBRQ*",currentMatrix[pieceToMove->y][pieceToMove->x]) == NULL)
+	{
+		return 0;
+	}
 	return validRook(currentMatrix, pieceCurrentPosition, pieceToMove) || 
 			validBishop(currentMatrix, pieceCurrentPosition, pieceToMove);
 }
 
 int validKing(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		 pieceCoordonate *pieceToMove) {
+	if (strchr("PHBRQ*",currentMatrix[pieceToMove->y][pieceToMove->x]) == NULL)
+	{
+		return 0;
+	}
 	if ((((pieceCurrentPosition->x - pieceToMove->x) > 1) || 
 		((pieceCurrentPosition->x - pieceToMove->x) < -1))
 			&& (((pieceCurrentPosition->y - pieceToMove->y) > 1) || 
@@ -145,10 +157,9 @@ int validKing(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 
 int validMove(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		 pieceCoordonate *pieceToMove) {
-
 	if (pieceToMove->piece != currentMatrix[pieceCurrentPosition->y][pieceCurrentPosition->x])
 	{
-		return 0;
+		return 0;	
 	}
 
 	if (pieceToMove->piece == 'p')
@@ -181,20 +192,24 @@ unsigned char** getPlayerMove(unsigned char** currentMatrix) {
 	pieceCoordonate *pieceToMovePos = malloc(sizeof(pieceCoordonate));
 
 	printf("Enter your next move\nPiece and current location: ");
-	scanf("%c %d %d", &(pieceToMovePos->piece), 
-					   &(pieceToMovePos->y), 
-					   &(pieceToMovePos->x));
+	scanf("\n%c", &(pieceToMovePos->piece));
+	scanf("%d %d", &pieceToMovePos->y, &pieceToMovePos->x);
 
 	pieceToMove->piece = pieceToMovePos->piece;
 
 	printf("New location: ");
-	scanf("%d %d", &(pieceToMove->y), &(pieceToMove->x));
-	//printf("%d %d %d %d",pieceToMovePos->y,pieceToMovePos->x,
-	//					 pieceToMove->y,   pieceToMove->x);
+	scanf("%d %d", &pieceToMove->y, &pieceToMove->x);
+	printf("%d %d %d %d",pieceToMovePos->y,pieceToMovePos->x,
+						 pieceToMove->y,   pieceToMove->x);
 	if (validMove(currentMatrix,pieceToMovePos, pieceToMove))
 	{
-		unsigned char **nextMatrix = malloc(sizeof(unsigned char*)*8);
-		memcpy(nextMatrix,currentMatrix,sizeof(unsigned char*)*8);
+		unsigned char** nextMatrix = malloc(sizeof(unsigned char*) * 8); 
+    	for(int i=0;i<8;i++)
+    	{
+        	nextMatrix[i] = malloc(sizeof(unsigned char)*8);
+        	memcpy(nextMatrix[i],currentMatrix[i],8);
+    	}
+		
 
 		nextMatrix[pieceToMovePos->y][pieceToMovePos->x] = '*';
 		nextMatrix[pieceToMove->y][pieceToMove->x] = pieceToMove->piece;
@@ -206,6 +221,8 @@ unsigned char** getPlayerMove(unsigned char** currentMatrix) {
 		}
 	}
 	printf("Your move is not valid\n");
+	free(pieceToMovePos);
+	free(pieceToMove);
 	return getPlayerMove(currentMatrix);
 
 }

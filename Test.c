@@ -84,17 +84,15 @@ int main(int argc, char const *argv[])
 	
 	while(true)
 	{
-		printf("\n\nThis is the current state of the game:\n");
-
-		printMatrix(chessMatrix);
 
 		if(userTurn == true)
 		{
+			printf("\n\nThis is the current state of the game:\n");
+			printMatrix(chessMatrix);
 			chessMatrix = getPlayerMove(chessMatrix);
 		}
 		else
-		{
-
+		{	
 			chessMatrix = getAIMove(chessMatrix);
 
 		}
