@@ -23,12 +23,17 @@ int validPionAttack(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentP
 int validKnight(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		pieceCoordonate *pieceToMove) {
 
-	int valid = (((pieceCurrentPosition->y == (pieceToMove->y + 2)) ||
+	int valid1 = (((pieceCurrentPosition->y == (pieceToMove->y + 2)) ||
 		(pieceCurrentPosition->y == (pieceToMove->y - 2))) &&
 		((pieceCurrentPosition->x == (pieceToMove->x + 1)) ||
 			(pieceCurrentPosition->x == (pieceToMove->x - 1))));
 
-	return valid;
+	int valid2 = (((pieceCurrentPosition->y == (pieceToMove->y + 1)) ||
+		(pieceCurrentPosition->y == (pieceToMove->y - 1))) &&
+		((pieceCurrentPosition->x == (pieceToMove->x + 2)) ||
+			(pieceCurrentPosition->x == (pieceToMove->x - 2))));
+
+	return valid1 || valid2;
 }
 
 int validRook(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
@@ -53,6 +58,10 @@ int validRook(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 			{
 				return 0;
 			}
+		if (i > 7 || i < 0)
+		{
+			return 0;
+		}
 		}
 	}
 	else 
@@ -65,7 +74,13 @@ int validRook(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 			i = pieceCurrentPosition->y;
 			while(i != pieceToMove->x-sgn) {
 				i+=sgn;
+				
 				if (currentMatrix[pieceToMove->y][i] != '*')
+				{
+					return 0;
+				}
+				
+				if (i > 7 || i < 0)
 				{
 					return 0;
 				}
@@ -99,6 +114,10 @@ int validBishop(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosit
 		j += sgnx;
 
 		if (currentMatrix[i][j] != '*')
+		{
+			return 0;
+		}
+		if (i > 7 || i < 0 || j > 7 || j < 0)
 		{
 			return 0;
 		}

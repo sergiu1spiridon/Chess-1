@@ -24,6 +24,18 @@ int diffStates(unsigned char**currentMatrix);
 // get the total number of pieces in game
 int countPieces(unsigned char**currentMatrix);
 
+bool isCheckPlayerFromPawn(unsigned char **currentMatrix, pieceCoordonate *king);
+
+bool isCheckAIFromPawn(unsigned char **currentMatrix, pieceCoordonate *king);
+
+bool isCheckFromRook(unsigned char **currentMatrix, pieceCoordonate *king, char c);
+
+bool isCheckFromBishop(unsigned char **currentMatrix, pieceCoordonate *king, char c);
+
+bool isCheckFromQueen(unsigned char **currentMatrix, pieceCoordonate *king, char c);
+
+bool isCheckFromKnight(unsigned char **currentMatrix, pieceCoordonate *king, char c);
+
 bool isNotInCheckPlayer(unsigned char**currentMatrix);
 
 bool isNotInCheckAI(unsigned char**currentMatrix);

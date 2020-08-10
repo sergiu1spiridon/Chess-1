@@ -4,13 +4,6 @@
 // general use libraries
 #include "common.h"
 
-typedef struct pieceCoordonate
-{
-	char piece;
-	int x;
-	int y;
-}pieceCoordonate;
-
 int validPion(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		pieceCoordonate *pieceToMove);
 
