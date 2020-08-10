@@ -2,11 +2,14 @@
 // print the current matrix
 void printMatrix(unsigned char** matrix)
 {
-		printf("\n\n");
+		printf("\n");
+        printf("          ");
         printf("  | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7");
-        printf("\n-----------------------------------\n");
+        printf("\n          ");
+        printf("-----------------------------------\n");
 		for(int col = 0;col < 8; col++)
 		{
+            printf("          ");
             printf("%d | ",col);
 			for(int row = 0;row <8;row ++)
 			{
@@ -22,9 +25,10 @@ void printMatrix(unsigned char** matrix)
                     printf("\033[0m| ");
                 }
 			}
-			printf("\n-----------------------------------\n");
+            printf("\n          ");
+			printf("-----------------------------------\n");
 		}
-		printf("\n\n");
+		printf("\n");
 }
 // get the difference between the current and initial states
 int diffStates(unsigned char**currentMatrix)
@@ -71,14 +75,25 @@ int countPieces(unsigned char**currentMatrix)
 }
 
 bool isCheckPlayerFromPawn(unsigned char **currentMatrix, pieceCoordonate *king) {
-    return (!(king->y-1 < 0 || king->y+1 > 7 || king->x-1 < 0 || king->x+1 > 7))
-        && (currentMatrix[king->y-1][king->x-1] == 'P' || 
+    if(king->y-1 < 0)
+        return 0;
+    if(king->x-1 < 0)
+        return currentMatrix[king->y-1][king->x+1] == 'P';
+    if(king->x+1 > 7)
+        return currentMatrix[king->y-1][king->x-1] == 'P';
+
+    return (currentMatrix[king->y-1][king->x-1] == 'P' || 
         currentMatrix[king->y-1][king->x+1] == 'P');
 }
 
 bool isCheckAIFromPawn(unsigned char **currentMatrix, pieceCoordonate *king) {
-    return (!(king->y-1 < 0 || king->y+1 > 7 || king->x-1 < 0 || king->x+1 > 7))
-        && (currentMatrix[king->y+1][king->x+1] == 'p' || 
+    if(king->y-1 < 0)
+        return 0;
+    if(king->x-1 < 0)
+        return currentMatrix[king->y-1][king->x+1] == 'P';
+    if(king->x+1 > 7)
+        return currentMatrix[king->y-1][king->x-1] == 'P';
+    return (currentMatrix[king->y+1][king->x+1] == 'p' || 
         currentMatrix[king->y+1][king->x+1] == 'p');
 }
 
@@ -87,22 +102,22 @@ bool isCheckFromRook(unsigned char **currentMatrix, pieceCoordonate *king, char 
     int sgny[4] = {-1, 0, 1, 0};
     int x,y;
 
-    x = king->x;
-    y = king->y;
-
     for (int i = 0; i < 4; i++)
     {
-        while(y > 0 && y <7 && x > 0 && x < 7) {
-            y += sgny[i];
-            x += sgnx[i];
+        y = king->y + sgny[i];
+        x = king->x + sgnx[i];
+        while(y >= 0 && y <= 7 && x >= 0 && x <= 7) {
+            
             if (currentMatrix[y][x] != '*')
             {
                 if (currentMatrix[y][x] == c)
                 {
                     return 1;
                 }
-                return 0;
+                break;
             }
+            y += sgny[i];
+            x += sgnx[i];
         }
     }
     return 0;
@@ -113,22 +128,23 @@ bool isCheckFromBishop(unsigned char **currentMatrix, pieceCoordonate *king, cha
     int sgny[4] = {-1, 1, 1, -1};
     int x,y;
 
-    x = king->x;
-    y = king->y;
-
     for (int i = 0; i < 4; i++)
     {
-        while(y > 0 && y <7 && x > 0 && x < 7) {
-            y += sgny[i];
-            x += sgnx[i];
+        x = king->x + sgnx[i];
+        y = king->y + sgny[i];
+        
+        while(y >= 0 && y <= 7 && x >= 0 && x <= 7) {
+
             if (currentMatrix[y][x] != '*')
             {
                 if (currentMatrix[y][x] == c)
                 {
                     return 1;
                 }
-                return 0;
+                break;
             }
+            y += sgny[i];
+            x += sgnx[i];
         }
     }
     return 0;
@@ -139,22 +155,25 @@ bool isCheckFromQueen(unsigned char **currentMatrix, pieceCoordonate *king, char
     int sgny[8] = {-1, 1, 1, -1, -1, 0, 1, 0};
     int x,y;
 
-    x = king->x;
-    y = king->y;
+    
 
     for (int i = 0; i < 8; i++)
     {
-        while(y > 0 && y <7 && x > 0 && x < 7) {
-            y += sgny[i];
-            x += sgnx[i];
+        x = king->x + sgnx[i];
+        y = king->y + sgny[i];
+
+        while(y >= 0 && y <= 7 && x >= 0 && x <= 7) {
+            
             if (currentMatrix[y][x] != '*')
             {
                 if (currentMatrix[y][x] == c)
                 {
                     return 1;
                 }
-                return 0;
+                break;
             }
+            y += sgny[i];
+            x += sgnx[i];
         }
     }
     return 0;
@@ -173,14 +192,11 @@ bool isCheckFromKnight(unsigned char **currentMatrix, pieceCoordonate *king, cha
             {
                 continue;
             }
-            if (currentMatrix[y][x] != '*')
+            if (currentMatrix[y][x] == c)
             {
-                if (currentMatrix[y][x] == c)
-                {
-                    return 1;
-                }
-                return 0;
+                return 1;
             }
+            
     }
     return 0;
 }
@@ -192,7 +208,7 @@ bool isNotInCheckPlayer(unsigned char**currentMatrix) {
     {
         for(int j=0;j<8;j++)
         {
-            if(currentMatrix[i][j]!='k') 
+            if(currentMatrix[i][j]=='k') 
             {
                 king->piece = 'k';
                 king->x = j;
@@ -221,7 +237,7 @@ bool isNotInCheckAI(unsigned char**currentMatrix) {
     {
         for(int j=0;j<8;j++)
         {
-            if(currentMatrix[i][j]!='K') 
+            if(currentMatrix[i][j]=='K') 
             {
                 king->piece = 'K';
                 king->x = j;
@@ -234,11 +250,16 @@ bool isNotInCheckAI(unsigned char**currentMatrix) {
 
     bool isFromRook = isCheckFromRook(currentMatrix, king, 'r');
 
-    bool isFromBishop = isCheckFromBishop(currentMatrix, king, 'r');
+    bool isFromBishop = isCheckFromBishop(currentMatrix, king, 'b');
 
     bool isFromQueen = isCheckFromQueen(currentMatrix, king, 'q');
 
     bool isFromKnight = isCheckFromKnight(currentMatrix, king, 'h');
 
-    return !(isFromPawn || isFromRook || isFromBishop || isFromQueen || isFromKnight);
+    bool result = !(isFromPawn || isFromRook || isFromBishop || isFromQueen || isFromKnight);
+    // if( result == false)
+    // {
+    //     printf("Check for AI");
+    // }
+    return result;
 }

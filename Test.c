@@ -89,17 +89,21 @@ int main(int argc, char const *argv[])
 	addToHash(hash,myNode);
 	
 	clrscr();
+	printf("          ");
 	printf("\033[1m%s\033[0m", "Welcome to chess\n");
 	srand(time(0));
 	bool userTurn = rand()%2;
 	if(userTurn)
 	{
+		printf("          ");
 		printf("\033[1m%s\033[0m","You will start!\n");
 	}
 	else
 	{
+		printf("          ");
 		printf("\033[1m%s\033[0m","The computer will start!\n");
 	}
+	printf("          ");
 	printf("\033[1m%s\033[0m","Press any key to begin: ");
 
 	char*str = malloc(sizeof(char)*10);
@@ -112,18 +116,23 @@ int main(int argc, char const *argv[])
 
 		if(userTurn == true)
 		{
-
-			clrscr();
+			//isNotInCheckAI(chessMatrix);
+			//clrscr();
+			printf("          ");
 			printf("Game round %d",round++);
 			printMatrix(chessMatrix);
-			if(!isNotInCheckPlayer(chessMatrix))
+			if(!isNotInCheckAI(chessMatrix))
 			{
+				printf("\n          ");
+				printf("Check for AI");
 				if(isInCheckMate(chessMatrix))
 				{
-					printf("Checkmate! Computer wins!");
+					printf("\n\n          ");
+					printf("Checkmate! Player wins!\n\n");
 					break;
 				}
 			}
+			printf("          ");
 			printf("If you want to exit, press x");
 			chessMatrix = getPlayerMove(chessMatrix);
 			if(chessMatrix == NULL)
@@ -133,27 +142,39 @@ int main(int argc, char const *argv[])
 		}
 		else
 		{	
-			unsigned char** newChessMatrix = malloc(sizeof(unsigned char*)*8);
+			unsigned char** oldChessMatrix = malloc(sizeof(unsigned char*)*8);
 			for(int i=0;i<8;i++)
 			{
-				newChessMatrix[i] = malloc(sizeof(unsigned char)*8);
-				for(int j =0;j<8;j++)
+				oldChessMatrix[i] = malloc(sizeof(unsigned char)*8);
+				for(int j=0;j<8;j++)
 				{
-					newChessMatrix[i][j]=chessMatrix[i][j];
+					oldChessMatrix[i][j]=chessMatrix[i][j];
 				}
 			} 
-			chessMatrix = getAIMove(chessMatrix);
-			int isCheck = 0;
+			unsigned char** newChessMatrix = getAIMove(chessMatrix);
+			if (!isNotInCheckPlayer(newChessMatrix))
+			{
+				printf("\n          ");
+				printf("Check for Player");
+			}
+			bool isCheck = false;
 			for(int i=0;i<8;i++)
 			{
-				if(strcmp((char*)chessMatrix[i],(char*)newChessMatrix[i]))
+				for(int j=0;j<8;j++)
 				{
-					isCheck++;
+					if(newChessMatrix[i][j]!= oldChessMatrix[i][j])
+					{
+						isCheck = true;
+						i = 8;
+						break;
+
+					}
 				}
-			}
+			}	
 			if(isCheck == 8)
 			{
-				printf("\n\nCheckmate! Player wins!\n\n");
+				printf("\n\n          ");
+				printf("Checkmate! Player wins!\n\n");
 				break;
 			}
 		}

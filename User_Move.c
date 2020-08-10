@@ -58,14 +58,11 @@ int validRook(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 		}
 		i = pieceCurrentPosition->y;
 		while(i != pieceToMove->y-sgn) {
-			printf("%d\n", pieceToMove->y-sgn);
 			i+=sgn;
-			printf("%d\n", i);
 			if (i > 7 || i < 0)
 			{
 				return 0;
 			}
-			printf("%d\n", pieceToMove->y-sgn);
 			if (currentMatrix[i][pieceToMove->x] != '*')
 			{
 				return 0;
@@ -198,13 +195,17 @@ unsigned char** getPlayerMove(unsigned char** currentMatrix) {
 	pieceCoordonate *pieceToMove = malloc(sizeof(pieceCoordonate));
 	pieceCoordonate *pieceToMovePos = malloc(sizeof(pieceCoordonate));
 
-	printf("\nEnter your next move\nCurrent location: ");
+	printf("\n          ");
+	printf("Enter your next move!");
+	printf("\n          ");
+	printf("Current location: ");
 	
 	char command;
 	scanf("\n%c", &command);
 	if (command == 'x')
 	{
-		printf("\n\nThank you for playing!\n\n");
+		printf("\n          ");
+		printf("Thank you for playing!\n\n");
 		return NULL;
 	}
 	else
@@ -217,6 +218,7 @@ unsigned char** getPlayerMove(unsigned char** currentMatrix) {
 	pieceToMovePos->piece = currentMatrix[pieceToMovePos->y][pieceToMovePos->x];
 	pieceToMove->piece = pieceToMovePos->piece;
 
+	printf("          ");
 	printf("    New location: ");
 	scanf("%d %d", &pieceToMove->y, &pieceToMove->x);
 
