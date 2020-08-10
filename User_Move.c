@@ -56,17 +56,21 @@ int validRook(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 		{
 			sgn = 1;
 		}
-		i = pieceCurrentPosition->x;
+		i = pieceCurrentPosition->y;
 		while(i != pieceToMove->y-sgn) {
+			printf("%d\n", pieceToMove->y-sgn);
 			i+=sgn;
+			printf("%d\n", i);
+			if (i > 7 || i < 0)
+			{
+				return 0;
+			}
+			printf("%d\n", pieceToMove->y-sgn);
 			if (currentMatrix[i][pieceToMove->x] != '*')
 			{
 				return 0;
 			}
-		if (i > 7 || i < 0)
-		{
-			return 0;
-		}
+			
 		}
 	}
 	else 
@@ -76,19 +80,20 @@ int validRook(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 			{
 				sgn = 1;
 			}
-			i = pieceCurrentPosition->y;
+			i = pieceCurrentPosition->x;
 			while(i != pieceToMove->x-sgn) {
 				i+=sgn;
-				
-				if (currentMatrix[pieceToMove->y][i] != '*')
-				{
-					return 0;
-				}
 				
 				if (i > 7 || i < 0)
 				{
 					return 0;
 				}
+
+				if (currentMatrix[pieceToMove->y][i] != '*')
+				{
+					return 0;
+				}
+				
 			}
 		}
 	
@@ -117,15 +122,16 @@ int validBishop(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosit
 	while (i != pieceToMove->y-sgny) {
 		i += sgny;
 		j += sgnx;
+		if (i > 7 || i < 0 || j > 7 || j < 0)
+		{
+			return 0;
+		}
 
 		if (currentMatrix[i][j] != '*')
 		{
 			return 0;
 		}
-		if (i > 7 || i < 0 || j > 7 || j < 0)
-		{
-			return 0;
-		}
+
 	}
 
 	return 1;
@@ -192,17 +198,30 @@ unsigned char** getPlayerMove(unsigned char** currentMatrix) {
 	pieceCoordonate *pieceToMove = malloc(sizeof(pieceCoordonate));
 	pieceCoordonate *pieceToMovePos = malloc(sizeof(pieceCoordonate));
 
-	printf("Enter your next move\nPiece and current location: ");
-	scanf("\n%c", &(pieceToMovePos->piece));
-	scanf("%d %d", &pieceToMovePos->y, &pieceToMovePos->x);
+	printf("\nEnter your next move\nCurrent location: ");
+	
+	char command;
+	scanf("\n%c", &command);
+	if (command == 'x')
+	{
+		printf("\n\nThank you for playing!\n\n");
+		return NULL;
+	}
+	else
+	{
+		pieceToMovePos->y = (int)(command -'0');
+	}
 
+	scanf("%d", &pieceToMovePos->x);
+
+	pieceToMovePos->piece = currentMatrix[pieceToMovePos->y][pieceToMovePos->x];
 	pieceToMove->piece = pieceToMovePos->piece;
 
-	printf("New location: ");
+	printf("    New location: ");
 	scanf("%d %d", &pieceToMove->y, &pieceToMove->x);
-	printf("%d %d %d %d",pieceToMovePos->y,pieceToMovePos->x,
-						 pieceToMove->y,   pieceToMove->x);
-	if (validMove(currentMatrix,pieceToMovePos, pieceToMove))
+
+	if (validMove(currentMatrix,pieceToMovePos, pieceToMove)&&
+		strchr("RBRKQP*",pieceToMovePos->piece)==NULL)
 	{
 		unsigned char** nextMatrix = malloc(sizeof(unsigned char*) * 8); 
     	for(int i=0;i<8;i++)

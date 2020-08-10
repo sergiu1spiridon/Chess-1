@@ -2,7 +2,7 @@
 
 bool movePawn(unsigned char **matrix, pieceCoordonate *myPiece) {
     unsigned char **newMat = malloc(sizeof(char *) * 8);
-    char pieseleMele = "pkqrhb*";
+    char *pieseleMele = "pkqrhb*";
     for(int i = 0; i < 8; i++)
         newMat[i] = malloc(sizeof(char) * 8);
 
@@ -16,7 +16,7 @@ bool movePawn(unsigned char **matrix, pieceCoordonate *myPiece) {
         if(matrix[myPiece->y + sgny[i]][myPiece->x + sgnx[i]] == '*') {
             newMat[myPiece->y + sgny[i]][myPiece->x + sgnx[i]] = 'p';
             newMat[myPiece->y][myPiece->x] = '*';
-            if (isNotInCheck(newMat))
+            if (isNotInCheckPlayer(newMat))
             {
                 return 1;
             }
@@ -30,7 +30,7 @@ bool movePawn(unsigned char **matrix, pieceCoordonate *myPiece) {
         if(strchr(pieseleMele, matrix[myPiece->y + sgny[i]][myPiece->x + sgnx[i]]) == NULL) {
             newMat[myPiece->y + sgny[i]][myPiece->x + sgnx[i]] = 'p';
             newMat[myPiece->y][myPiece->x] = '*';
-            if (isNotInCheck(newMat))
+            if (isNotInCheckPlayer(newMat))
             {
                 return 1;
             }
@@ -44,7 +44,7 @@ bool movePawn(unsigned char **matrix, pieceCoordonate *myPiece) {
 
 bool moveRook(unsigned char **matrix, pieceCoordonate *myPiece) {
     unsigned char **newMat = malloc(sizeof(char *) * 8);
-    char pieseleMele = "pkqrhb";
+    char *pieseleMele = "pkqrhb";
     for(int i = 0; i < 8; i++)
         newMat[i] = malloc(sizeof(char) * 8);
 
@@ -63,7 +63,7 @@ bool moveRook(unsigned char **matrix, pieceCoordonate *myPiece) {
                 newMat[y][x] = 'r';
                 newMat[myPiece->y][myPiece->x] = '*';
 
-                if (isNotInCheck(newMat)) {
+                if (isNotInCheckPlayer(newMat)) {
                     return 1;
                 }
                 newMat[y][x] = matrix[y][x];
@@ -80,7 +80,7 @@ bool moveRook(unsigned char **matrix, pieceCoordonate *myPiece) {
 
 bool moveBishop(unsigned char **matrix, pieceCoordonate *myPiece) {
     unsigned char **newMat = malloc(sizeof(char *) * 8);
-    char pieseleMele = "pkqrhb";
+    char *pieseleMele = "pkqrhb";
     for(int i = 0; i < 8; i++)
         newMat[i] = malloc(sizeof(char) * 8);
 
@@ -99,7 +99,7 @@ bool moveBishop(unsigned char **matrix, pieceCoordonate *myPiece) {
                 newMat[y][x] = 'b';
                 newMat[myPiece->y][myPiece->x] = '*';
 
-                if (isNotInCheck(newMat)) {
+                if (isNotInCheckPlayer(newMat)) {
                     return 1;
                 }
                 newMat[y][x] = matrix[y][x];
@@ -116,7 +116,7 @@ bool moveBishop(unsigned char **matrix, pieceCoordonate *myPiece) {
 
 bool moveKnight(unsigned char **matrix, pieceCoordonate *myPiece) {
     unsigned char **newMat = malloc(sizeof(char *) * 8);
-    char pieseleMele = "pkqrhb";
+    char *pieseleMele = "pkqrhb";
     for(int i = 0; i < 8; i++)
         newMat[i] = malloc(sizeof(char) * 8);
 
@@ -135,7 +135,7 @@ bool moveKnight(unsigned char **matrix, pieceCoordonate *myPiece) {
                 newMat[y][x] = 'h';
                 newMat[myPiece->y][myPiece->x] = '*';
 
-                if (isNotInCheck(newMat)) {
+                if (isNotInCheckPlayer(newMat)) {
                     return 1;
                 }
                 newMat[y][x] = matrix[y][x];
@@ -149,7 +149,7 @@ bool moveKnight(unsigned char **matrix, pieceCoordonate *myPiece) {
 
 bool moveQueen(unsigned char **matrix, pieceCoordonate *myPiece) {
     unsigned char **newMat = malloc(sizeof(char *) * 8);
-    char pieseleMele = "pkqrhb";
+    char *pieseleMele = "pkqrhb";
     for(int i = 0; i < 8; i++)
         newMat[i] = malloc(sizeof(char) * 8);
 
@@ -168,7 +168,7 @@ bool moveQueen(unsigned char **matrix, pieceCoordonate *myPiece) {
                 newMat[y][x] = 'q';
                 newMat[myPiece->y][myPiece->x] = '*';
 
-                if (isNotInCheck(newMat)) {
+                if (isNotInCheckPlayer(newMat)) {
                     return 1;
                 }
                 newMat[y][x] = matrix[y][x];
@@ -185,7 +185,7 @@ bool moveQueen(unsigned char **matrix, pieceCoordonate *myPiece) {
 
 bool moveKing(unsigned char **matrix, pieceCoordonate *myPiece) {
     unsigned char **newMat = malloc(sizeof(char *) * 8);
-    char pieseleMele = "pkqrhb";
+    char *pieseleMele = "pkqrhb";
     for(int i = 0; i < 8; i++)
         newMat[i] = malloc(sizeof(char) * 8);
 
@@ -204,7 +204,7 @@ bool moveKing(unsigned char **matrix, pieceCoordonate *myPiece) {
                 newMat[y][x] = 'k';
                 newMat[myPiece->y][myPiece->x] = '*';
 
-                if (isNotInCheck(newMat)) {
+                if (isNotInCheckPlayer(newMat)) {
                     return 1;
                 }
                 newMat[y][x] = matrix[y][x];

@@ -19,8 +19,6 @@ void readFromFile(hashtable *hash) {
     while (fscanf(file, "%s %s", child, parent) == 2)
     {
         addChildToParent(hash, child, parent);
-        printf("%s\n", parent);
-        printf("%s\n", child);
     }
     
     fclose(file);

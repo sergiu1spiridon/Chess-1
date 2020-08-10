@@ -11,8 +11,8 @@ default: test
 # To create the executable file count we need the object files
 # Heap.o, LinkedList.o, and Hashtable.o:
 #
-test:  Heap.o Linked_List.o Hashtable.o Game_Logic.o Test.o User_Move.o common.o AI_Move.o File_Manipulation.o
-	$(CC) $(CFLAGS) -o test Heap.o Linked_List.o Hashtable.o Game_Logic.o Test.o User_Move.o common.o AI_Move.o File_Manipulation.o
+test:  Heap.o Linked_List.o Hashtable.o Game_Logic.o Test.o User_Move.o common.o AI_Move.o File_Manipulation.o Check_Mate.o
+	$(CC) $(CFLAGS) -o test Heap.o Linked_List.o Hashtable.o Game_Logic.o Test.o User_Move.o common.o AI_Move.o File_Manipulation.o Check_Mate.o
 
 # To create the object file Heap.o, we need the source
 # files Heap.c, Heap.h:
@@ -61,6 +61,12 @@ Game_Logic.o:  Game_Logic.c Game_Logic.h
 #
 File_Manipulation.o: File_Manipulation.c File_Manipulation.h
 	$(CC) $(CFLAGS) -c File_Manipulation.c
+
+# To create the object file Heap.o, we need the source
+# files Heap.c, Heap.h:
+#
+Check_Mate.o:  Check_Mate.c Check_Mate.h 
+	$(CC) $(CFLAGS) -c Check_Mate.c
 
 Test.o: Test.c
 	$(CC) $(CFLAGS) -c Test.c

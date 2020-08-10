@@ -1,4 +1,10 @@
 #include "File_Manipulation.h"
+#include "common.h"
+
+void clrscr()
+{
+    system("@cls||clear");
+}
 
 unsigned char** randomMatrix()
 {
@@ -82,28 +88,80 @@ int main(int argc, char const *argv[])
 	myNode->score = getStateScore(parentKey);
 	addToHash(hash,myNode);
 	
+	clrscr();
+	printf("\033[1m%s\033[0m", "Welcome to chess\n");
+	srand(time(0));
 	bool userTurn = rand()%2;
-	
+	if(userTurn)
+	{
+		printf("\033[1m%s\033[0m","You will start!\n");
+	}
+	else
+	{
+		printf("\033[1m%s\033[0m","The computer will start!\n");
+	}
+	printf("\033[1m%s\033[0m","Press any key to begin: ");
+
+	char*str = malloc(sizeof(char)*10);
+	fgets(str,10,stdin);
+	free(str);
+
+	int round = 0;
 	while(true)
 	{
 
 		if(userTurn == true)
 		{
-			printf("\n\nThis is the current state of the game:\n");
+
+			clrscr();
+			printf("Game round %d",round++);
 			printMatrix(chessMatrix);
+			if(!isNotInCheckPlayer(chessMatrix))
+			{
+				if(isInCheckMate(chessMatrix))
+				{
+					printf("Checkmate! Computer wins!");
+					break;
+				}
+			}
+			printf("If you want to exit, press x");
 			chessMatrix = getPlayerMove(chessMatrix);
+			if(chessMatrix == NULL)
+			{
+				break;
+			}
 		}
 		else
 		{	
+			unsigned char** newChessMatrix = malloc(sizeof(unsigned char*)*8);
+			for(int i=0;i<8;i++)
+			{
+				newChessMatrix[i] = malloc(sizeof(unsigned char)*8);
+				for(int j =0;j<8;j++)
+				{
+					newChessMatrix[i][j]=chessMatrix[i][j];
+				}
+			} 
 			chessMatrix = getAIMove(chessMatrix);
-
+			int isCheck = 0;
+			for(int i=0;i<8;i++)
+			{
+				if(strcmp((char*)chessMatrix[i],(char*)newChessMatrix[i]))
+				{
+					isCheck++;
+				}
+			}
+			if(isCheck == 8)
+			{
+				printf("\n\nCheckmate! Player wins!\n\n");
+				break;
+			}
 		}
 		unsigned char* key = (unsigned char*)getKeyFromChessTable(chessMatrix);
 		addChildToParent(hash, key, parentKey);
 
 		userTurn = !userTurn;
 	}
-
 	writeToFile(hash);
 
 	return 0;

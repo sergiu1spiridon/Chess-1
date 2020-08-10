@@ -3,6 +3,7 @@
 
 // general use libraries
 #include "common.h"
+#include "Check_Mate.h"
 
 int validPion(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		pieceCoordonate *pieceToMove);
