@@ -1,6 +1,16 @@
 #include "AI_Move.h"
 
-coord* horizontalMove(int posX, int posY, unsigned char** matrix)
+
+unsigned char** getFutureMatrix(coord* position, unsigned char** currentMatrix)
+{
+    unsigned char** futureMatrix = currentMatrix;
+    futureMatrix[position->posY][position->posX] = position->typePiece;
+    futureMatrix[position->posY_initial][position->posX] = position->typePiece;
+
+    return futureMatrix;
+}
+
+coord* horizontalMove(int posX, int posY, unsigned char** matrix,unsigned char typePiece)
 {
     char* userPieces = "rhbqkp";
     char* aiPieces = "RHBQKP";
@@ -10,7 +20,7 @@ coord* horizontalMove(int posX, int posY, unsigned char** matrix)
     returnValue->posX_initial = posX;
     returnValue->posY = posY;
     returnValue->posY_initial = posY;
-    returnValue->typePiece = '\0';
+    returnValue->typePiece = typePiece;
 
     if(strchr(aiPieces,matrix[posY][posX+1])&&strchr(aiPieces,matrix[posY][posX-1]))
         return returnValue;
@@ -21,12 +31,10 @@ coord* horizontalMove(int posX, int posY, unsigned char** matrix)
         //right movement
         for(int i = posX+1 ; i<=7;i++)
         {
-            if((strchr(userPieces,matrix[posX][i])!=NULL || 
-                matrix[posX][i]=='*')&&
-                strchr(aiPieces,matrix[posY][i])==NULL)
+            if(strchr(userPieces,matrix[posX][i]) || 
+                matrix[posX][i]=='*')
             {
-                possibleMovement[sizePossible++] = i;
-                if(strchr(userPieces,matrix[posX][i])!=NULL)
+                if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
                 {
                     possibleMovement[sizePossible++] = i;
                     possibleMovement[sizePossible++] = i;
@@ -36,12 +44,10 @@ coord* horizontalMove(int posX, int posY, unsigned char** matrix)
         //left movement
         for(int i = posX-1 ; i>=0;i--)
         {
-            if((strchr(userPieces,matrix[posX][i])!=NULL || 
-                matrix[posX][i]=='*')&&
-                strchr(aiPieces,matrix[posY][i])==NULL)
+            if((strchr(userPieces,matrix[posX][i]) || 
+                matrix[posX][i]=='*'))
             {
-                possibleMovement[sizePossible++] = i;
-                if(strchr(userPieces,matrix[posX][i])!=NULL)
+                if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
                 {
                     possibleMovement[sizePossible++] = i;
                     possibleMovement[sizePossible++] = i;
@@ -55,7 +61,7 @@ coord* horizontalMove(int posX, int posY, unsigned char** matrix)
         
     
 }
-coord* verticalMove(int posX, int posY, unsigned char** matrix)
+coord* verticalMove(int posX, int posY, unsigned char** matrix,unsigned char*typePiece)
 {
     char* userPieces = "rhbqkp";
     char* aiPieces = "RHBQKP";
@@ -65,7 +71,7 @@ coord* verticalMove(int posX, int posY, unsigned char** matrix)
     returnValue->posX_initial = posX;
     returnValue->posY = posY;
     returnValue->posY_initial = posY;     
-    returnValue->typePiece = '\0';
+    returnValue->typePiece = typePiece;
 
     if(strchr(aiPieces,matrix[posY+1][posX])&&strchr(aiPieces,matrix[posY-1][posX]))
         return returnValue;
@@ -73,30 +79,26 @@ coord* verticalMove(int posX, int posY, unsigned char** matrix)
     {
         int * possibleMovement = malloc(sizeof(int)*8);
         int sizePossible = 0;
-        //right movement
+        //down movement
         for(int i = posY+1 ; i<=7;i++)
         {
-            if((strchr(userPieces,matrix[i][posX])!=NULL || 
-                matrix[posX][i]=='*')&&
-                strchr(aiPieces,matrix[i][posX])==NULL)
+            if((strchr(userPieces,matrix[i][posX]) || 
+                matrix[i][posX]=='*'))
             {
-                possibleMovement[sizePossible++] = i;
-                if(strchr(userPieces,matrix[i][posX])!=NULL)
+                if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
                 {
                     possibleMovement[sizePossible++] = i;
                     possibleMovement[sizePossible++] = i;
                 }
             }
         }
-        //left movement
+        //up movement
         for(int i = posY-1 ; i>=0;i--)
         {
-            if((strchr(userPieces,matrix[i][posX])!=NULL || 
-                matrix[posX][i]=='*')&&
-                strchr(aiPieces,matrix[i][posX])==NULL)
+            if(strchr(userPieces,matrix[i][posX]) || 
+                matrix[i][posX]=='*')
             {
-                possibleMovement[sizePossible++] = i;
-                if(strchr(userPieces,matrix[i][posX])!=NULL)
+                if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
                 {
                     possibleMovement[sizePossible++] = i;
                     possibleMovement[sizePossible++] = i;
@@ -110,7 +112,7 @@ coord* verticalMove(int posX, int posY, unsigned char** matrix)
     }
 }
 // main diagonal is of the form i=j
-coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix)
+coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix,unsigned char typePiece)
 {
     char* userPieces = "rhbqkp";
     char* aiPieces = "RHBQKP";
@@ -120,7 +122,7 @@ coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix)
     returnValue->posX_initial = posX;
     returnValue->posY = posY;
     returnValue->posY_initial = posY;     
-    returnValue->typePiece = '\0';
+    returnValue->typePiece = typePiece;
 
     if(strchr(aiPieces,matrix[posY+1][posX+1])&&strchr(aiPieces,matrix[posY-1][posX-1]))
         return returnValue;
@@ -142,12 +144,10 @@ coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix)
                 break;    
                 
             // conditions for the move  
-            if((strchr(userPieces,matrix[posY+i][posX+i])!=NULL || 
-                matrix[posY+i][posX+i]=='*')&&
-                strchr(aiPieces,matrix[posY+i][posX+i])==NULL)
+            if(strchr(userPieces,matrix[posY+i][posX+i]) || 
+                matrix[posY+i][posX+i]=='*')
             {
-                possibleMovement[sizePossible++] = i;
-                if(strchr(userPieces,matrix[posY+i][posX+i])!=NULL)
+                if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
                 {
                     possibleMovement[sizePossible++] = i;
                     possibleMovement[sizePossible++] = i;
@@ -165,7 +165,7 @@ coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix)
     }
 }
 // secondary diagonal is of the form i = nrCol - j - i
-coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix)
+coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix, unsigned char typePiece)
 {
     char* userPieces = "rhbqkp";
     char* aiPieces = "RHBQKP";
@@ -175,7 +175,7 @@ coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix)
     returnValue->posX_initial = posX;
     returnValue->posY = posY;
     returnValue->posY_initial = posY;     
-    returnValue->typePiece = '\0';
+    returnValue->typePiece = typePiece;
 
     if(strchr(aiPieces,matrix[posY+1][posX-1])&&strchr(aiPieces,matrix[posY-1][posX+1]))
         return returnValue;
@@ -197,16 +197,16 @@ coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix)
                 break;
                 
             // conditions for the move
-            if((strchr(userPieces,matrix[posY+i][posX-i])!=NULL || 
-                matrix[posY+i][posX+i]=='*')&&
-                strchr(aiPieces,matrix[posY+i][posX-i])==NULL)
+            if(strchr(userPieces,matrix[posY+i][posX-i]) || 
+                matrix[posY+i][posX+i]=='*')
             {
-                possibleMovement[sizePossible++] = i;
-                if(strchr(userPieces,matrix[posY+i][posX-i])!=NULL)
+                if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
                 {
                     possibleMovement[sizePossible++] = i;
                     possibleMovement[sizePossible++] = i;
                 }
+                
+
             }
         }
 
@@ -237,29 +237,57 @@ coord* pawnMovement(int posX, int posY, unsigned char** matrix)
     {
             returnValue->posX ++;
             returnValue->posY ++;
-            return returnValue;
+            
+            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+            {
+                   return returnValue;
+            }  
+            returnValue->posX = returnValue->posX_initial;
+            returnValue->posY = returnValue->posY_initial;
+            
     }
     // left attack
     if(strchr(userPieces,matrix[posY+1][posX-1]))
     {
             returnValue->posX --;
             returnValue->posY ++;
-            return returnValue;
+            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+            {
+                   return returnValue;
+            }  
+            returnValue->posX = returnValue->posX_initial;
+            returnValue->posY = returnValue->posY_initial;
     }
     // impossible to move
     if(strchr(aiPieces,matrix[posY+1][posX])||strchr(userPieces,matrix[posY+1][posX]))
     {
-            return returnValue;    
+            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+            {
+                   return returnValue;
+            }  
+            returnValue->posX = returnValue->posX_initial;
+            returnValue->posY = returnValue->posY_initial;    
     }
     //move two spaces
     if(posY == 1 && !(strchr(aiPieces,matrix[posY+2][posX])||strchr(userPieces,matrix[posY+2][posX])))
     {
             returnValue->posY += 2;
-            return returnValue;
+            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+            {
+                   return returnValue;
+            }  
+            returnValue->posX = returnValue->posX_initial;
+            returnValue->posY = returnValue->posY_initial;
 
     }
 
     returnValue->posY++;
+    if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+    {
+            return returnValue;
+    }  
+    returnValue->posX = returnValue->posX_initial;
+    returnValue->posY = returnValue->posY_initial;
     return returnValue;
 }
 // knight movement
@@ -286,10 +314,12 @@ coord* knightMovement(int posX, int posY, unsigned char** matrix)
     {
         // conditions on the possible moves
         if(strchr(userPieces,matrix[posY+yValues[i]][posX+xValues[i]]) ||
-            '*' == matrix[posY+yValues[i]][posX+xValues[i]] ||
-            strchr(aiPieces,matrix[posY+yValues[i]][posX+xValues[i]])==NULL)
+            '*' == matrix[posY+yValues[i]][posX+xValues[i]])
             {
-                possibleMovement[sizePossible++] = i;
+                if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+                {
+                   possibleMovement[sizePossible++] = i;
+                }  
             }
     }
 
@@ -305,7 +335,11 @@ coord* knightMovement(int posX, int posY, unsigned char** matrix)
 coord* kingMovement(int posX,int posY,unsigned**matrix)
 {
     char* userPieces = "rhbqkp";
-    char* aiPieces = "RHBQKP";
+    char* aiPieces = "RHBQP";
+
+    // relative positions on the king's move
+    int xValues[8] = {1 ,1,1,0,-1,-1,-1, 0};
+    int yValues[8] = {-1,0,1,1, 1, 0,-1,-1};
     
     coord* returnValue = malloc(sizeof(coord));
     returnValue->posX = posX;
@@ -314,6 +348,27 @@ coord* kingMovement(int posX,int posY,unsigned**matrix)
     returnValue->posY_initial = posY;     
     returnValue->typePiece = 'K';
 
+    int * possibleMovement = malloc(sizeof(int)*8);
+    int sizePossible = 0;
+
+    for(int i=0;i<8;i++)
+    {
+        if(strchr(userPieces,matrix[posY+yValues[i]][posX+xValues[i]]) ||
+           '*' == matrix[posY+yValues[i]][posX+xValues[i]])
+           {
+               if(isNotInCheckAI(matrix))
+               {
+                   possibleMovement[sizePossible++] = i;
+               }     
+           }
+    }
+
+    srand(sizePossible);
+    int diffMovement = possibleMovement[rand()%sizePossible];
+    free(possibleMovement);
+    
+    returnValue->posX += xValues[diffMovement];
+    returnValue->posY += yValues[diffMovement];
     return returnValue;
 }
 //get all the coordonates of the pieces of type "piece"
@@ -361,85 +416,85 @@ void switchPieces(coord** allPieces, unsigned char piece, int *nrOfPieces,
         case 'P':
             for(prob = 0;prob<pieceValue[0][typeGame];prob++)
             {
+                allPieces[currentNrOfPieces]->typePiece = 'P';
                 allPieces = realloc(allPieces,sizeof(coord*)*(currentNrOfPieces));
                 allPieces[currentNrOfPieces++] = pawnMovement( currentPieceLocation->posX,
                                                         currentPieceLocation->posY,
                                                         matrix);
-                allPieces[currentNrOfPieces]->typePiece = 'P';
             }
             break;
         case 'H':
             for(prob = 0;prob<pieceValue[1][typeGame];prob++)
             {
+                allPieces[currentNrOfPieces]->typePiece = 'H';
                 allPieces = realloc(allPieces,sizeof(coord*)*(currentNrOfPieces));
                 allPieces[currentNrOfPieces++] = knightMovement(currentPieceLocation->posX,
                                                             currentPieceLocation->posY,
                                                             matrix);
-                allPieces[currentNrOfPieces]->typePiece = 'H';
             }
                 
             break;
         case 'B':
             for(prob = 0;prob<pieceValue[2][typeGame];prob++)
             {
+                allPieces[currentNrOfPieces]->typePiece = 'B';
                 allPieces = realloc(allPieces,sizeof(coord*)*(currentNrOfPieces));
                 allPieces[currentNrOfPieces++] = mainDiagonalMove( currentPieceLocation->posX,
                                                             currentPieceLocation->posY,
-                                                            matrix);
+                                                            matrix,piece);
                 allPieces[currentNrOfPieces]->typePiece = 'B';
                 allPieces = realloc(allPieces,sizeof(coord*)*(currentNrOfPieces));
                 allPieces[currentNrOfPieces++] = secondaryDiagonalMove(currentPieceLocation->posX,
                                                                 currentPieceLocation->posY,
-                                                                matrix);
-                allPieces[currentNrOfPieces]->typePiece = 'B';
+                                                                matrix,piece);
             }
             break;
         case 'R':
             for(prob = 0;prob<pieceValue[3][typeGame];prob++)
             {
+                allPieces[currentNrOfPieces]->typePiece = 'R';
                 allPieces = realloc(allPieces,sizeof(coord*)*(currentNrOfPieces));
                 allPieces[currentNrOfPieces++] = horizontalMove(currentPieceLocation->posX,
                                                             currentPieceLocation->posY,
-                                                            matrix);
+                                                            matrix,piece);
                 allPieces[currentNrOfPieces]->typePiece = 'R';
                 allPieces = realloc(allPieces,sizeof(coord*)*(currentNrOfPieces));
                 allPieces[currentNrOfPieces++] = verticalMove( currentPieceLocation->posX,
                                                         currentPieceLocation->posY,
-                                                        matrix);
-                allPieces[currentNrOfPieces]->typePiece = 'R';
+                                                        matrix,piece);
             }
             break;
         case 'Q':
             for(prob = 0;prob<pieceValue[4][typeGame];prob++)
             {
+                allPieces[currentNrOfPieces]->typePiece = 'Q';
                 allPieces = realloc(allPieces,sizeof(coord*)*(currentNrOfPieces));
                 allPieces[currentNrOfPieces++] = mainDiagonalMove( currentPieceLocation->posX,
                                                             currentPieceLocation->posY,
-                                                            matrix);
+                                                            matrix,piece);
                 allPieces[currentNrOfPieces]->typePiece = 'Q';
                 allPieces = realloc(allPieces,sizeof(coord*)*(currentNrOfPieces));
                 allPieces[currentNrOfPieces++] = secondaryDiagonalMove(currentPieceLocation->posX,
                                                                 currentPieceLocation->posY,
-                                                                matrix);
+                                                                matrix,piece);
                 allPieces[currentNrOfPieces]->typePiece = 'Q';
                 allPieces = realloc(allPieces,sizeof(coord*)*(currentNrOfPieces));
                 allPieces[currentNrOfPieces++] = horizontalMove(currentPieceLocation->posX,
                                                             currentPieceLocation->posY,
-                                                            matrix);
+                                                            matrix,piece);
                 allPieces[currentNrOfPieces]->typePiece = 'Q';
                 allPieces = realloc(allPieces,sizeof(coord*)*(currentNrOfPieces));
                 allPieces[currentNrOfPieces++] = verticalMove( currentPieceLocation->posX,
                                                         currentPieceLocation->posY,
-                                                        matrix);
-                allPieces[currentNrOfPieces]->typePiece = 'Q';
+                                                        matrix,piece);
             }
             break;
         case 'K':
             for(prob = 0;prob<pieceValue[5][typeGame];prob++)
             {
+                allPieces[currentNrOfPieces]->typePiece = 'K';
                 allPieces = realloc(allPieces,sizeof(coord*)*(currentNrOfPieces));
                 allPieces[currentNrOfPieces++] = kingMovement(currentPieceLocation->posX,currentPieceLocation->posY,matrix);
-                allPieces[currentNrOfPieces]->typePiece = 'K';
             }
             break;
         default:

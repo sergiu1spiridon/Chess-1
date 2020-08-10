@@ -24,6 +24,7 @@ typedef struct Point
  * the functions will return the number of positions that change
  * 
  */ 
+unsigned char** getFutureMatrix(coord* position, unsigned char** currentMatrix);
 coord* horizontalMove(int posX, int posY, unsigned char** matrix);
 coord* verticalMove(int posX, int posY, unsigned char** matrix);
 // main diagonal is of the form i=j
@@ -43,5 +44,4 @@ void switchPieces(coord** allPieces, unsigned char piece, int *nrOfPieces,
                  coord*currentPieceLocation,unsigned char** matrix,int typeGame);
 // function that interprets and returns the new state from the AI
 unsigned char** getAIMove(unsigned char** matrix);
-
 #endif /* AI_Moves*/
