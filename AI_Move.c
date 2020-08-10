@@ -12,7 +12,7 @@ unsigned char** getFutureMatrix(coord* position, unsigned char** currentMatrix)
             futureMatrix[i][j]=currentMatrix[i][j];
         }
     }
-    
+
     futureMatrix[position->posY][position->posX] = position->typePiece;
     futureMatrix[position->posY_initial][position->posX_initial] = '*';
     return futureMatrix;
@@ -140,7 +140,7 @@ coord* verticalMove(int posX, int posY, unsigned char** matrix,unsigned char typ
 // main diagonal is of the form i=j
 coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix,unsigned char typePiece)
 {
-    char* userPieces = "rhbqkp";
+    char* userPieces = "rhbqkp*";
 
     coord* returnValue = malloc(sizeof(coord));
     returnValue->posX = posX;
@@ -164,10 +164,8 @@ coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix,unsigned char
             break;
         if(posY + i > 7)
             break;    
-            
         // conditions for the move  
-        if(strchr(userPieces,matrix[posY+i][posX+i]) || 
-            matrix[posY+i][posX+i]=='*')
+        if(strchr(userPieces,matrix[posY+i][posX+i]))
         {
             returnValue->posX += i;
             returnValue->posY += i;
@@ -198,7 +196,7 @@ coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix,unsigned char
 // secondary diagonal is of the form i = nrCol - j - i
 coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix, unsigned char typePiece)
 {
-    char* userPieces = "rhbqkp";
+    char* userPieces = "rhbqkp*";
     
     coord* returnValue = malloc(sizeof(coord));
     returnValue->posX = posX;
@@ -215,16 +213,15 @@ coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix, unsigne
         //if the position is not on the board
         if(posY + i < 0 )
             continue;
-        if(posX + i < 0 )
+        if(posX - i < 0 )
             continue;
-        if(posX + i > 7)
+        if(posX - i > 7)
             break;
         if(posY + i > 7)
             break;
             
         // conditions for the move
-        if(strchr(userPieces,matrix[posY+i][posX-i]) || 
-            matrix[posY+i][posX+i]=='*')
+        if(strchr(userPieces,matrix[posY+i][posX-i]))
         {
             returnValue->posX += i;
             returnValue->posY -= i;
@@ -265,7 +262,16 @@ coord* pawnMovement(int posX, int posY, unsigned char** matrix)
     returnValue->posY = posY;
     returnValue->posY_initial = posY;     
     returnValue->typePiece = 'P';
-
+    // impossible to move
+    if(!(posY + 1 > 7 || posX > 7) && (strchr(aiPieces,matrix[posY+1][posX])||strchr(userPieces,matrix[posY+1][posX])))
+    {
+            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+            {
+                   return returnValue;
+            }  
+            returnValue->posX = returnValue->posX_initial;
+            returnValue->posY = returnValue->posY_initial;    
+    }
     // right attack
     if(!(posY + 1 > 7 || posX + 1 > 7) && strchr(userPieces,matrix[posY+1][posX+1]))
     {
@@ -291,16 +297,6 @@ coord* pawnMovement(int posX, int posY, unsigned char** matrix)
             }  
             returnValue->posX = returnValue->posX_initial;
             returnValue->posY = returnValue->posY_initial;
-    }
-    // impossible to move
-    if(!(posY + 1 > 7 || posX > 7) && (strchr(aiPieces,matrix[posY+1][posX])||strchr(userPieces,matrix[posY+1][posX])))
-    {
-            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
-            {
-                   return returnValue;
-            }  
-            returnValue->posX = returnValue->posX_initial;
-            returnValue->posY = returnValue->posY_initial;    
     }
     //move two spaces
     if(posY == 1 && !(strchr(aiPieces,matrix[posY+2][posX])||strchr(userPieces,matrix[posY+2][posX])))
@@ -375,7 +371,7 @@ coord* knightMovement(int posX, int posY, unsigned char** matrix)
 // king movement
 coord* kingMovement(int posX,int posY,unsigned char**matrix)
 {
-    char* userPieces = "rhbqkp*";
+    char* userPieces = "rhbqp*";
 
     // relative positions on the king's move
     int xValues[8] = {1 ,1,1,0,-1,-1,-1, 0};
@@ -390,20 +386,18 @@ coord* kingMovement(int posX,int posY,unsigned char**matrix)
 
     int * possibleMovement = malloc(sizeof(int)*8);
     int sizePossible = 0;
-
     for(int i=0;i<8;i++)
     {
         if(posY+yValues[i] < 0 || posY+yValues[i] > 7 ||
             posX+xValues[i]< 0 || posX+xValues[i] > 7)
             continue;
-
         if(strchr(userPieces,matrix[posY+yValues[i]][posX+xValues[i]]))
            {
                 returnValue->posX += xValues[i];
                 returnValue->posY += yValues[i];
-                if(isNotInCheckAI(matrix))
+                if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
                 {
-                   possibleMovement[sizePossible++] = i;
+                    possibleMovement[sizePossible++] = i;
                 }    
                 returnValue->posX -= xValues[i];
                 returnValue->posY -= yValues[i]; 
@@ -458,7 +452,7 @@ coord** getCoordPieces(unsigned char** matrix,unsigned char piece)
 void switchPieces(coord** allPieces, unsigned char piece, int *nrOfPieces,
                  coord*currentPieceLocation,unsigned char** matrix,int typeGame)
 {
-    int pieceValue[6][3] = {{1,1,1},{3,4,5},{3,4,5},{5,6,7},{9,10,13},{0,1,1}};
+    int pieceValue[6][3] = {{1,1,1},{3,4,5},{3,4,5},{5,6,7},{9,10,13},{1,1,1}};
     int currentNrOfPieces= *nrOfPieces;
     int prob = 0;
     switch (piece)
@@ -500,7 +494,7 @@ void switchPieces(coord** allPieces, unsigned char piece, int *nrOfPieces,
                 allPieces[currentNrOfPieces]->typePiece = 'B';
                 allPieces[currentNrOfPieces] = mainDiagonalMove( currentPieceLocation->posX,
                                                             currentPieceLocation->posY,
-                                                            matrix,piece);
+                                                            matrix,'B');
                 if(allPieces[currentNrOfPieces]!=NULL)
                     currentNrOfPieces++;
                 allPieces[currentNrOfPieces] = malloc(sizeof(coord));
@@ -508,7 +502,7 @@ void switchPieces(coord** allPieces, unsigned char piece, int *nrOfPieces,
                 allPieces[currentNrOfPieces]->typePiece = 'B';
                 allPieces[currentNrOfPieces] = secondaryDiagonalMove(currentPieceLocation->posX,
                                                                 currentPieceLocation->posY,
-                                                                matrix,piece);
+                                                                matrix,'B');
                 if(allPieces[currentNrOfPieces]!=NULL)
                     currentNrOfPieces++;
             }
@@ -521,7 +515,7 @@ void switchPieces(coord** allPieces, unsigned char piece, int *nrOfPieces,
                 allPieces[currentNrOfPieces]->typePiece = 'R';
                 allPieces[currentNrOfPieces] = horizontalMove(currentPieceLocation->posX,
                                                             currentPieceLocation->posY,
-                                                            matrix,piece);
+                                                            matrix,'R');
                 if(allPieces[currentNrOfPieces]!=NULL)
                     currentNrOfPieces++;
                 allPieces[currentNrOfPieces] = malloc(sizeof(coord));
@@ -529,7 +523,7 @@ void switchPieces(coord** allPieces, unsigned char piece, int *nrOfPieces,
                 allPieces[currentNrOfPieces]->typePiece = 'R';
                 allPieces[currentNrOfPieces] = verticalMove( currentPieceLocation->posX,
                                                         currentPieceLocation->posY,
-                                                        matrix,piece);
+                                                        matrix,'R');
                 if(allPieces[currentNrOfPieces]!=NULL)
                     currentNrOfPieces++;
             }
@@ -543,7 +537,7 @@ void switchPieces(coord** allPieces, unsigned char piece, int *nrOfPieces,
                 allPieces[currentNrOfPieces]->typePiece = 'Q';
                 allPieces[currentNrOfPieces] = mainDiagonalMove( currentPieceLocation->posX,
                                                             currentPieceLocation->posY,
-                                                            matrix,piece);
+                                                            matrix,'Q');
                 if(allPieces[currentNrOfPieces]!=NULL)
                     currentNrOfPieces++;
                 allPieces[currentNrOfPieces] = malloc(sizeof(coord));
@@ -551,7 +545,7 @@ void switchPieces(coord** allPieces, unsigned char piece, int *nrOfPieces,
                 allPieces[currentNrOfPieces]->typePiece = 'Q';
                 allPieces[currentNrOfPieces] = secondaryDiagonalMove(currentPieceLocation->posX,
                                                                 currentPieceLocation->posY,
-                                                                matrix,piece);
+                                                                matrix,'Q');
                 if(allPieces[currentNrOfPieces]!=NULL)
                     currentNrOfPieces++;
                 allPieces[currentNrOfPieces] = malloc(sizeof(coord));
@@ -559,7 +553,7 @@ void switchPieces(coord** allPieces, unsigned char piece, int *nrOfPieces,
                 allPieces[currentNrOfPieces]->typePiece = 'Q';
                 allPieces[currentNrOfPieces] = horizontalMove(currentPieceLocation->posX,
                                                             currentPieceLocation->posY,
-                                                            matrix,piece);
+                                                            matrix,'Q');
                 if(allPieces[currentNrOfPieces]!=NULL)
                     currentNrOfPieces++;
                 allPieces[currentNrOfPieces] = malloc(sizeof(coord));
@@ -567,7 +561,7 @@ void switchPieces(coord** allPieces, unsigned char piece, int *nrOfPieces,
                 allPieces[currentNrOfPieces]->typePiece = 'Q';
                 allPieces[currentNrOfPieces] = verticalMove( currentPieceLocation->posX,
                                                         currentPieceLocation->posY,
-                                                        matrix,piece);
+                                                        matrix,'Q');
                 if(allPieces[currentNrOfPieces]!=NULL)
                     currentNrOfPieces++;
             }
@@ -613,7 +607,6 @@ unsigned char** getAIMove(unsigned char** matrix)
             sizeAllocated++;
         }
 
-
         for(int k=0;k<sizeAllocated;k++)
         {
             int diffCount = diffStates(matrix);
@@ -626,7 +619,8 @@ unsigned char** getAIMove(unsigned char** matrix)
             if(diffCount < 16)
             {
                 //early game, get the first row of the pieceValue
-                switchPieces(allPieces,aiPieces[i],&nrOfMoves,currentPieceLocation[k],matrix,0); 
+                switchPieces(allPieces,aiPieces[i],&nrOfMoves,currentPieceLocation[k],matrix,0);
+
             }
             else if(diffCount >=16 && totalPieces >=8)
             {
@@ -638,6 +632,17 @@ unsigned char** getAIMove(unsigned char** matrix)
                 //end game,, get the third row of the pieceValue
                 switchPieces(allPieces,aiPieces[i],&nrOfMoves,currentPieceLocation[k],matrix,2);
             }
+
+            for(int i=0 ;i<nrOfMoves;i++)
+            {
+                if(!isNotInCheckAI(getFutureMatrix(allPieces[i],matrix)))
+                {
+                    for(int j=i;j<nrOfMoves-1;j++)
+                        allPieces[j]=allPieces[j+1];
+                    nrOfMoves--;
+                }
+            }
+
             free(currentPieceLocation[k]);
         }
         // append the next state with the current piece

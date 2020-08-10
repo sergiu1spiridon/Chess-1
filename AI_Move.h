@@ -9,7 +9,7 @@ typedef struct Point
     int posY;
     int posX_initial;
     int posY_initial;
-    char typePiece;
+    unsigned char typePiece;
 }coord;
 /*
  * All functions will be called in:

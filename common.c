@@ -87,13 +87,13 @@ bool isCheckPlayerFromPawn(unsigned char **currentMatrix, pieceCoordonate *king)
 }
 
 bool isCheckAIFromPawn(unsigned char **currentMatrix, pieceCoordonate *king) {
-    if(king->y-1 < 0)
+    if(king->y+1 < 0)
         return 0;
     if(king->x-1 < 0)
-        return currentMatrix[king->y-1][king->x+1] == 'P';
+        return currentMatrix[king->y+1][king->x+1] == 'p';
     if(king->x+1 > 7)
-        return currentMatrix[king->y-1][king->x-1] == 'P';
-    return (currentMatrix[king->y+1][king->x+1] == 'p' || 
+        return currentMatrix[king->y+1][king->x-1] == 'p';
+    return (currentMatrix[king->y+1][king->x-1] == 'p' || 
         currentMatrix[king->y+1][king->x+1] == 'p');
 }
 
@@ -246,7 +246,7 @@ bool isNotInCheckAI(unsigned char**currentMatrix) {
         }
     }
 
-    bool isFromPawn = isCheckPlayerFromPawn(currentMatrix, king);
+    bool isFromPawn = isCheckAIFromPawn(currentMatrix, king);
 
     bool isFromRook = isCheckFromRook(currentMatrix, king, 'r');
 
@@ -257,9 +257,5 @@ bool isNotInCheckAI(unsigned char**currentMatrix) {
     bool isFromKnight = isCheckFromKnight(currentMatrix, king, 'h');
 
     bool result = !(isFromPawn || isFromRook || isFromBishop || isFromQueen || isFromKnight);
-    // if( result == false)
-    // {
-    //     printf("Check for AI");
-    // }
     return result;
 }

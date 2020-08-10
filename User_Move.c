@@ -130,8 +130,14 @@ int validBishop(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosit
 		}
 
 	}
-
-	return 1;
+	i += sgny;
+	j += sgnx;
+	
+	if (i == pieceToMove->y && j == pieceToMove->x)
+	{
+		return 1;
+	}
+	return 0;
 }
 
 int validQueen(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
