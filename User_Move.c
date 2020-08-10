@@ -132,6 +132,17 @@ int validQueen(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositi
 			validBishop(currentMatrix, pieceCurrentPosition, pieceToMove);
 }
 
+int validKing(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
+		 pieceCoordonate *pieceToMove) {
+	if ((((pieceCurrentPosition->x - pieceToMove->x) > 1) || 
+		((pieceCurrentPosition->x - pieceToMove->x) < -1))
+			&& (((pieceCurrentPosition->y - pieceToMove->y) > 1) || 
+				((pieceCurrentPosition->y - pieceToMove->y) < -1))) {
+		return 0;
+	}
+	return 1;
+}
+
 int validMove(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		 pieceCoordonate *pieceToMove) {
 
@@ -179,10 +190,16 @@ unsigned char** getPlayerMove(unsigned char** currentMatrix) {
 
 	if (validMove(currentMatrix,pieceToMovePos, pieceToMove))
 	{
-		currentMatrix[pieceToMovePos->y][pieceToMovePos->x] = '*';
-		currentMatrix[pieceToMove->y][pieceToMove->x] = pieceToMove->piece;
-	
-		return currentMatrix;
+		unsigned char **nextMatrix = memcpy(currentMatrix);
+
+		nextMatrix[pieceToMovePos->y][pieceToMovePos->x] = '*';
+		nextMatrix[pieceToMove->y][pieceToMove->x] = pieceToMove->piece;
+
+		if (isNotInCheckPlayer(nextMatrix))
+		{
+			free(currentMatrix);
+			return nextMatrix;
+		}
 	}
 	printf("Your move is not valid\n");
 	return getPlayerMove(currentMatrix);
