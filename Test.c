@@ -90,7 +90,13 @@ int main(int argc, char const *argv[])
 		}
 		else
 		{
-			chessMatrix = getAIMove(chessMatrix);
+			unsigned char** newChessMatrix = getAIMove(chessMatrix);
+			if(chessMatrix == newChessMatrix)
+			{
+				printf("Check Mate! Player wins!");
+				break;
+			}
+			free(newChessMatrix);
 		}
 		unsigned char* key = (unsigned char*)getKeyFromChessTable(chessMatrix);
 		addChildToParent(hash, key, parentKey);

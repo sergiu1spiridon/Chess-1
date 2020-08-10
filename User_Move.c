@@ -190,7 +190,8 @@ unsigned char** getPlayerMove(unsigned char** currentMatrix) {
 
 	if (validMove(currentMatrix,pieceToMovePos, pieceToMove))
 	{
-		unsigned char **nextMatrix = memcpy(currentMatrix);
+		unsigned char **nextMatrix;
+		memcpy(nextMatrix,currentMatrix,sizeof(currentMatrix));
 
 		nextMatrix[pieceToMovePos->y][pieceToMovePos->x] = '*';
 		nextMatrix[pieceToMove->y][pieceToMove->x] = pieceToMove->piece;

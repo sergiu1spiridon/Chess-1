@@ -554,6 +554,10 @@ unsigned char** getAIMove(unsigned char** matrix)
     }
 
     srand(nrOfMoves);
+    if(NULL == allPieces[0])
+    {
+        return matrix;
+    }
     coord* aiMove = allPieces[rand()%nrOfMoves];
 
     matrix[aiMove->posY_initial][aiMove->posX_initial]='*';
