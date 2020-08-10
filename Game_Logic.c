@@ -148,6 +148,20 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
         if (!getFromHash(hash, parentKey))
         {
             printf("Returns null\n");
+            InfoNode *newParent = malloc(sizeof(InfoNode));
+
+            newParent->key = parentKey;
+            newParent->score = getStateScore(parentKey);
+            newParent->parents = malloc(sizeof(unsigned char *) * 1);
+            newParent->numberOfParents = 0;
+            newParent->parents[0] = NULL;
+            Heap* newHeapP = createHeap();
+            newParent->heap = newHeapP;
+
+            addToHash(hash, newParent);
+
+            if (!getFromHash(hash, parentKey))
+                printf("still null hash\n");
         }
         addInHeap(getFromHash(hash, parentKey)->info->heap, newHeapNode);
 

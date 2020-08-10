@@ -48,8 +48,7 @@ coord* horizontalMove(int posX, int posY, unsigned char** matrix,unsigned char t
     //left movement
     for(int i = posX-1 ; i>=0;i--)
     {
-        if((strchr(userPieces,matrix[posY][i]) || 
-            matrix[posX][i]=='*'))
+        if(strchr(userPieces,matrix[posY][i]))
         {
             if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
             {

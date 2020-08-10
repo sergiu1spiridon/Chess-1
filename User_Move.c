@@ -5,7 +5,8 @@ int validPion(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 
 	int prevPos = (pieceCurrentPosition->piece == pieceToMove->piece);
 	int thisPos = (pieceCurrentPosition->y == (pieceToMove->y + 1) 
-		|| ((pieceCurrentPosition->y == (pieceToMove->y + 2)) && pieceCurrentPosition->y == 6));
+		|| ((pieceCurrentPosition->y == (pieceToMove->y + 2)) && pieceCurrentPosition->y == 6))
+		&& (pieceCurrentPosition->x == pieceToMove->x);
 
 	return (prevPos && thisPos && (currentMatrix[pieceToMove->y][pieceToMove->x] == '*'));
 }

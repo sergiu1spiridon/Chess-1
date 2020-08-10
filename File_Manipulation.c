@@ -14,13 +14,16 @@ void readFromFile(hashtable *hash) {
 		printf("Hash nonexistent\n");
 		return;
 	}
-    unsigned char *parent, *child; 
-    while ((int)fscanf(file, "%s %s ", parent, child) != 0)
+    unsigned char *parent = malloc(sizeof(char) * 194);
+    unsigned char *child = malloc(sizeof(char) * 194); 
+    while (fscanf(file, "%s %s", child, parent) == 2)
     {
         addChildToParent(hash, child, parent);
+        printf("%s\n", parent);
+        printf("%s\n", child);
     }
     
-    fclose;
+    fclose(file);
 }
 
 void writeToFile(hashtable *hash) {

@@ -1,4 +1,4 @@
-#include "Game_Logic.h"
+#include "File_Manipulation.h"
 
 unsigned char** randomMatrix()
 {
@@ -68,6 +68,8 @@ int main(int argc, char const *argv[])
 
 	//create the hashtable
 	hashtable* hash = initHashtable(100);
+	readFromFile(hash);
+
 	InfoNode * myNode;
 	unsigned char* parentKey = (unsigned char*)getKeyFromChessTable(chessMatrix);
 	Heap* newHeap = createHeap();
@@ -102,7 +104,7 @@ int main(int argc, char const *argv[])
 		userTurn = !userTurn;
 	}
 
-	printAll(hash);
+	writeToFile(hash);
 
 	return 0;
 }
