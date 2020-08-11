@@ -57,7 +57,7 @@ bool moveRook(unsigned char **matrix, pieceCoordonate *myPiece) {
     {
         x = myPiece->x + sgnx[i];
         y = myPiece->y + sgny[i];
-        while (x >= 0 && x <= 7 && y >= 0 && y <= 7 && matrix[x][y] == '*')
+        while (x >= 0 && x <= 7 && y >= 0 && y <= 7)
         {
             if(strchr(pieseleMele, matrix[y][x]) == NULL) {
                 newMat[y][x] = 'r';
@@ -67,8 +67,14 @@ bool moveRook(unsigned char **matrix, pieceCoordonate *myPiece) {
                     return 1;
                 }
                 newMat[y][x] = matrix[y][x];
-                newMat[myPiece->y][myPiece->x] = 'r';                
+                newMat[myPiece->y][myPiece->x] = 'r';
+                if(matrix[x][y] != '*')
+                {
+                    break;
+                }            
             }
+            else
+                break;
             
             x += sgnx[i];
             y += sgny[i];
@@ -93,7 +99,7 @@ bool moveBishop(unsigned char **matrix, pieceCoordonate *myPiece) {
     {
         x = myPiece->x + sgnx[i];
         y = myPiece->y + sgny[i];
-        while (x >= 0 && x <= 7 && y >= 0 && y <= 7 && matrix[y][x] == '*')
+        while (x >= 0 && x <= 7 && y >= 0 && y <= 7)
         {
             if(strchr(pieseleMele, matrix[y][x]) == NULL) {
                 newMat[y][x] = 'b';
@@ -103,8 +109,15 @@ bool moveBishop(unsigned char **matrix, pieceCoordonate *myPiece) {
                     return 1;
                 }
                 newMat[y][x] = matrix[y][x];
-                newMat[myPiece->y][myPiece->x] = 'b';                
+                newMat[myPiece->y][myPiece->x] = 'b';
+
+                if (matrix[y][x] != '*')
+                {
+                    break;
+                }                
             }
+            else
+                break;
             
             x += sgnx[i];
             y += sgny[i];
@@ -162,7 +175,7 @@ bool moveQueen(unsigned char **matrix, pieceCoordonate *myPiece) {
     {
         x = myPiece->x + sgnx[i];
         y = myPiece->y + sgny[i];
-        while (x >= 0 && x <= 7 && y >= 0 && y <= 7 && matrix[y][x] == '*')
+        while (x >= 0 && x <= 7 && y >= 0 && y <= 7)
         {
             if(strchr(pieseleMele, matrix[y][x]) == NULL) {
                 newMat[y][x] = 'q';
@@ -172,8 +185,15 @@ bool moveQueen(unsigned char **matrix, pieceCoordonate *myPiece) {
                     return 1;
                 }
                 newMat[y][x] = matrix[y][x];
-                newMat[myPiece->y][myPiece->x] = 'q';                
+                newMat[myPiece->y][myPiece->x] = 'q';
+
+                if (newMat[y][x] != '*';)
+               {
+                   break;
+               }           
             }
+            else
+                break;
             
             x += sgnx[i];
             y += sgny[i];
