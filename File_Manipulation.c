@@ -15,12 +15,24 @@ void readFromFile(hashtable *hash) {
 		return;
 	}
     unsigned char *parent = malloc(sizeof(char) * 194);
-    unsigned char *child = malloc(sizeof(char) * 194); 
-    while (fscanf(file, "%s %s", child, parent) == 2)
+    while (fscanf(file, "%s", parent) == 1)
     {
+        unsigned char *child = malloc(sizeof(char) * 194); 
+        
+        fscanf(file, "%s\n", child);
+        //printf("newRead\n");
+        
+        //printMatrix(getChessTableFromKey(child));
+        //printMatrix(getChessTableFromKey(parent));
+        
         addChildToParent(hash, child, parent);
+
+        //printAllHash(hash);
+
+        parent = malloc(sizeof(char) * 194);
     }
     
+    free(parent);
     fclose(file);
 }
 
@@ -45,14 +57,14 @@ void writeToFile(hashtable *hash) {
 		currentNode = hash->bucket[i]->head;
 		while (currentNode)
 		{
-			for (int i = 0; i < currentNode->info->numberOfParents; i++)
-			{
-				fprintf(file, "%s %s\n", currentNode->info->parents[i], currentNode->info->key);
-			}
+			// for (int i = 0; i < currentNode->info->numberOfParents; i++)
+			// {
+			// 	fprintf(file, "%s %s\n", currentNode->info->parents[i], currentNode->info->key);
+			// }
 
 			for (int i = 0; i < currentNode->info->heap->size; i++)
 			{
-				fprintf(file, "%s %s\n",currentNode->info->key, currentNode->info->heap->myHeap[i]->key);
+				fprintf(file, "%s %s\n",currentNode->info->key, currentNode->info->heap->myHeap[0]->key);
 			}
 			currentNode = currentNode->next;
 		}

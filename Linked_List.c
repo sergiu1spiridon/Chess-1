@@ -40,11 +40,26 @@ Node* getElementByKey(List* currentList, unsigned char *key){
         return NULL;
 
     Node* currentElement = currentList->head;
+    int ok;
+    while(currentElement != NULL) {
+        ok = 1;
+        
+        for(int i = 0; i < 193; i++)
+            if(currentElement->info->key[i] != key[i])
+            {
+                ok = 0;
+                break;
+            }
 
-    while(currentElement != NULL && strcmp((const char *)(currentElement->info->key), (const char *)key) != 0){
+        
+        if (ok == 1)
+        {
+            return currentElement;
+        }
+
         currentElement = currentElement->next;
     }
-    return currentElement;
+    return NULL;
 }
 
 // manipulate data from front
@@ -53,14 +68,14 @@ void push(List* currentList, InfoNode* info){
         return;
     if(NULL == info)
         return;
-    Node* newHead = (Node*)malloc(sizeof(Node));
-
-    if(NULL == newHead)
-        return;
-
 
     if (!getElementByKey(currentList,info->key))
     {
+        Node* newHead = (Node*)malloc(sizeof(Node));
+
+        if(NULL == newHead)
+            return;
+
         newHead->info = info;
         newHead->next = currentList->head;
         currentList->head = newHead;
@@ -70,8 +85,15 @@ void push(List* currentList, InfoNode* info){
 }
 InfoNode * popList(List* currentList)
 {
-    if(NULL == currentList)
+    if(NULL == currentList ) {
+        printf("current list is null\n");
         return NULL;
+    }
+
+    if(NULL == currentList->head) {
+        printf("head is null\n");
+        return NULL;
+    }
 
     InfoNode* newInfo = currentList->head->info;
     currentList->head = currentList->head->next;
@@ -87,13 +109,25 @@ void insertRear(List* currentList, InfoNode* info){
     if(NULL == info)
         return;
 
+    if(getElementByKey(currentList,info->key))
+    {
+        return;
+    }
+
     Node* currentNode = (Node*)malloc(sizeof(Node));
     currentNode->next = NULL;
 
     currentNode->info = info;
+    if(NULL == currentList->tail)
+    {
+        currentList->tail = currentNode;
+        currentList->size ++;
+        currentList->head = currentNode;
+        return;
+    }
     currentList->tail->next = currentNode;
     currentList->tail = currentNode;
     currentList->size ++;
 
-    free(currentNode); 
+    return;
 }

@@ -53,6 +53,11 @@ unsigned char* getExtreme(Heap* heap) {
 		printf("0 Heap\n");
 		return NULL;
 	}
+	if (!heap->myHeap[0]) {
+		printf("heap has no nodes\n");
+		printf("%d\n", heap->size);
+		return NULL;
+	}
 
 	return heap->myHeap[0]->key;
 }

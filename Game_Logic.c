@@ -126,11 +126,48 @@ int getStateScore(unsigned char *chessMatrixKey) {
     return result;
 }
 
+void printAllHash(hashtable *hash) {
+    if(!hash) {
+        printf("Hash nonexistent\n");
+        return;
+    }
+    Node *currentNode;
+    int nr;
+    for (int i = 0; i < hash->size; i++)
+    {   
+        currentNode = hash->bucket[i]->head;
+        while (currentNode)
+        {
+            nr = 0;
+            printf("in bucket[%d] number %d is %s", i, nr, 
+                currentNode->info->key);
+
+            printMatrix(getChessTableFromKey(currentNode->info->key));
+
+            printf("its parents are:\n");
+            for (int j = 0; j < currentNode->info->numberOfParents; j++)
+            {
+                printMatrix(getChessTableFromKey(currentNode->info->parents[j]));
+            }
+
+            printf("its children are:\n");
+            for (int j = 0; j < currentNode->info->heap->size; j++)
+            {
+                printMatrix(getChessTableFromKey(currentNode->info->heap->myHeap[j]->key));
+            }
+            currentNode = currentNode->next;
+            nr++;
+        }
+    }
+}
+
 int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned char* parentKey)
 {
+    // printAllHash(hash);
     Node *nodeForKey = getFromHash(hash, chessMatrixKey);
 
     if(nodeForKey == NULL) {
+        //printf("cant find it\n");
         InfoNode *newNode = malloc(sizeof(InfoNode));
 
         newNode->key = chessMatrixKey;
@@ -145,9 +182,11 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
 
         newHeapNode->key = chessMatrixKey;
         newHeapNode->score = newNode->score;
-        if (!getFromHash(hash, parentKey))
+        
+        if (getFromHash(hash, parentKey) == NULL)
         {
-            printf("Returns null\n");
+            //printf("%s\n", getFromHash(hash, parentKey));
+            //printf("Returns null\n");
             InfoNode *newParent = malloc(sizeof(InfoNode));
 
             newParent->key = parentKey;
@@ -162,21 +201,29 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
 
             if (!getFromHash(hash, parentKey))
                 printf("still null hash\n");
+            
         }
         addInHeap(getFromHash(hash, parentKey)->info->heap, newHeapNode);
 
         addToHash(hash, newNode);
+        //printAllHash(hash);
+        //printf("%s\n", getFromHash(hash, chessMatrixKey)->info->key);
     } else {
+        //printf("intra in else\n");
+        //printMatrix(getChessTableFromKey(nodeForKey->info->key));
          InfoNode *newNode = nodeForKey->info;
-         for (int i = 0; i < newNode->numberOfParents; i++)
-         {
-             if (strcmp((char *)newNode->parents[i],(char *)parentKey) == 0)
-             {
-                 return 0;
-             }
+         // for (int i = 0; i < newNode->numberOfParents; i++)
+         // {
+         //     if (strcmp((char *)newNode->parents[i],(char *)parentKey) == 0)
+         //     {
+         //        printMatrix(getChessTableFromKey(newNode->parents[i]));
+         //        printMatrix(getChessTableFromKey(parentKey));
+         //         return 0;
+         //     }
              
-         }
+         // }
          
+        newNode->parents = realloc(newNode->parents, sizeof(unsigned char *) * (newNode->numberOfParents+1));
         newNode->parents[newNode->numberOfParents] = parentKey;
         newNode->numberOfParents ++;
 
@@ -184,6 +231,24 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
 
         newHeapNode->key = chessMatrixKey;
         newHeapNode->score = newNode->score;
+        
+        Node *parinteHashNod = getFromHash(hash, parentKey); 
+        
+        if (!parinteHashNod)
+        {
+            // printf("parinte not found\n");
+            InfoNode *newParent = malloc(sizeof(InfoNode));
+
+            newParent->key = parentKey;
+            newParent->score = getStateScore(parentKey);
+            newParent->parents = malloc(sizeof(unsigned char *) * 1);
+            newParent->numberOfParents = 0;
+            newParent->parents[0] = NULL;
+            Heap* newHeapP = createHeap();
+            newParent->heap = newHeapP;
+
+            addToHash(hash, newParent);
+        }
 
          InfoNode *currentNode = getFromHash(hash, parentKey)->info;
 
@@ -195,9 +260,12 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
          
          insertRear(myQueue, currentNode);
          
-         while (!(myQueue->size))
+         while ((myQueue->size) != 0)
          {
+            // printf("intra in while size: %d \n", myQueue->size);
              currentNode = popList(myQueue);
+            // printf("intra in while size: %d \n", myQueue->size);
+             // printf("%s\n", currentNode->key);
              
              newHeapNode->key = currentNode->key;
              newHeapNode->score = currentNode->score;
@@ -205,6 +273,8 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
              for (int i = 0; i < currentNode->numberOfParents; i++)
              {
                currentParent = getFromHash(hash,currentNode->parents[i]);
+               printf("gasit parinte:\n");
+               printMatrix(getChessTableFromKey(currentParent->info->key));
                currentParent->info->score += newNode->score;
                
                addInHeap(currentParent->info->heap, newHeapNode);
@@ -221,4 +291,33 @@ unsigned char* getNextMove(hashtable *hash, unsigned char* currentMoveKey) {
 	Node *currentNode = getFromHash(hash, currentMoveKey);
 
 	return getExtreme(currentNode->info->heap);
+}
+
+void upperLowerChange(unsigned char **key) {
+    int i = 0;
+    char *digits = {"0,1,2,3,4,5,6,7,8,9,*"};
+    //printf("%s\n\n\n", *key);
+    while((*key)[i] != '\0') {
+        if(strchr(digits, (*key)[i]) == NULL) {
+
+        if((*key)[i] < 'a') {
+            (*key)[i] += 32;
+            (*key)[i + 1] = (7 - ((*key)[i + 1] - '0')) + '0';
+        } 
+        else if((*key)[i] > 'a') {
+            (*key)[i] -= 32;
+            (*key)[i + 1] = (7 - ((*key)[i + 1] - '0')) + '0';
+        }
+
+        }
+        else
+            if ((*key)[i] == '*')
+            {
+                (*key)[i + 1] = (7 - ((*key)[i + 1] - '0')) + '0';
+            }
+
+        i++;
+    }
+    *key = getKeyFromChessTable(getChessTableFromKey(*key));
+    //printf("%s\n\n\n", *key);
 }

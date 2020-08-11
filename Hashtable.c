@@ -1,15 +1,17 @@
 #include "Hashtable.h"
 
 // The hashing function used on state to get index
-unsigned long
-hashfct(unsigned char *str) {
-    unsigned long hash = 5381;
-    int c;
 
-    while ((c = *str++))
-        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+ unsigned long hashfct(unsigned char *str) {
+	unsigned int hash = 0;
+	int c = *str;
 
-    return hash;
+	while (c) {
+	    hash += c;
+		c = *str++;
+	}
+
+	return hash;
 }
 
 // Put a new state in the hashtable
@@ -66,6 +68,8 @@ void printAll(hashtable *hash) {
 		{
 			printf("in bucket[%d] is %s with score: %d\n", i, 
 				currentNode->info->key, currentNode->info->score);
+
+
 
 			printf("its parents are:\n");
 			for (int i = 0; i < currentNode->info->numberOfParents; i++)

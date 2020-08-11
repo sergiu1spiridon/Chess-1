@@ -53,6 +53,8 @@ unsigned char** randomMatrix()
 
 }
 
+
+
 int main(int argc, char const *argv[])
 {
 	// initial chess table
@@ -74,26 +76,37 @@ int main(int argc, char const *argv[])
 
 	//create the hashtable
 	hashtable* hash = initHashtable(100);
+	
 	readFromFile(hash);
+	//printAllHash(hash);
 
 	InfoNode * myNode;
+	
 	unsigned char *child;
 	unsigned char* parentKey = (unsigned char*)getKeyFromChessTable(chessMatrix);
+	
 	Heap* newHeap = createHeap();
 
 	myNode = (InfoNode*)malloc(sizeof(InfoNode));
 	myNode->parents = malloc(sizeof(unsigned char *) * 1);
     myNode->numberOfParents = 0;
+    //printf("%s\n\n\n", parentKey);
+    //upperLowerChange(&parentKey);
+    //printf("%s\n", parentKey);
 	myNode->key = parentKey;
 	myNode->heap = newHeap;
 	myNode->score = getStateScore(parentKey);
-	addToHash(hash,myNode);
 	
-	clrscr();
+	addToHash(hash,myNode);
+
+
+	//clrscr();
+	
 	printf("          ");
 	printf("\033[1m%s\033[0m", "Welcome to chess\n");
 	srand(time(0));
 	bool userTurn = rand()%2;
+	
 	if(userTurn)
 	{
 		printf("          ");
@@ -103,14 +116,23 @@ int main(int argc, char const *argv[])
 	{
 		printf("          ");
 		printf("\033[1m%s\033[0m","The computer will start!\n");
+		getAIMove(chessMatrix);
+
+		child = (unsigned char*)getKeyFromChessTable(chessMatrix);
+		upperLowerChange(&child);
+		addChildToParent(hash, child, parentKey);
+		parentKey = child;
+
+		userTurn = true;	
 	}
-	printf("          ");
-	printf("\033[1m%s\033[0m","Press any key to begin: ");
+	// printf("          ");
+	// printf("\033[1m%s\033[0m","Press any key to begin: ");
 
-	char*str = malloc(sizeof(char)*10);
-	fgets(str,10,stdin);
-	free(str);
+	// char*str = malloc(sizeof(char)*10);
+	// fgets(str,10,stdin);
+	// free(str);
 
+	int ok = 0;
 	int round = 0;
 	while(true)
 	{
@@ -140,10 +162,16 @@ int main(int argc, char const *argv[])
 			{
 				break;
 			}
+			//child = (unsigned char*)getKeyFromChessTable(chessMatrix);
+			//upperLowerChange(&child);	
+
+			//addChildToParent(hash, child, parentKey);
+			//parentKey = child;
 
 		}
 		else
-		{	
+		{		
+			ok = 0;
 			unsigned char** oldChessMatrix = malloc(sizeof(unsigned char*)*8);
 			for(int i=0;i<8;i++)
 			{
@@ -152,7 +180,19 @@ int main(int argc, char const *argv[])
 				{
 					oldChessMatrix[i][j]=chessMatrix[i][j];
 				}
-			} 
+			}
+			if (getFromHash(hash, getKeyFromChessTable(oldChessMatrix)))
+			{
+				printf("should work\n");
+				Node *nod = getFromHash(hash, getKeyFromChessTable(oldChessMatrix));
+				unsigned char *heapExtreme = getExtreme(nod->info->heap);
+				if(heapExtreme) {
+					chessMatrix = getChessTableFromKey(heapExtreme);
+					ok = 1;
+				}
+			}
+			if(ok == 0)
+			{
 			unsigned char** newChessMatrix = getAIMove(chessMatrix);
 			if (!isNotInCheckPlayer(newChessMatrix))
 			{
@@ -179,10 +219,15 @@ int main(int argc, char const *argv[])
 				printf("Checkmate! Player wins!\n\n");
 				break;
 			}
+			}
+		
 		}
+
 		child = (unsigned char*)getKeyFromChessTable(chessMatrix);
+		upperLowerChange(&child);
 		addChildToParent(hash, child, parentKey);
 		parentKey = child;
+		//printMatrix(getChessTableFromKey(child));
 
 		userTurn = !userTurn;
 	}

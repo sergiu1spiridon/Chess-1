@@ -187,10 +187,10 @@ bool moveQueen(unsigned char **matrix, pieceCoordonate *myPiece) {
                 newMat[y][x] = matrix[y][x];
                 newMat[myPiece->y][myPiece->x] = 'q';
 
-                if (newMat[y][x] != '*';)
-               {
-                   break;
-               }           
+                if (newMat[y][x] != '*')
+                {
+                    break;
+                }           
             }
             else
                 break;

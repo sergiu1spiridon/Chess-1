@@ -38,10 +38,15 @@ unsigned char* getKeyFromChessTable(unsigned char**chessMatrix);
 unsigned char** getChessTableFromKey(unsigned char* key);
 // get the score of the state from the key of the table
 int getStateScore(unsigned char *chessMatrixKey);
+
+void printAllHash(hashtable *hash);
+
 // get the score of the state from the table
 int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned char* parentKey);
 // get the move thats on top of the heap of curent one
 unsigned char* getNextMove(hashtable *hash, unsigned char* currentMoveKey);
+// change the matrix so the AI can use the players moves
+void upperLowerChange(unsigned char **key);
 
 
 #endif/*GAME_LOGIC*/
