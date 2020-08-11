@@ -90,9 +90,6 @@ int main(int argc, char const *argv[])
 	myNode = (InfoNode*)malloc(sizeof(InfoNode));
 	myNode->parents = malloc(sizeof(unsigned char *) * 1);
     myNode->numberOfParents = 0;
-    //printf("%s\n\n\n", parentKey);
-    //upperLowerChange(&parentKey);
-    //printf("%s\n", parentKey);
 	myNode->key = parentKey;
 	myNode->heap = newHeap;
 	myNode->score = getStateScore(parentKey);
@@ -119,8 +116,11 @@ int main(int argc, char const *argv[])
 		getAIMove(chessMatrix);
 
 		child = (unsigned char*)getKeyFromChessTable(chessMatrix);
+
+		//addChildToParent(hash, child, parentKey);
 		upperLowerChange(&child);
 		addChildToParent(hash, child, parentKey);
+
 		parentKey = child;
 
 		userTurn = true;	
@@ -160,7 +160,8 @@ int main(int argc, char const *argv[])
 			chessMatrix = getPlayerMove(chessMatrix);
 			if(chessMatrix == NULL)
 			{
-				break;
+				writeToFile(hash);
+				return 1;
 			}
 			//child = (unsigned char*)getKeyFromChessTable(chessMatrix);
 			//upperLowerChange(&child);	
@@ -224,6 +225,7 @@ int main(int argc, char const *argv[])
 		}
 
 		child = (unsigned char*)getKeyFromChessTable(chessMatrix);
+		
 		upperLowerChange(&child);
 		addChildToParent(hash, child, parentKey);
 		parentKey = child;
@@ -231,7 +233,5 @@ int main(int argc, char const *argv[])
 
 		userTurn = !userTurn;
 	}
-	writeToFile(hash);
-
 	return 0;
 }

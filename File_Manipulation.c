@@ -22,9 +22,14 @@ void readFromFile(hashtable *hash) {
         fscanf(file, "%s\n", child);
         //printf("newRead\n");
         
-        //printMatrix(getChessTableFromKey(child));
-        //printMatrix(getChessTableFromKey(parent));
-        
+
+        if(parent == NULL)
+            break;
+        if(child == NULL)
+            break;
+        if(hash == NULL)
+            break;
+
         addChildToParent(hash, child, parent);
 
         //printAllHash(hash);

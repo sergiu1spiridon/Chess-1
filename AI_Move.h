@@ -24,7 +24,7 @@ typedef struct Point
  * the functions will return the number of positions that change
  * 
  */ 
-unsigned char** getFutureMatrix(coord* position, unsigned char** currentMatrix);
+unsigned char** getFutureMatrix(coord* position, unsigned char** currentMatrix,char typePiece);
 coord* horizontalMove(int posX, int posY, unsigned char** matrix,unsigned char typePiece);
 coord* verticalMove(int posX, int posY, unsigned char** matrix,unsigned char typePiece);
 // main diagonal is of the form i=j

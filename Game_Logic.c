@@ -212,16 +212,16 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
         //printf("intra in else\n");
         //printMatrix(getChessTableFromKey(nodeForKey->info->key));
          InfoNode *newNode = nodeForKey->info;
-         // for (int i = 0; i < newNode->numberOfParents; i++)
-         // {
-         //     if (strcmp((char *)newNode->parents[i],(char *)parentKey) == 0)
-         //     {
-         //        printMatrix(getChessTableFromKey(newNode->parents[i]));
-         //        printMatrix(getChessTableFromKey(parentKey));
-         //         return 0;
-         //     }
+         for (int i = 0; i < newNode->numberOfParents; i++)
+         {
+             if (strcmp((char *)newNode->parents[i],(char *)parentKey) == 0)
+             {
+                printMatrix(getChessTableFromKey(newNode->parents[i]));
+                printMatrix(getChessTableFromKey(parentKey));
+                 return 0;
+             }
              
-         // }
+         }
          
         newNode->parents = realloc(newNode->parents, sizeof(unsigned char *) * (newNode->numberOfParents+1));
         newNode->parents[newNode->numberOfParents] = parentKey;
@@ -259,19 +259,21 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
          List *myQueue = createList();
          
          insertRear(myQueue, currentNode);
-         
+         printAllHash(hash);
          while ((myQueue->size) != 0)
          {
             // printf("intra in while size: %d \n", myQueue->size);
              currentNode = popList(myQueue);
-            // printf("intra in while size: %d \n", myQueue->size);
-             // printf("%s\n", currentNode->key);
+            printf("intra in while size: %d \n", myQueue->size);
+             printf("%s\n", currentNode->key);
              
              newHeapNode->key = currentNode->key;
+
              newHeapNode->score = currentNode->score;
              
              for (int i = 0; i < currentNode->numberOfParents; i++)
              {
+               printf("%d\n", currentNode->numberOfParents);
                currentParent = getFromHash(hash,currentNode->parents[i]);
                printf("gasit parinte:\n");
                printMatrix(getChessTableFromKey(currentParent->info->key));

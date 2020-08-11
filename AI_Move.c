@@ -1,26 +1,30 @@
 #include "AI_Move.h"
 
 
-unsigned char** getFutureMatrix(coord* position, unsigned char** currentMatrix)
+unsigned char** getFutureMatrix(coord* position, unsigned char** currentMatrix,char typePiece)
 {
-    unsigned char** futureMatrix = malloc(sizeof(unsigned char*) * 8); 
+    unsigned char** futureMatrix = malloc(64); 
     for(int i=0;i<8;i++)
     {
-        futureMatrix[i] = malloc(sizeof(unsigned char)*8);
+        futureMatrix[i] = malloc(64);
         for(int j=0;j<8;j++)
         {
             futureMatrix[i][j]=currentMatrix[i][j];
         }
     }
 
-    futureMatrix[position->posY][position->posX] = position->typePiece;
+    if(position==NULL)
+    {
+        printf("position is null from getFutureMatrix");
+    }
+    futureMatrix[position->posY][position->posX] = typePiece;
     futureMatrix[position->posY_initial][position->posX_initial] = '*';
     return futureMatrix;
 }
 
 coord* horizontalMove(int posX, int posY, unsigned char** matrix,unsigned char typePiece)
 {
-    char* userPieces = "rhbqkp*";
+    char* userPieces = "rhbqp*";
 
     coord* returnValue = malloc(sizeof(coord));
     returnValue->posX = posX;
@@ -30,7 +34,7 @@ coord* horizontalMove(int posX, int posY, unsigned char** matrix,unsigned char t
     returnValue->typePiece = typePiece;
 
 
-    int * possibleMovement = malloc(sizeof(int)*16);
+    int * possibleMovement = malloc(sizeof(int)*64);
     int sizePossible = 0;
     //right movement
     for(int i = posX+1 ; i<=7;i++)
@@ -38,7 +42,7 @@ coord* horizontalMove(int posX, int posY, unsigned char** matrix,unsigned char t
         if(strchr(userPieces,matrix[posY][i]))
         {
             returnValue->posX += i;
-            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,typePiece)))
             {
                 possibleMovement[sizePossible++] = i;
                 possibleMovement[sizePossible++] = i;
@@ -56,7 +60,7 @@ coord* horizontalMove(int posX, int posY, unsigned char** matrix,unsigned char t
         if(strchr(userPieces,matrix[posY][i]))
         {
             returnValue->posX += i;
-            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,typePiece)))
             {
                 possibleMovement[sizePossible++] = i;
                 possibleMovement[sizePossible++] = i;
@@ -80,7 +84,7 @@ coord* horizontalMove(int posX, int posY, unsigned char** matrix,unsigned char t
 }
 coord* verticalMove(int posX, int posY, unsigned char** matrix,unsigned char typePiece)
 {
-    char* userPieces = "rhbqkp";
+    char* userPieces = "rhbqp*";
 
     coord* returnValue = malloc(sizeof(coord));
     returnValue->posX = posX;
@@ -89,16 +93,15 @@ coord* verticalMove(int posX, int posY, unsigned char** matrix,unsigned char typ
     returnValue->posY_initial = posY;     
     returnValue->typePiece = typePiece;
 
-    int * possibleMovement = malloc(sizeof(int)*16);
+    int * possibleMovement = malloc(sizeof(int)*64);
     int sizePossible = 0;
     //down movement
     for(int i = posY+1 ; i<=7;i++)
     {
-        if((strchr(userPieces,matrix[i][posX]) || 
-            matrix[i][posX]=='*'))
+        if(strchr(userPieces,matrix[i][posX]))
         {
             returnValue->posY += i;
-            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,typePiece)))
             {
                 possibleMovement[sizePossible++] = i;
                 possibleMovement[sizePossible++] = i;
@@ -117,7 +120,7 @@ coord* verticalMove(int posX, int posY, unsigned char** matrix,unsigned char typ
             matrix[i][posX]=='*')
         {
             returnValue->posY += i;
-            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,typePiece)))
             {
                 possibleMovement[sizePossible++] = i;
                 possibleMovement[sizePossible++] = i;
@@ -140,7 +143,7 @@ coord* verticalMove(int posX, int posY, unsigned char** matrix,unsigned char typ
 // main diagonal is of the form i=j
 coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix,unsigned char typePiece)
 {
-    char* userPieces = "rhbqkp*";
+    char* userPieces = "rhbqp*";
 
     coord* returnValue = malloc(sizeof(coord));
     returnValue->posX = posX;
@@ -150,7 +153,7 @@ coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix,unsigned char
     returnValue->typePiece = typePiece;
 
 
-    int * possibleMovement = malloc(sizeof(int)*8);
+    int * possibleMovement = malloc(sizeof(int)*32);
     int sizePossible = 0;
     //diagonal movement
     for(int i = -7 ; i<=7;i++)
@@ -169,7 +172,7 @@ coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix,unsigned char
         {
             returnValue->posX += i;
             returnValue->posY += i;
-            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,typePiece)))
             {
                 possibleMovement[sizePossible++] = i;
                 possibleMovement[sizePossible++] = i;
@@ -196,7 +199,7 @@ coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix,unsigned char
 // secondary diagonal is of the form i = nrCol - j - i
 coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix, unsigned char typePiece)
 {
-    char* userPieces = "rhbqkp*";
+    char* userPieces = "rhbqp*";
     
     coord* returnValue = malloc(sizeof(coord));
     returnValue->posX = posX;
@@ -205,7 +208,7 @@ coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix, unsigne
     returnValue->posY_initial = posY;     
     returnValue->typePiece = typePiece;
 
-    int * possibleMovement = malloc(sizeof(int)*8);
+    int * possibleMovement = malloc(sizeof(int)*32);
     int sizePossible = 0;
     //diagonal movement
     for(int i = -7 ; i<=7;i++)
@@ -225,7 +228,7 @@ coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix, unsigne
         {
             returnValue->posX += i;
             returnValue->posY -= i;
-            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,typePiece)))
             {
                 possibleMovement[sizePossible++] = i;
                 possibleMovement[sizePossible++] = i;
@@ -253,7 +256,7 @@ coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix, unsigne
 // pawn movement
 coord* pawnMovement(int posX, int posY, unsigned char** matrix)
 {
-    char* userPieces = "rhbqkp";
+    char* userPieces = "rhbqp*";
     char* aiPieces = "RHBQKP";
     
     coord* returnValue = malloc(sizeof(coord));
@@ -265,7 +268,7 @@ coord* pawnMovement(int posX, int posY, unsigned char** matrix)
     // impossible to move
     if(!(posY + 1 > 7 || posX > 7) && (strchr(aiPieces,matrix[posY+1][posX])||strchr(userPieces,matrix[posY+1][posX])))
     {
-            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,'P')))
             {
                    return returnValue;
             }  
@@ -278,7 +281,7 @@ coord* pawnMovement(int posX, int posY, unsigned char** matrix)
             returnValue->posX ++;
             returnValue->posY ++;
             
-            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,'P')))
             {
                    return returnValue;
             }  
@@ -291,7 +294,7 @@ coord* pawnMovement(int posX, int posY, unsigned char** matrix)
     {
             returnValue->posX --;
             returnValue->posY ++;
-            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,'P')))
             {
                    return returnValue;
             }  
@@ -302,7 +305,7 @@ coord* pawnMovement(int posX, int posY, unsigned char** matrix)
     if(posY == 1 && !(strchr(aiPieces,matrix[posY+2][posX])||strchr(userPieces,matrix[posY+2][posX])))
     {
             returnValue->posY += 2;
-            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,'P')))
             {
                    return returnValue;
             }  
@@ -312,7 +315,7 @@ coord* pawnMovement(int posX, int posY, unsigned char** matrix)
     }
 
     returnValue->posY++;
-    if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+    if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,'P')))
     {
             return returnValue;
     }  
@@ -323,7 +326,7 @@ coord* pawnMovement(int posX, int posY, unsigned char** matrix)
 // knight movement
 coord* knightMovement(int posX, int posY, unsigned char** matrix)
 {
-    char* userPieces = "rhbqkp*";
+    char* userPieces = "rhbqp*";
 
     // relative positions on the knight's move
     int xValues[8] = {-1,-2,-2,-1,1,2,2,1};
@@ -336,7 +339,7 @@ coord* knightMovement(int posX, int posY, unsigned char** matrix)
     returnValue->posY_initial = posY;
     returnValue->typePiece = 'H';
 
-    int * possibleMovement = malloc(sizeof(int)*8);
+    int * possibleMovement = malloc(sizeof(int)*10);
     int sizePossible = 0;
 
     for(int i=0;i<8;i++)
@@ -349,7 +352,7 @@ coord* knightMovement(int posX, int posY, unsigned char** matrix)
             {
                 returnValue->posX += xValues[i];
                 returnValue->posY += yValues[i];
-                if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+                if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,'H')))
                 {
                    possibleMovement[sizePossible++] = i;
                 }  
@@ -384,7 +387,7 @@ coord* kingMovement(int posX,int posY,unsigned char**matrix)
     returnValue->posY_initial = posY;     
     returnValue->typePiece = 'K';
 
-    int * possibleMovement = malloc(sizeof(int)*8);
+    int * possibleMovement = malloc(sizeof(int)*9);
     int sizePossible = 0;
     for(int i=0;i<8;i++)
     {
@@ -395,7 +398,7 @@ coord* kingMovement(int posX,int posY,unsigned char**matrix)
            {
                 returnValue->posX += xValues[i];
                 returnValue->posY += yValues[i];
-                if(isNotInCheckAI(getFutureMatrix(returnValue,matrix)))
+                if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,'K')))
                 {
                     possibleMovement[sizePossible++] = i;
                 }    
@@ -420,7 +423,7 @@ coord** getCoordPieces(unsigned char** matrix,unsigned char piece)
     coord** pieceCoord;
     int nrOfPieces = 0;
     //allocate memory for each of the pieces
-    pieceCoord = malloc(sizeof(coord*)*8);
+    pieceCoord = malloc(sizeof(coord*)*100);
 
     nrOfPieces=0;
     for(int i=0;i<8;i++)
@@ -635,7 +638,11 @@ unsigned char** getAIMove(unsigned char** matrix)
 
             for(int i=0 ;i<nrOfMoves;i++)
             {
-                if(!isNotInCheckAI(getFutureMatrix(allPieces[i],matrix)))
+                if(sizeof(allPieces[i]->typePiece)==0)
+                {
+                    continue;
+                }
+                if(!isNotInCheckAI(getFutureMatrix(allPieces[i],matrix,(char)allPieces[i]->typePiece)))
                 {
                     for(int j=i;j<nrOfMoves-1;j++)
                         allPieces[j]=allPieces[j+1];

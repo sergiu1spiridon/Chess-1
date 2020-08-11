@@ -70,29 +70,32 @@ int validRook(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 			
 		}
 	}
-	else 
-		if (pieceCurrentPosition->y == pieceToMove->y)
+	else if (pieceCurrentPosition->y == pieceToMove->y)
+	{
+		if (pieceCurrentPosition->x < pieceToMove->x)
 		{
-			if (pieceCurrentPosition->x < pieceToMove->x)
-			{
-				sgn = 1;
-			}
-			i = pieceCurrentPosition->x;
-			while(i != pieceToMove->x-sgn) {
-				i+=sgn;
-				
-				if (i > 7 || i < 0)
-				{
-					return 0;
-				}
-
-				if (currentMatrix[pieceToMove->y][i] != '*')
-				{
-					return 0;
-				}
-				
-			}
+			sgn = 1;
 		}
+		i = pieceCurrentPosition->x;
+		while(i != pieceToMove->x-sgn) {
+			i+=sgn;
+			
+			if (i > 7 || i < 0)
+			{
+				return 0;
+			}
+
+			if (currentMatrix[pieceToMove->y][i] != '*')
+			{
+				return 0;
+			}
+			
+		}
+	}
+	else
+	{
+		return 0;
+	}
 	
 
 	return 1;
@@ -132,7 +135,10 @@ int validBishop(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosit
 	}
 	i += sgny;
 	j += sgnx;
-	
+	if(strchr("phbrqk",currentMatrix[i][j]) != NULL)
+	{
+		return 0;
+	}
 	if (i == pieceToMove->y && j == pieceToMove->x)
 	{
 		return 1;
@@ -144,6 +150,7 @@ int validQueen(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositi
 		 pieceCoordonate *pieceToMove) {
 	if (strchr("PHBRQ*",currentMatrix[pieceToMove->y][pieceToMove->x]) == NULL)
 	{
+		printf("Nope");
 		return 0;
 	}
 	return validRook(currentMatrix, pieceCurrentPosition, pieceToMove) || 
@@ -192,7 +199,15 @@ int validMove(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 		return validBishop(currentMatrix,pieceCurrentPosition, pieceToMove);
 	}
 
+	if (pieceToMove->piece == 'k')
+	{
+		return validKing(currentMatrix,pieceCurrentPosition, pieceToMove);
+	}
 
+	if (pieceToMove->piece == 'q')
+	{
+		return validQueen(currentMatrix,pieceCurrentPosition, pieceToMove);
+	}
 	return 1;
 }
 

@@ -97,7 +97,7 @@ InfoNode * popList(List* currentList)
 
     InfoNode* newInfo = currentList->head->info;
     currentList->head = currentList->head->next;
-    currentList->size--;
+    (currentList->size)--;
 
     return newInfo;
 }
@@ -118,16 +118,16 @@ void insertRear(List* currentList, InfoNode* info){
     currentNode->next = NULL;
 
     currentNode->info = info;
-    if(NULL == currentList->tail)
+    if(NULL == currentList->head)
     {
         currentList->tail = currentNode;
-        currentList->size ++;
+        (currentList->size) ++;
         currentList->head = currentNode;
         return;
     }
     currentList->tail->next = currentNode;
     currentList->tail = currentNode;
-    currentList->size ++;
+    (currentList->size) ++;
 
     return;
 }
