@@ -77,6 +77,7 @@ int main(int argc, char const *argv[])
 	readFromFile(hash);
 
 	InfoNode * myNode;
+	unsigned char *child;
 	unsigned char* parentKey = (unsigned char*)getKeyFromChessTable(chessMatrix);
 	Heap* newHeap = createHeap();
 
@@ -139,6 +140,7 @@ int main(int argc, char const *argv[])
 			{
 				break;
 			}
+
 		}
 		else
 		{	
@@ -178,8 +180,9 @@ int main(int argc, char const *argv[])
 				break;
 			}
 		}
-		unsigned char* key = (unsigned char*)getKeyFromChessTable(chessMatrix);
-		addChildToParent(hash, key, parentKey);
+		child = (unsigned char*)getKeyFromChessTable(chessMatrix);
+		addChildToParent(hash, child, parentKey);
+		parentKey = child;
 
 		userTurn = !userTurn;
 	}
