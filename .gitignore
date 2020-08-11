@@ -17,9 +17,6 @@
 *.gch
 *.pch
 
-# Executables
-*.exe
-
 ### VisualStudioCode main ignore extensions types###
 .vscode/*
 !.vscode/settings.json
