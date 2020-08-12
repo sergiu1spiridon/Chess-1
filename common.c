@@ -1,4 +1,19 @@
 #include "common.h"
+
+int matrixCmp(unsigned char**firstMatrix, unsigned char**secondMatrix)
+{
+    for(int i=0;i<8;i++)
+    {
+        for(int j=0;j<8;j++)
+        {
+            if(firstMatrix[i][j]<secondMatrix[i][j])
+                return -1;
+            if(firstMatrix[i][j]>secondMatrix[i][j])
+                return 1;
+        }
+    }
+    return 0;
+}
 // print the current matrix
 void printMatrix(unsigned char** matrix)
 {

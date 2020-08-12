@@ -68,22 +68,24 @@ int main(int argc, char const *argv[])
 		"pppppppp",
 		"rhbqkbhr"};
 	unsigned char** chessMatrix = malloc(sizeof(unsigned char*)*8);
+	unsigned char** initialChessMatrix2 = malloc(sizeof(unsigned char*)*8);
 	for(int i=0;i<8;i++)
 	{
 		chessMatrix[i] = malloc(sizeof(unsigned char)*8);
 		chessMatrix[i] = initialChessMatrix[i];
+		initialChessMatrix2[i] = malloc(sizeof(unsigned char)*8);
+		initialChessMatrix2[i] = initialChessMatrix[i];
 	}
 
 	//create the hashtable
 	hashtable* hash = initHashtable(100);
 	
 	readFromFile(hash);
-	//printAllHash(hash);
 
 	InfoNode * myNode;
 	
 	unsigned char *child;
-	unsigned char* parentKey = (unsigned char*)getKeyFromChessTable(chessMatrix);
+	unsigned char* parentKey = (unsigned char*)getKeyFromChessTable(initialChessMatrix2);
 	
 	Heap* newHeap = createHeap();
 
@@ -100,39 +102,39 @@ int main(int argc, char const *argv[])
 	//clrscr();
 	
 	printf("          ");
-	printf("\033[1m%s\033[0m", "Welcome to chess\n");
+	printf("Welcome to chess\n");
 	srand(time(0));
-	bool userTurn = rand()%2;
+	bool userTurn = true;
 	
 	if(userTurn)
 	{
 		printf("          ");
-		printf("\033[1m%s\033[0m","You will start!\n");
+		printf("You will start!\n");
 	}
 	else
 	{
 		printf("          ");
-		printf("\033[1m%s\033[0m","The computer will start!\n");
-		getAIMove(chessMatrix);
+		printf("The computer will start!\n");
+		//printf("%s\n", (const char*)getKeyFromChessTable(chessMatrix));
+
+
+		chessMatrix = (getAIMove(chessMatrix));
+		
+		printMatrix(chessMatrix);
+		printf("\n\n          ");
+		printf("Computer Turn. Press any key to continue...");
+		getc(stdin);
 
 		child = (unsigned char*)getKeyFromChessTable(chessMatrix);
-
-		//addChildToParent(hash, child, parentKey);
 		upperLowerChange(&child);
+		//if(strcmp((char *)child, (char *)parentKey))
 		addChildToParent(hash, child, parentKey);
 
 		parentKey = child;
 
 		userTurn = true;	
 	}
-	// printf("          ");
-	// printf("\033[1m%s\033[0m","Press any key to begin: ");
 
-	// char*str = malloc(sizeof(char)*10);
-	// fgets(str,10,stdin);
-	// free(str);
-
-	int ok = 0;
 	int round = 0;
 	while(true)
 	{
@@ -144,14 +146,15 @@ int main(int argc, char const *argv[])
 			printf("          ");
 			printf("Game round %d",round++);
 			printMatrix(chessMatrix);
-			if(!isNotInCheckAI(chessMatrix))
+			if(!isNotInCheckPlayer(chessMatrix))
 			{
 				printf("\n          ");
 				printf("Check for AI");
+
 				if(isInCheckMate(chessMatrix))
 				{
 					printf("\n\n          ");
-					printf("Checkmate! Player wins!\n\n");
+					printf("Checkmate! AI wins!\n\n");
 					break;
 				}
 			}
@@ -172,7 +175,6 @@ int main(int argc, char const *argv[])
 		}
 		else
 		{		
-			ok = 0;
 			unsigned char** oldChessMatrix = malloc(sizeof(unsigned char*)*8);
 			for(int i=0;i<8;i++)
 			{
@@ -182,45 +184,45 @@ int main(int argc, char const *argv[])
 					oldChessMatrix[i][j]=chessMatrix[i][j];
 				}
 			}
+
 			if (getFromHash(hash, getKeyFromChessTable(oldChessMatrix)))
 			{
-				printf("should work\n");
 				Node *nod = getFromHash(hash, getKeyFromChessTable(oldChessMatrix));
 				unsigned char *heapExtreme = getExtreme(nod->info->heap);
 				if(heapExtreme) {
 					chessMatrix = getChessTableFromKey(heapExtreme);
-					ok = 1;
+				}
+				else
+				{
+					chessMatrix = getAIMove(chessMatrix);
 				}
 			}
-			if(ok == 0)
+			else
 			{
-			unsigned char** newChessMatrix = getAIMove(chessMatrix);
-			if (!isNotInCheckPlayer(newChessMatrix))
+				chessMatrix = getAIMove(chessMatrix);
+			}
+
+			printMatrix(chessMatrix);
+			printf("\n\n          ");
+			printf("Computer Turn. Press any key to continue...");
+
+			if (!isNotInCheckAI(chessMatrix))
 			{
 				printf("\n          ");
 				printf("Check for Player");
-			}
-			bool isCheck = false;
-			for(int i=0;i<8;i++)
-			{
-				for(int j=0;j<8;j++)
+				//is checkmate for Player?
+				if(matrixCmp(chessMatrix,oldChessMatrix)==0)
 				{
-					if(newChessMatrix[i][j]!= oldChessMatrix[i][j])
-					{
-						isCheck = true;
-						i = 8;
-						break;
-
-					}
+					printf("\n\n          ");
+					printf("Checkmate! Player wins!\n\n");
+					break;
 				}
-			}	
-			if(isCheck == 8)
-			{
-				printf("\n\n          ");
-				printf("Checkmate! Player wins!\n\n");
-				break;
+				
 			}
-			}
+			getc(stdin);
+			getc(stdin);
+
+			
 		
 		}
 
@@ -233,5 +235,6 @@ int main(int argc, char const *argv[])
 
 		userTurn = !userTurn;
 	}
+	writeToFile(hash);
 	return 0;
 }

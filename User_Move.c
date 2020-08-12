@@ -174,6 +174,17 @@ int validKing(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 
 int validMove(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		 pieceCoordonate *pieceToMove) {
+	
+	// is on chess table
+	if(pieceCurrentPosition->x >= 8 || pieceCurrentPosition->y >= 8)
+		return 0;
+	if(pieceToMove->x >= 8 || pieceToMove->y >= 8)
+		return 0;
+	if(pieceCurrentPosition->x < 0 || pieceCurrentPosition->y < 0)
+		return 0;
+	if(pieceToMove->x < 0 || pieceToMove->y < 0)
+		return 0;
+
 	if (pieceToMove->piece != currentMatrix[pieceCurrentPosition->y][pieceCurrentPosition->x])
 	{
 		return 0;	

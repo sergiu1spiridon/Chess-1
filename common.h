@@ -16,7 +16,7 @@ typedef struct pieceCoordonate
 	int y;
 }pieceCoordonate;
 
-
+int matrixCmp(unsigned char**firstMatrix, unsigned char**secondMatrix);
 // print the current matrix
 void printMatrix(unsigned char** matrix);
 // get the difference between the current and initial states
