@@ -57,6 +57,7 @@ unsigned char** randomMatrix()
 
 int main(int argc, char const *argv[])
 {
+	
 	// initial chess table
 	unsigned char initialChessMatrix[8][8]
   	={  "RHBQKBHR",

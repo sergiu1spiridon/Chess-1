@@ -1,5 +1,17 @@
 #include "common.h"
-
+//print colored matrix if on UNIX
+#ifdef _WIN32 // Includes both 32 bit and 64 bit
+        #ifdef _WIN64
+            #define COLOR ""
+            #define ENDING_COLOR printf("| ");
+        #else 
+            #define COLOR ""
+            #define ENDING_COLOR printf("| ");
+        #endif
+    #else
+        #define COLOR "\033[0;31m"
+        #define ENDING_COLOR printf("\033[0m| ");
+    #endif
 int matrixCmp(unsigned char**firstMatrix, unsigned char**secondMatrix)
 {
     for(int i=0;i<8;i++)
@@ -17,33 +29,33 @@ int matrixCmp(unsigned char**firstMatrix, unsigned char**secondMatrix)
 // print the current matrix
 void printMatrix(unsigned char** matrix)
 {
-		printf("\n");
+	printf("\n");
+    printf("          ");
+    printf("  | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7");
+    printf("\n          ");
+    printf("-----------------------------------\n");
+	for(int col = 0;col < 8; col++)
+	{
         printf("          ");
-        printf("  | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7");
-        printf("\n          ");
-        printf("-----------------------------------\n");
-		for(int col = 0;col < 8; col++)
+        printf("%d | ",col);
+		for(int row = 0;row <8;row ++)
 		{
-            printf("          ");
-            printf("%d | ",col);
-			for(int row = 0;row <8;row ++)
-			{
-                if(matrix[col][row]=='*')
-                    printf("  | ");
-                else
-                {   
-                    if(matrix[col][row]<'a')
-                    {
-                        printf("\033[0;31m");
-                    }
-				    printf("%c ",matrix[col][row]);
-                    printf("\033[0m| ");
+            if(matrix[col][row]=='*')
+                printf("  | ");
+            else
+            {   
+                if(matrix[col][row]<'a')
+                {
+                    printf(COLOR);
                 }
-			}
-            printf("\n          ");
-			printf("-----------------------------------\n");
+			    printf("%c ",matrix[col][row]);
+                ENDING_COLOR
+            }
 		}
-		printf("\n");
+        printf("\n          ");
+		printf("-----------------------------------\n");
+	}
+	printf("\n");
 }
 // get the difference between the current and initial states
 int diffStates(unsigned char**currentMatrix)

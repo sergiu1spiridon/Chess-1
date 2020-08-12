@@ -6,13 +6,13 @@ CFLAGS  = -g -Wall
 # you can name this target entry anything, but "default" or "all"
 # are the most commonly used names by convention
 #
-default: test
+default: test.exe
 
 # To create the executable file count we need the object files
 # Heap.o, LinkedList.o, and Hashtable.o:
 #
-test:  Heap.o Linked_List.o Hashtable.o Game_Logic.o Test.o User_Move.o common.o AI_Move.o File_Manipulation.o Check_Mate.o
-	$(CC) $(CFLAGS) -o test Heap.o Linked_List.o Hashtable.o Game_Logic.o Test.o User_Move.o common.o AI_Move.o File_Manipulation.o Check_Mate.o
+test.exe:  Heap.o Linked_List.o Hashtable.o Game_Logic.o Test.o User_Move.o common.o AI_Move.o File_Manipulation.o Check_Mate.o
+	$(CC) $(CFLAGS) -o test.exe Heap.o Linked_List.o Hashtable.o Game_Logic.o Test.o User_Move.o common.o AI_Move.o File_Manipulation.o Check_Mate.o
 
 # To create the object file Heap.o, we need the source
 # files Heap.c, Heap.h:
