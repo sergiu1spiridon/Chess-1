@@ -185,8 +185,9 @@ coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix,unsigned char
                 }
                 returnValue->posX -= i;
                 returnValue->posY -= i;
-                break;
+                
             }
+            break;
         }
     }
 
@@ -211,8 +212,9 @@ coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix,unsigned char
                 }
                 returnValue->posX -= i;
                 returnValue->posY -= i;
-                break;
+                
             }
+            break;
         }
     }
     
@@ -260,8 +262,9 @@ coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix, unsigne
                 }
                 returnValue->posX -= i;
                 returnValue->posY += i;
-                break;
+                
             }
+            break;
         }
     }
     
@@ -286,8 +289,9 @@ coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix, unsigne
                 }
                 returnValue->posX -= i;
                 returnValue->posY += i;
-                break;
+                
             }
+            break;
         }
     }
     
