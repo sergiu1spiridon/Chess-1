@@ -2,11 +2,6 @@
 #define CHECK_MATE
 
 // general use libraries
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-
 #include "common.h"
 
 bool movePawn(unsigned char **matrix, pieceCoordonate *myPiece);

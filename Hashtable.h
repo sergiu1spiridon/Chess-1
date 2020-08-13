@@ -1,12 +1,8 @@
 #ifndef HASHTABLE
 #define HASHTABLE
 
-// general use libraries
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 //custom made libraries
+#include "common.h"
 #include "Linked_List.h"
 
 typedef struct hashtable {

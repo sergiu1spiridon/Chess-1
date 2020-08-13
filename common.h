@@ -7,6 +7,30 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+// macro definitions for param validation
+//
+// PARAM can be the whole parameter or 
+// a component of it
+/*
+* NULL_PARAM_STRUCT_VALIDATION(PARAM) 
+* validates a parameter from a function that
+* returns a data type or structure
+*/
+#define NULL_PARAM_STRUCT_VALIDATION(PARAM) (\
+			if(NULL == PARAM){\
+			printf("NULL PARAMETER\n");\
+			return NULL;\
+			})
+/*
+* NULL_PARAM_STRUCT_VALIDATION(PARAM) 
+* validates a parameter from a void function
+*/
+#define NULL_PARAM_VOID_VALIDATION(PARAM) (\
+			if(NULL == PARAM){\
+			printf("NULL PARAMETER\n");\
+			return;\
+			})
+// end of macro definitions
 
 typedef enum {false,true}bool;
 

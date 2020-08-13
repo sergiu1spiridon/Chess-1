@@ -2,6 +2,7 @@
 #define GAME_LOGIC
 
 // general use libraries
+#include "common.h"
 #include "Hashtable.h"
 #include "AI_Move.h"
 #include "User_Move.h"

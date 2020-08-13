@@ -1,11 +1,7 @@
 #ifndef LINKED_LIST
 #define LINKED_LIST
 
-// general use libraries
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
+#include "common.h"
 #include "Heap.h"
 
 typedef struct InfoNode{

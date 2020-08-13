@@ -2,6 +2,7 @@
 #define FILE_MANIPULATION
 
 // general use libraries
+#include "common.h"
 #include "Game_Logic.h"
 
 void readFromFile(hashtable *hash);
