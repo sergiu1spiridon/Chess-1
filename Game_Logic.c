@@ -138,7 +138,7 @@ void printAllHash(hashtable *hash) {
         while (currentNode)
         {
             nr = 0;
-            printf("in bucket[%d] number %d is %s", i, nr, 
+            printf("in bucket[%d] score %d is %s", i, currentNode->info->score, 
                 currentNode->info->key);
 
             printMatrix(getChessTableFromKey(currentNode->info->key));
@@ -176,7 +176,7 @@ void BFS(hashtable *hash, InfoNode *currentNode, int score) {
                // printf("gasit parinte:\n");
                // printMatrix(getChessTableFromKey(currentParent->info->key));
                currentParent->info->score += score;
-               heapifyFromPos(currentParent->info->heap, currentNode->key, score);
+               heapifyFromPos(currentParent->info->heap, currentNode->key, currentNode->score);
                
                // printHeap(currentParent->info->heap);
                // printf("%d\n", currentParent->info->score);
@@ -237,10 +237,13 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
                 printf("still null hash\n");
             
         }
+        
         addInHeap(getFromHash(hash, parentKey)->info->heap, newHeapNode);
 
 
         addToHash(hash, newNode);
+        // printMatrix(getChessTableFromKey(getFromHash(hash, parentKey)->info->key));
+        // printMatrix(getChessTableFromKey(getFromHash(hash, newHeapNode->key)->info->key));
         BFS(hash, newNode, newNode->score);
         //printAllHash(hash);
         //printf("%s\n", getFromHash(hash, chessMatrixKey)->info->key);

@@ -12,6 +12,7 @@ Heap* createHeap() {
 }
 
 void printHeap(Heap *heap) {
+	printf("%d\n", heap->size);
 	for(int i = 0; i < heap->size; i++) {
 		printf("%d ", heap->myHeap[i]->score);
 	}
@@ -29,8 +30,8 @@ void heapifyFromPos(Heap *heap, unsigned char *key,int score) {
 	}
 
 	int k = i;
-	heap->myHeap[k]->score += score;
-	
+	heap->myHeap[k]->score = score;
+
 	int left = ((k + 1) << 1) - 1, right = ((k + 1) << 1);
 	HeapNode *aux;
 

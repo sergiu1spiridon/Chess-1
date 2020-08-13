@@ -53,8 +53,6 @@ unsigned char** randomMatrix()
 
 }
 
-
-
 int main()
 {
 	
@@ -83,6 +81,8 @@ int main()
 	
 	readFromFile(hash);
 
+	//printAllHash(hash);
+
 	InfoNode * myNode;
 	
 	unsigned char *child;
@@ -97,160 +97,44 @@ int main()
 	myNode->heap = newHeap;
 	myNode->score = getStateScore(parentKey);
 	
-	//addToHash(hash,myNode);
+	addToHash(hash,myNode);
 
+	printMatrix(chessMatrix);
+	chessMatrix = randomMatrix();
 
-	// clrscr();
-	
-	printf("          ");
-	printf("Welcome to chess\n");
-	srand(time(0));
-	bool userTurn = rand()%2;
-	printf("\n\n          ");
-	// printf("Press any key to start the game");
-	// getc(stdin);
-
-	if(userTurn)
-	{
-		printf("          ");
-		printf("You will start!\n");
-	}
-	else
-	{
-		printf("          ");
-		printf("The computer will start!\n");
-
-		chessMatrix = (getAIMove(chessMatrix));
+	child = (unsigned char*)getKeyFromChessTable(chessMatrix);
 		
-		printMatrix(chessMatrix);
-		printf("\n\n          ");
-		printf("Computer Turn. Press any key to continue...");
-		//getc(stdin);
+	upperLowerChange(&child);
+	addChildToParent(hash, child, parentKey);
+	parentKey = child;
 
-		child = (unsigned char*)getKeyFromChessTable(chessMatrix);
-		upperLowerChange(&child);
-		//if(strcmp((char *)child, (char *)parentKey))
-		addChildToParent(hash, child, parentKey);
-
-		parentKey = child;
-
-		userTurn = true;	
-	}
-
-	int round = 0;
-	while(true)
-	{
-
-		if(userTurn == true)
-		{
-			// clrscr();
-			printf("          ");
-			printf("Game round %d",round++);
-			printMatrix(chessMatrix);
-			if(!isNotInCheckPlayer(chessMatrix))
-			{
-				printf("\n          ");
-				printf("Check for AI");
-
-				if(isInCheckMate(chessMatrix))
-				{
-					printf("\n\n          ");
-					printf("Checkmate! AI wins!\n\n");
-					break;
-				}
-			}
-			printf("          ");
-			printf("If you want to exit, press x");
-			chessMatrix = getPlayerMove(chessMatrix);
-			if(chessMatrix == NULL)
-			{
-				break;
-			}
-
-		}
-		else
-		{		
-			unsigned char** oldChessMatrix = malloc(sizeof(unsigned char*)*8);
-			for(int i=0;i<8;i++)
-			{
-				oldChessMatrix[i] = malloc(sizeof(unsigned char)*8);
-				for(int j=0;j<8;j++)
-				{
-					oldChessMatrix[i][j]=chessMatrix[i][j];
-				}
-			}
-
-			if (getFromHash(hash, getKeyFromChessTable(oldChessMatrix)))
-			{
-				Node *nod = getFromHash(hash, getKeyFromChessTable(oldChessMatrix));
-				unsigned char *heapExtreme = getExtreme(nod->info->heap);
-				
-				if(heapExtreme) {
-					printHeap(nod->info->heap);
-					
-					chessMatrix = getChessTableFromKey(heapExtreme);
-				}
-				else
-				{
-					chessMatrix = getAIMove(chessMatrix);
-				}
-			}
-			else
-			{
-				chessMatrix = getAIMove(chessMatrix);
-			}
-			//is checkmate for Player?
-			if(chessMatrix == NULL)
-				{
-					printf("\n\n          ");
-					printf("Checkmate! Player wins!\n\n");
-					break;
-				}
-
-			//is checkmate for Player?
-			if (!isNotInCheckAI(chessMatrix))
-			{
-				printf("\n          ");
-				printf("Check for Player");			
-			}
-			printMatrix(chessMatrix);
-			printf("\n\n          ");
-			printf("Computer Turn. Press any key to continue...");
-
-			//getc(stdin);
-			//getc(stdin);
-
-			
+	printMatrix(chessMatrix);
+	//chessMatrix = getPlayerMove(chessMatrix);
+	chessMatrix = randomMatrix();
+	child = (unsigned char*)getKeyFromChessTable(chessMatrix);
 		
-		}
+	upperLowerChange(&child);
+	addChildToParent(hash, child, parentKey);
+	parentKey = child;
 
-		child = (unsigned char*)getKeyFromChessTable(chessMatrix);
+	printMatrix(chessMatrix);
+	//chessMatrix = getPlayerMove(chessMatrix);
+	chessMatrix = randomMatrix();
+
+	child = (unsigned char*)getKeyFromChessTable(chessMatrix);
 		
-		upperLowerChange(&child);
-		addChildToParent(hash, child, parentKey);
-		parentKey = child;
+	upperLowerChange(&child);
+	addChildToParent(hash, child, parentKey);
+	parentKey = child;
 
-		userTurn = !userTurn;
-	}
-
+	//clrscr();
+	printf("%d\n", getFromHash(hash, parentKey)->info->score);
+	printHeap(getFromHash(hash, parentKey)->info->heap);
+	printAllHash(hash);
 	writeToFile(hash);
-	getc(stdin);
-	// clrscr();
-	printf("\n\n          ");
-	printf("If you want to exit, press X");
-	printf("\n\n          ");
-	printf("If you want to play again, press R\n\n");
-	printf("\n\n          My option is: ");
-	char response = getc(stdin);
 
-	if('x' == tolower(response))
-	{
-		return 0;
-	}
-	else if('r' == tolower(response))
-	{
-		return main();
-	}
+
+	
 
 	return 0;
 }
