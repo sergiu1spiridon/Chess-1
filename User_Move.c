@@ -2,6 +2,9 @@
 
 int validPion(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		pieceCoordonate *pieceToMove) {
+	NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+	NULL_PARAM_STRUCT_VALIDATION(pieceCurrentPosition)
+	NULL_PARAM_STRUCT_VALIDATION(pieceToMove)
 
 	int prevPos = (pieceCurrentPosition->piece == pieceToMove->piece);
 	int thisPos = (pieceCurrentPosition->y == (pieceToMove->y + 1) 
@@ -13,6 +16,9 @@ int validPion(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 
 int validPionAttack(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		pieceCoordonate *pieceToMove) {
+	NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+	NULL_PARAM_STRUCT_VALIDATION(pieceCurrentPosition)
+	NULL_PARAM_STRUCT_VALIDATION(pieceToMove)
 
 	int prevPos = (((pieceCurrentPosition->y-1) == pieceToMove->y) && 
 					(((pieceCurrentPosition->x+1) == pieceToMove->x) || 
@@ -24,6 +30,10 @@ int validPionAttack(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentP
 
 int validKnight(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		pieceCoordonate *pieceToMove) {
+	NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+	NULL_PARAM_STRUCT_VALIDATION(pieceCurrentPosition)
+	NULL_PARAM_STRUCT_VALIDATION(pieceToMove)
+	
 	if (strchr("PHBRQ*",currentMatrix[pieceToMove->y][pieceToMove->x]) == NULL)
 	{
 		return 0;
@@ -43,6 +53,9 @@ int validKnight(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosit
 
 int validRook(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		pieceCoordonate *pieceToMove) {
+	NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+	NULL_PARAM_STRUCT_VALIDATION(pieceCurrentPosition)
+	NULL_PARAM_STRUCT_VALIDATION(pieceToMove)
 
 	int sgn = -1,i;
 	if (strchr("PHBRQ*",currentMatrix[pieceToMove->y][pieceToMove->x]) == NULL)
@@ -103,6 +116,9 @@ int validRook(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 
 int validBishop(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		pieceCoordonate *pieceToMove) {
+	NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+	NULL_PARAM_STRUCT_VALIDATION(pieceCurrentPosition)
+	NULL_PARAM_STRUCT_VALIDATION(pieceToMove)
 
 	int sgny = 1,sgnx = 1,i,j;
 	if (strchr("PHBRQ*",currentMatrix[pieceToMove->y][pieceToMove->x]) == NULL)
@@ -148,6 +164,10 @@ int validBishop(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosit
 
 int validQueen(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		 pieceCoordonate *pieceToMove) {
+	NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+	NULL_PARAM_STRUCT_VALIDATION(pieceCurrentPosition)
+	NULL_PARAM_STRUCT_VALIDATION(pieceToMove)
+	
 	if (strchr("PHBRQ*",currentMatrix[pieceToMove->y][pieceToMove->x]) == NULL)
 	{
 		printf("Nope");
@@ -159,6 +179,10 @@ int validQueen(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositi
 
 int validKing(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		 pieceCoordonate *pieceToMove) {
+	NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+	NULL_PARAM_STRUCT_VALIDATION(pieceCurrentPosition)
+	NULL_PARAM_STRUCT_VALIDATION(pieceToMove)
+	
 	if (strchr("PHBRQ*",currentMatrix[pieceToMove->y][pieceToMove->x]) == NULL)
 	{
 		return 0;
@@ -174,7 +198,10 @@ int validKing(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 
 int validMove(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosition,
 		 pieceCoordonate *pieceToMove) {
-	
+	NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+	NULL_PARAM_STRUCT_VALIDATION(pieceCurrentPosition)
+	NULL_PARAM_STRUCT_VALIDATION(pieceToMove)
+		
 	// is on chess table
 	if(pieceCurrentPosition->x >= 8 || pieceCurrentPosition->y >= 8)
 		return 0;
@@ -223,9 +250,13 @@ int validMove(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPositio
 }
 
 unsigned char** getPlayerMove(unsigned char** currentMatrix) {
+	NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
 
 	pieceCoordonate *pieceToMove = malloc(sizeof(pieceCoordonate));
 	pieceCoordonate *pieceToMovePos = malloc(sizeof(pieceCoordonate));
+
+	NULL_PARAM_STRUCT_VALIDATION(pieceToMovePos)
+	NULL_PARAM_STRUCT_VALIDATION(pieceToMove)
 
 	printf("\n          ");
 	printf("Enter your next move!");
