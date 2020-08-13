@@ -3,7 +3,12 @@
 
 unsigned char** getFutureMatrix(coord* position, unsigned char** currentMatrix,char typePiece)
 {
+    NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+    NULL_PARAM_STRUCT_VALIDATION(position)
+
     unsigned char** futureMatrix = malloc(64); 
+    NULL_PARAM_STRUCT_VALIDATION(futureMatrix)
+
     for(int i=0;i<8;i++)
     {
         futureMatrix[i] = malloc(64);
@@ -13,10 +18,6 @@ unsigned char** getFutureMatrix(coord* position, unsigned char** currentMatrix,c
         }
     }
 
-    if(position==NULL)
-    {
-        printf("position is null from getFutureMatrix");
-    }
     futureMatrix[position->posY][position->posX] = typePiece;
     futureMatrix[position->posY_initial][position->posX_initial] = '*';
     return futureMatrix;
@@ -24,17 +25,20 @@ unsigned char** getFutureMatrix(coord* position, unsigned char** currentMatrix,c
 
 coord* horizontalMove(int posX, int posY, unsigned char** matrix,unsigned char typePiece)
 {
-    char* userPieces = "rhbqp*";
-
+    NULL_PARAM_STRUCT_VALIDATION(matrix)
+    
+    char* userPieces = "rhbqp";
     coord* returnValue = malloc(sizeof(coord));
+    NULL_PARAM_STRUCT_VALIDATION(returnValue)
+    
     returnValue->posX = posX;
     returnValue->posX_initial = posX;
     returnValue->posY = posY;
-    returnValue->posY_initial = posY;
+    returnValue->posY_initial = posY;     
     returnValue->typePiece = typePiece;
 
-
-    int * possibleMovement = malloc(sizeof(int)*64);
+    int * possibleMovement = malloc(sizeof(int)*32);
+    NULL_PARAM_STRUCT_VALIDATION(possibleMovement)
     int sizePossible = 0;
     //right movement
     for(int i = posX+1 ; i<=7;i++)
@@ -88,16 +92,21 @@ coord* horizontalMove(int posX, int posY, unsigned char** matrix,unsigned char t
 }
 coord* verticalMove(int posX, int posY, unsigned char** matrix,unsigned char typePiece)
 {
-    char* userPieces = "rhbqp*";
-
+    NULL_PARAM_STRUCT_VALIDATION(matrix)
+    
+    char* userPieces = "rhbqp";
     coord* returnValue = malloc(sizeof(coord));
+    NULL_PARAM_STRUCT_VALIDATION(returnValue)
+    
     returnValue->posX = posX;
     returnValue->posX_initial = posX;
     returnValue->posY = posY;
     returnValue->posY_initial = posY;     
     returnValue->typePiece = typePiece;
 
-    int * possibleMovement = malloc(sizeof(int)*64);
+    int * possibleMovement = malloc(sizeof(int)*32);
+    NULL_PARAM_STRUCT_VALIDATION(possibleMovement)
+
     int sizePossible = 0;
     //down movement
     for(int i = posY+1 ; i<=7;i++)
@@ -151,17 +160,22 @@ coord* verticalMove(int posX, int posY, unsigned char** matrix,unsigned char typ
 // main diagonal is of the form i=j
 coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix,unsigned char typePiece)
 {
+    
+    NULL_PARAM_STRUCT_VALIDATION(matrix)
+    
     char* userPieces = "rhbqp";
-
     coord* returnValue = malloc(sizeof(coord));
+    NULL_PARAM_STRUCT_VALIDATION(returnValue)
+    
     returnValue->posX = posX;
     returnValue->posX_initial = posX;
     returnValue->posY = posY;
     returnValue->posY_initial = posY;     
     returnValue->typePiece = typePiece;
 
-
     int * possibleMovement = malloc(sizeof(int)*32);
+    NULL_PARAM_STRUCT_VALIDATION(possibleMovement)
+    
     int sizePossible = 0;
     //diagonal movement
     int i = 0;
@@ -231,8 +245,12 @@ coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix,unsigned char
 // secondary diagonal is of the form i = nrCol - j - i
 coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix, unsigned char typePiece)
 {
+    NULL_PARAM_STRUCT_VALIDATION(matrix)
+    
     char* userPieces = "rhbqp";
     coord* returnValue = malloc(sizeof(coord));
+    NULL_PARAM_STRUCT_VALIDATION(returnValue)
+    
     returnValue->posX = posX;
     returnValue->posX_initial = posX;
     returnValue->posY = posY;
@@ -240,6 +258,8 @@ coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix, unsigne
     returnValue->typePiece = typePiece;
 
     int * possibleMovement = malloc(sizeof(int)*32);
+    NULL_PARAM_STRUCT_VALIDATION(possibleMovement)
+    
     int sizePossible = 0;
     //diagonal movement
     int i;
@@ -308,10 +328,14 @@ coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix, unsigne
 // pawn movement
 coord* pawnMovement(int posX, int posY, unsigned char** matrix)
 {
+    NULL_PARAM_STRUCT_VALIDATION(matrix)
+
     char* userPieces = "rhbqp";
     char* aiPieces = "RHBQKP*";
     
     coord* returnValue = malloc(sizeof(coord));
+    NULL_PARAM_STRUCT_VALIDATION(returnValue)
+    
     returnValue->posX = posX;
     returnValue->posX_initial = posX;
     returnValue->posY = posY;
@@ -384,6 +408,8 @@ coord* pawnMovement(int posX, int posY, unsigned char** matrix)
 // knight movement
 coord* knightMovement(int posX, int posY, unsigned char** matrix)
 {
+    NULL_PARAM_STRUCT_VALIDATION(matrix)
+    
     char* userPieces = "rhbqp*";
 
     // relative positions on the knight's move
@@ -391,6 +417,8 @@ coord* knightMovement(int posX, int posY, unsigned char** matrix)
     int yValues[8] = {2,1,-1,-2,-2,-1,1,2};
 
     coord* returnValue = malloc(sizeof(coord));
+    NULL_PARAM_STRUCT_VALIDATION(returnValue)
+    
     returnValue->posX = posX;
     returnValue->posY = posY;
     returnValue->posX_initial = posX;
@@ -432,6 +460,8 @@ coord* knightMovement(int posX, int posY, unsigned char** matrix)
 // king movement
 coord* kingMovement(int posX,int posY,unsigned char**matrix)
 {
+    NULL_PARAM_STRUCT_VALIDATION(matrix)
+
     char* userPieces = "rhbqp*";
 
     // relative positions on the king's move
@@ -439,6 +469,8 @@ coord* kingMovement(int posX,int posY,unsigned char**matrix)
     int yValues[8] = {-1,0,1,1, 1, 0,-1,-1};
     
     coord* returnValue = malloc(sizeof(coord));
+    NULL_PARAM_STRUCT_VALIDATION(returnValue)
+
     returnValue->posX = posX;
     returnValue->posX_initial = posX;
     returnValue->posY = posY;
@@ -478,10 +510,15 @@ coord* kingMovement(int posX,int posY,unsigned char**matrix)
 //get all the coordonates of the pieces of type "piece"
 coord** getCoordPieces(unsigned char** matrix,unsigned char piece)
 {
+    
+    NULL_PARAM_STRUCT_VALIDATION(matrix)
+    
     coord** pieceCoord;
     int nrOfPieces = 0;
     //allocate memory for each of the pieces
     pieceCoord = malloc(sizeof(coord*)*100);
+
+    NULL_PARAM_STRUCT_VALIDATION(pieceCoord)
 
     nrOfPieces=0;
     for(int i=0;i<8;i++)
@@ -513,6 +550,12 @@ coord** getCoordPieces(unsigned char** matrix,unsigned char piece)
 void switchPieces(coord** allPieces, unsigned char piece, int *nrOfPieces,
                  coord*currentPieceLocation,unsigned char** matrix,int typeGame)
 {
+    
+    NULL_PARAM_STRUCT_VALIDATION(allPieces)
+    NULL_PARAM_STRUCT_VALIDATION(currentPieceLocation)
+    NULL_PARAM_STRUCT_VALIDATION(matrix)
+    NULL_PARAM_STRUCT_VALIDATION(nrOfPieces)
+    
     int pieceValue[6][3] = {{1,1,1},{3,4,5},{3,4,5},{5,6,7},{9,10,13},{1,1,1}};
     int currentNrOfPieces= *nrOfPieces;
     int prob = 0;
@@ -646,13 +689,15 @@ void switchPieces(coord** allPieces, unsigned char piece, int *nrOfPieces,
 // function that interprets and returns the new state from the AI
 unsigned char** getAIMove(unsigned char** matrix)
 {
-    // check for check and try to find a solution
-
+   NULL_PARAM_STRUCT_VALIDATION(matrix)
 
     // normal play
     char* aiPieces = "PHBRQK";
 
     coord ** allPieces = calloc(sizeof(coord *),1024);
+    
+    NULL_PARAM_STRUCT_VALIDATION(allPieces)
+
     int nrOfMoves = 0;
 
     // select all locations of pieces
