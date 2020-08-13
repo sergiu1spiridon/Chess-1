@@ -269,7 +269,6 @@ bool isNotInCheckPlayer(unsigned char**currentMatrix) {
     }
     
     NULL_PARAM_STRUCT_VALIDATION(king)
-    NULL_PARAM_STRUCT_VALIDATION(king->piece)
 
     bool isFromPawn = isCheckPlayerFromPawn(currentMatrix, king);
 
@@ -304,7 +303,6 @@ bool isNotInCheckAI(unsigned char**currentMatrix) {
     }
 
     NULL_PARAM_STRUCT_VALIDATION(king)
-    NULL_PARAM_STRUCT_VALIDATION(king->piece)
 
     bool isFromPawn = isCheckAIFromPawn(currentMatrix, king);
 
