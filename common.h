@@ -7,6 +7,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#include <math.h>
 // macro definitions for param validation
 //
 // PARAM can be the whole parameter or 
