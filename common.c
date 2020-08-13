@@ -60,6 +60,7 @@ void printMatrix(unsigned char** matrix)
 // get the difference between the current and initial states
 int diffStates(unsigned char**currentMatrix)
 {
+    NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
 
     char initialChessMatrix[8][8]
   ={"RHBQKBHR",
@@ -87,6 +88,8 @@ int diffStates(unsigned char**currentMatrix)
 // get the total number of pieces in game
 int countPieces(unsigned char**currentMatrix)
 {
+    NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+
     // the difference between the two Matrices
     int count = 0;
     
@@ -102,6 +105,10 @@ int countPieces(unsigned char**currentMatrix)
 }
 
 bool isCheckPlayerFromPawn(unsigned char **currentMatrix, pieceCoordonate *king) {
+
+    NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+    NULL_PARAM_STRUCT_VALIDATION(king)
+
     if(king->y-1 < 0)
         return 0;
     if(king->x-1 < 0)
@@ -114,6 +121,9 @@ bool isCheckPlayerFromPawn(unsigned char **currentMatrix, pieceCoordonate *king)
 }
 
 bool isCheckAIFromPawn(unsigned char **currentMatrix, pieceCoordonate *king) {
+    NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+    NULL_PARAM_STRUCT_VALIDATION(king)
+
     if(king->y+1 < 0)
         return 0;
     if(king->x-1 < 0)
@@ -125,6 +135,9 @@ bool isCheckAIFromPawn(unsigned char **currentMatrix, pieceCoordonate *king) {
 }
 
 bool isCheckFromRook(unsigned char **currentMatrix, pieceCoordonate *king, char c) {
+    NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+    NULL_PARAM_STRUCT_VALIDATION(king)
+
     int sgnx[4] = {0, 1, 0, -1};
     int sgny[4] = {-1, 0, 1, 0};
     int x,y;
@@ -151,6 +164,9 @@ bool isCheckFromRook(unsigned char **currentMatrix, pieceCoordonate *king, char 
 }
 
 bool isCheckFromBishop(unsigned char **currentMatrix, pieceCoordonate *king, char c) {
+    NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+    NULL_PARAM_STRUCT_VALIDATION(king)
+
     int sgnx[4] = {-1, -1, 1, 1};
     int sgny[4] = {-1, 1, 1, -1};
     int x,y;
@@ -178,6 +194,9 @@ bool isCheckFromBishop(unsigned char **currentMatrix, pieceCoordonate *king, cha
 }
 
 bool isCheckFromQueen(unsigned char **currentMatrix, pieceCoordonate *king, char c) {
+    NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+    NULL_PARAM_STRUCT_VALIDATION(king)
+
     int sgnx[8] = {-1, -1, 1, 1, 0, 1, 0, -1};
     int sgny[8] = {-1, 1, 1, -1, -1, 0, 1, 0};
     int x,y;
@@ -207,6 +226,9 @@ bool isCheckFromQueen(unsigned char **currentMatrix, pieceCoordonate *king, char
 }
 
 bool isCheckFromKnight(unsigned char **currentMatrix, pieceCoordonate *king, char c) {
+    NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+    NULL_PARAM_STRUCT_VALIDATION(king)
+
     int sgnx[8] = {-2, -2, 2, 2, 1, 1, -1, -1};
     int sgny[8] = {-1, 1, -1, 1, -2, 2, -2, 2};
     int x,y;
@@ -229,6 +251,8 @@ bool isCheckFromKnight(unsigned char **currentMatrix, pieceCoordonate *king, cha
 }
 
 bool isNotInCheckPlayer(unsigned char**currentMatrix) {
+    NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+
     pieceCoordonate *king = malloc(sizeof(pieceCoordonate));
     
     for(int i= 0;i<8;i++)
@@ -243,6 +267,9 @@ bool isNotInCheckPlayer(unsigned char**currentMatrix) {
             }
         }
     }
+    
+    NULL_PARAM_STRUCT_VALIDATION(king)
+    NULL_PARAM_STRUCT_VALIDATION(king->piece)
 
     bool isFromPawn = isCheckPlayerFromPawn(currentMatrix, king);
 
@@ -258,6 +285,9 @@ bool isNotInCheckPlayer(unsigned char**currentMatrix) {
 }
 
 bool isNotInCheckAI(unsigned char**currentMatrix) {
+    
+    NULL_PARAM_STRUCT_VALIDATION(currentMatrix)
+
     pieceCoordonate *king = malloc(sizeof(pieceCoordonate));
     
     for(int i= 0;i<8;i++)
@@ -272,6 +302,9 @@ bool isNotInCheckAI(unsigned char**currentMatrix) {
             }
         }
     }
+
+    NULL_PARAM_STRUCT_VALIDATION(king)
+    NULL_PARAM_STRUCT_VALIDATION(king->piece)
 
     bool isFromPawn = isCheckAIFromPawn(currentMatrix, king);
 

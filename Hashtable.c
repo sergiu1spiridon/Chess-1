@@ -3,6 +3,8 @@
 // The hashing function used on state to get index
 
  unsigned long hashfct(unsigned char *str) {
+	NULL_PARAM_STRUCT_VALIDATION(str)
+	
 	unsigned int hash = 0;
 	int c = *str;
 
@@ -16,6 +18,9 @@
 
 // Put a new state in the hashtable
 void addToHash(hashtable *hash, InfoNode *info) {
+	NULL_PARAM_STRUCT_VALIDATION(hash)
+	NULL_PARAM_STRUCT_VALIDATION(info)	
+	
 	unsigned long indexOfElement = hash->hashFunction(info->key) % hash->size;
 	
 	push(hash->bucket[indexOfElement], info);
@@ -23,6 +28,9 @@ void addToHash(hashtable *hash, InfoNode *info) {
 
 // Get a state from the hashtable
 Node *getFromHash(hashtable *hash, unsigned char *key) {
+	NULL_PARAM_STRUCT_VALIDATION(hash)
+	NULL_PARAM_STRUCT_VALIDATION(key)
+	
 	unsigned long indexOfElement = hash->hashFunction(key) % hash->size;
 
 	return getElementByKey(hash->bucket[indexOfElement], key);
@@ -30,6 +38,8 @@ Node *getFromHash(hashtable *hash, unsigned char *key) {
 
 // Create and initialize the hashtable
 hashtable *initHashtable(int size) {
+	
+	NULL_PARAM_STRUCT_VALIDATION(size)
 	
 	hashtable *hash = malloc(sizeof(hashtable));
 	hash->size = size;
@@ -56,10 +66,8 @@ hashtable *initHashtable(int size) {
 }
 
 void printAll(hashtable *hash) {
-	if(!hash) {
-		printf("Hash nonexistent\n");
-		return;
-	}
+	NULL_PARAM_STRUCT_VALIDATION(hash)
+
 	Node *currentNode;
 	for (int i = 0; i < hash->size; ++i)
 	{	

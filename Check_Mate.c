@@ -1,6 +1,9 @@
 #include "Check_Mate.h"
 
 bool movePawn(unsigned char **matrix, pieceCoordonate *myPiece) {
+    NULL_PARAM_STRUCT_VALIDATION(myPiece)
+    NULL_PARAM_STRUCT_VALIDATION(matrix)
+
     unsigned char **newMat = malloc(sizeof(char *) * 8);
     char *pieseleMele = "pkqrhb*";
     for(int i = 0; i < 8; i++)
@@ -43,6 +46,9 @@ bool movePawn(unsigned char **matrix, pieceCoordonate *myPiece) {
 }
 
 bool moveRook(unsigned char **matrix, pieceCoordonate *myPiece) {
+    NULL_PARAM_STRUCT_VALIDATION(myPiece)
+    NULL_PARAM_STRUCT_VALIDATION(matrix)
+
     unsigned char **newMat = malloc(sizeof(char *) * 8);
     char *pieseleMele = "pkqrhb";
     for(int i = 0; i < 8; i++)
@@ -85,6 +91,9 @@ bool moveRook(unsigned char **matrix, pieceCoordonate *myPiece) {
 }
 
 bool moveBishop(unsigned char **matrix, pieceCoordonate *myPiece) {
+    NULL_PARAM_STRUCT_VALIDATION(myPiece)
+    NULL_PARAM_STRUCT_VALIDATION(matrix)
+    
     unsigned char **newMat = malloc(sizeof(char *) * 8);
     char *pieseleMele = "pkqrhb";
     for(int i = 0; i < 8; i++)
@@ -128,6 +137,9 @@ bool moveBishop(unsigned char **matrix, pieceCoordonate *myPiece) {
 }
 
 bool moveKnight(unsigned char **matrix, pieceCoordonate *myPiece) {
+    NULL_PARAM_STRUCT_VALIDATION(myPiece)
+    NULL_PARAM_STRUCT_VALIDATION(matrix)
+    
     unsigned char **newMat = malloc(sizeof(char *) * 8);
     char *pieseleMele = "pkqrhb";
     for(int i = 0; i < 8; i++)
@@ -161,6 +173,9 @@ bool moveKnight(unsigned char **matrix, pieceCoordonate *myPiece) {
 }
 
 bool moveQueen(unsigned char **matrix, pieceCoordonate *myPiece) {
+    NULL_PARAM_STRUCT_VALIDATION(myPiece)
+    NULL_PARAM_STRUCT_VALIDATION(matrix)
+    
     unsigned char **newMat = malloc(sizeof(char *) * 8);
     char *pieseleMele = "pkqrhb";
     for(int i = 0; i < 8; i++)
@@ -204,12 +219,17 @@ bool moveQueen(unsigned char **matrix, pieceCoordonate *myPiece) {
 }
 
 bool moveKing(unsigned char **matrix, pieceCoordonate *myPiece) {
+    NULL_PARAM_STRUCT_VALIDATION(myPiece)
+    NULL_PARAM_STRUCT_VALIDATION(matrix)
+    
     unsigned char **newMat = malloc(sizeof(char *) * 8);
     char *pieseleMele = "pkqrhb";
     for(int i = 0; i < 8; i++)
         newMat[i] = malloc(sizeof(char) * 8);
 
     newMat = memcpy(newMat, matrix, 64);
+
+    NULL_PARAM_STRUCT_VALIDATION(newMat)
 
     int sgny[8] = {-1,-1,1,1,-1,1,0,0};
     int sgnx[8] = {-1,1,-1,1,0,0,-1,1};
@@ -237,7 +257,12 @@ bool moveKing(unsigned char **matrix, pieceCoordonate *myPiece) {
 }
 
 bool isInCheckMate(unsigned char **matrix) {
+
+    NULL_PARAM_STRUCT_VALIDATION(matrix)
+    
     pieceCoordonate *myPiece = malloc(sizeof(pieceCoordonate));
+
+    NULL_PARAM_STRUCT_VALIDATION(myPiece)
 
     for(int j = 0; j < 8; j++)
         for(int l = 0; l < 8; l++)

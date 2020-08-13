@@ -33,12 +33,9 @@ void deleteList(List* currentList){
 
 // manipulate at index
 Node* getElementByKey(List* currentList, unsigned char *key){
-    if(NULL == currentList )
-        return NULL;
-
-    if(NULL == key)
-        return NULL;
-
+	NULL_PARAM_STRUCT_VALIDATION(currentList)
+	NULL_PARAM_STRUCT_VALIDATION(key)
+	
     Node* currentElement = currentList->head;
     int ok;
     while(currentElement != NULL) {
@@ -64,10 +61,8 @@ Node* getElementByKey(List* currentList, unsigned char *key){
 
 // manipulate data from front
 void push(List* currentList, InfoNode* info){
-    if(NULL == currentList)
-        return;
-    if(NULL == info)
-        return;
+	NULL_PARAM_STRUCT_VALIDATION(currentList)
+	NULL_PARAM_STRUCT_VALIDATION(info)
 
     if (!getElementByKey(currentList,info->key))
     {
@@ -85,16 +80,10 @@ void push(List* currentList, InfoNode* info){
 }
 InfoNode * popList(List* currentList)
 {
-    if(NULL == currentList ) {
-        printf("current list is null\n");
-        return NULL;
-    }
-
-    if(NULL == currentList->head) {
-        printf("head is null\n");
-        return NULL;
-    }
-
+    
+	NULL_PARAM_STRUCT_VALIDATION(currentList)
+	NULL_PARAM_STRUCT_VALIDATION(currentList->head)
+	
     InfoNode* newInfo = currentList->head->info;
     currentList->head = currentList->head->next;
     (currentList->size)--;
@@ -103,6 +92,10 @@ InfoNode * popList(List* currentList)
 }
 // manipulate data from rear
 void insertRear(List* currentList, InfoNode* info){
+    
+	NULL_PARAM_STRUCT_VALIDATION(currentList)
+	NULL_PARAM_STRUCT_VALIDATION(info)
+	
     if(NULL == currentList)
         return;
 
