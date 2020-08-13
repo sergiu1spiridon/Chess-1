@@ -127,10 +127,9 @@ int getStateScore(unsigned char *chessMatrixKey) {
 }
 
 void printAllHash(hashtable *hash) {
-    if(!hash) {
-        printf("Hash nonexistent\n");
-        return;
-    }
+
+    NULL_PARAM_STRUCT_VALIDATION(hash)
+
     Node *currentNode;
     int nr;
     for (int i = 0; i < hash->size; i++)
@@ -163,6 +162,16 @@ void printAllHash(hashtable *hash) {
 
 int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned char* parentKey)
 {
+    
+    NULL_PARAM_STRUCT_VALIDATION(hash)
+
+    
+    NULL_PARAM_STRUCT_VALIDATION(chessMatrixKey)
+
+    
+    NULL_PARAM_STRUCT_VALIDATION(parentKey)
+
+    
     // printAllHash(hash);
     Node *nodeForKey = getFromHash(hash, chessMatrixKey);
 
@@ -292,12 +301,20 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
 }
 
 unsigned char* getNextMove(hashtable *hash, unsigned char* currentMoveKey) {
+    
+    NULL_PARAM_STRUCT_VALIDATION(hash)
+
+    NULL_PARAM_STRUCT_VALIDATION(currentMoveKey)
+    
 	Node *currentNode = getFromHash(hash, currentMoveKey);
 
 	return getExtreme(currentNode->info->heap);
 }
 
 void upperLowerChange(unsigned char **key) {
+    
+    NULL_PARAM_STRUCT_VALIDATION(key)
+
     int i = 0;
     char *digits = {"0,1,2,3,4,5,6,7,8,9,*"};
     //printf("%s\n\n\n", *key);
