@@ -19,9 +19,7 @@ void readFromFile(hashtable *hash) {
     {
         unsigned char *child = malloc(sizeof(char) * 194); 
         
-        fscanf(file, "%s\n", child);
-        //printf("newRead\n");
-        
+        fscanf(file, "%s\n", child);   
 
         if(parent == NULL)
             break;
@@ -31,8 +29,6 @@ void readFromFile(hashtable *hash) {
             break;
 
         addChildToParent(hash, child, parent);
-
-        //printAllHash(hash);
 
         parent = malloc(sizeof(char) * 194);
     }
@@ -62,11 +58,6 @@ void writeToFile(hashtable *hash) {
 		currentNode = hash->bucket[i]->head;
 		while (currentNode)
 		{
-			// for (int i = 0; i < currentNode->info->numberOfParents; i++)
-			// {
-			// 	fprintf(file, "%s %s\n", currentNode->info->parents[i], currentNode->info->key);
-			// }
-
 			for (int i = 0; i < currentNode->info->heap->size; i++)
 			{
 				fprintf(file, "%s %s\n",currentNode->info->key, currentNode->info->heap->myHeap[0]->key);

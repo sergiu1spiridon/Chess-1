@@ -178,7 +178,6 @@ coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix,unsigned char
 
                 returnValue->posX += i;
                 returnValue->posY += i;
-                printf("d%d %d %d\n",returnValue->posY,returnValue->posX,isNotInCheckAI(getFutureMatrix(returnValue,matrix,typePiece)));
                 if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,typePiece)))
                 {
                     possibleMovement[sizePossible++] = i;
@@ -222,7 +221,6 @@ coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix,unsigned char
     if(sizePossible==0)
         return NULL;
     int diffMovement = possibleMovement[rand()%sizePossible];
-    // printf("main d :%d\n",sizePossible);
 
     returnValue->posX += diffMovement;
     returnValue->posY += diffMovement;
@@ -232,7 +230,6 @@ coord* mainDiagonalMove(int posX, int posY, unsigned char** matrix,unsigned char
 coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix, unsigned char typePiece)
 {
     char* userPieces = "rhbqp";
-    //printf("secondaryDiagonalMove\n");
     coord* returnValue = malloc(sizeof(coord));
     returnValue->posX = posX;
     returnValue->posX_initial = posX;
@@ -299,7 +296,6 @@ coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix, unsigne
     if(sizePossible==0)
         return NULL;
     int diffMovement = possibleMovement[rand()%sizePossible];
-    // printf("sec d :%d\n",sizePossible);
     returnValue->posX += diffMovement;
     returnValue->posY -= diffMovement;
     return returnValue;
@@ -309,7 +305,7 @@ coord* secondaryDiagonalMove(int posX, int posY, unsigned char** matrix, unsigne
 coord* pawnMovement(int posX, int posY, unsigned char** matrix)
 {
     char* userPieces = "rhbqp";
-    char* aiPieces = "RHBQKP";
+    char* aiPieces = "RHBQKP*";
     
     coord* returnValue = malloc(sizeof(coord));
     returnValue->posX = posX;
@@ -347,16 +343,15 @@ coord* pawnMovement(int posX, int posY, unsigned char** matrix)
             returnValue->posY = returnValue->posY_initial;
     }
     //move two spaces
-    if(posY == 1 && strchr(aiPieces,matrix[posY+2][posX])==NULL)
+    if(posY == 1 && strchr(aiPieces,matrix[3][posX])==NULL)
     {
-            returnValue->posY += 2;
-            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,'P')))
-            {
+        returnValue->posY = 3;
+        if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,'P')))
+        {
 
-                   return returnValue;
-            }  
-            returnValue->posX = returnValue->posX_initial;
-            returnValue->posY = returnValue->posY_initial;
+               return returnValue;
+        }  
+        returnValue->posY = 1;
 
     }
 
@@ -712,7 +707,10 @@ unsigned char** getAIMove(unsigned char** matrix)
             i--;
         }
     }
-
+    if(nrOfMoves == 0)
+    {
+        return NULL;
+    }
     coord* aiMove = allPieces[rand()%nrOfMoves];
 
     

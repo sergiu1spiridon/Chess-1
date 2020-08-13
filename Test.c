@@ -55,7 +55,7 @@ unsigned char** randomMatrix()
 
 
 
-int main(int argc, char const *argv[])
+int main()
 {
 	
 	// initial chess table
@@ -100,13 +100,16 @@ int main(int argc, char const *argv[])
 	addToHash(hash,myNode);
 
 
-	//clrscr();
+	clrscr();
 	
 	printf("          ");
 	printf("Welcome to chess\n");
 	srand(time(0));
 	bool userTurn = true;
-	
+	printf("\n\n          ");
+	printf("Press any key to start the game");
+	getc(stdin);
+
 	if(userTurn)
 	{
 		printf("          ");
@@ -116,8 +119,6 @@ int main(int argc, char const *argv[])
 	{
 		printf("          ");
 		printf("The computer will start!\n");
-		//printf("%s\n", (const char*)getKeyFromChessTable(chessMatrix));
-
 
 		chessMatrix = (getAIMove(chessMatrix));
 		
@@ -142,8 +143,7 @@ int main(int argc, char const *argv[])
 
 		if(userTurn == true)
 		{
-			//isNotInCheckAI(chessMatrix);
-			//clrscr();
+			clrscr();
 			printf("          ");
 			printf("Game round %d",round++);
 			printMatrix(chessMatrix);
@@ -164,8 +164,7 @@ int main(int argc, char const *argv[])
 			chessMatrix = getPlayerMove(chessMatrix);
 			if(chessMatrix == NULL)
 			{
-				writeToFile(hash);
-				return 1;
+				break;
 			}
 			//child = (unsigned char*)getKeyFromChessTable(chessMatrix);
 			//upperLowerChange(&child);	
@@ -202,24 +201,24 @@ int main(int argc, char const *argv[])
 			{
 				chessMatrix = getAIMove(chessMatrix);
 			}
-
-			printMatrix(chessMatrix);
-			printf("\n\n          ");
-			printf("Computer Turn. Press any key to continue...");
-
-			if (!isNotInCheckAI(chessMatrix))
-			{
-				printf("\n          ");
-				printf("Check for Player");
-				//is checkmate for Player?
-				if(matrixCmp(chessMatrix,oldChessMatrix)==0)
+			//is checkmate for Player?
+			if(chessMatrix == NULL)
 				{
 					printf("\n\n          ");
 					printf("Checkmate! Player wins!\n\n");
 					break;
 				}
-				
+
+			//is checkmate for Player?
+			if (!isNotInCheckAI(chessMatrix))
+			{
+				printf("\n          ");
+				printf("Check for Player");			
 			}
+			printMatrix(chessMatrix);
+			printf("\n\n          ");
+			printf("Computer Turn. Press any key to continue...");
+
 			getc(stdin);
 			getc(stdin);
 
@@ -232,10 +231,28 @@ int main(int argc, char const *argv[])
 		upperLowerChange(&child);
 		addChildToParent(hash, child, parentKey);
 		parentKey = child;
-		//printMatrix(getChessTableFromKey(child));
 
 		userTurn = !userTurn;
 	}
+
 	writeToFile(hash);
+	getc(stdin);
+	clrscr();
+	printf("\n\n          ");
+	printf("If you want to exit, press X");
+	printf("\n\n          ");
+	printf("If you want to play again, press R\n\n");
+	printf("\n\n          My option is: ");
+	char response = getc(stdin);
+
+	if('x' == tolower(response))
+	{
+		return 0;
+	}
+	else if('r' == tolower(response))
+	{
+		return main();
+	}
+
 	return 0;
 }

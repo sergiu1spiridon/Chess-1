@@ -255,7 +255,7 @@ unsigned char** getPlayerMove(unsigned char** currentMatrix) {
 	scanf("%d %d", &pieceToMove->y, &pieceToMove->x);
 
 	if (validMove(currentMatrix,pieceToMovePos, pieceToMove)&&
-		strchr("RBRKQP*",pieceToMovePos->piece)==NULL)
+		strchr("RBRKQP",pieceToMovePos->piece)==NULL)
 	{
 		unsigned char** nextMatrix = malloc(sizeof(unsigned char*) * 8); 
     	for(int i=0;i<8;i++)
