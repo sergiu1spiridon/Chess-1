@@ -135,7 +135,7 @@ int validBishop(unsigned char **currentMatrix,pieceCoordonate *pieceCurrentPosit
 	}
 	i = pieceCurrentPosition->y;
 	j = pieceCurrentPosition->x;
-	while (i != pieceToMove->y-sgny) {
+	while (i != pieceToMove->y-sgny && j != pieceToMove->x-sgnx) {
 		i += sgny;
 		j += sgnx;
 		if (i > 7 || i < 0 || j > 7 || j < 0)

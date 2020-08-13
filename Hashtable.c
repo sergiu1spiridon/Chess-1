@@ -39,7 +39,6 @@ Node *getFromHash(hashtable *hash, unsigned char *key) {
 // Create and initialize the hashtable
 hashtable *initHashtable(int size) {
 	
-	NULL_PARAM_STRUCT_VALIDATION(size)
 	
 	hashtable *hash = malloc(sizeof(hashtable));
 	hash->size = size;

@@ -97,18 +97,18 @@ int main()
 	myNode->heap = newHeap;
 	myNode->score = getStateScore(parentKey);
 	
-	addToHash(hash,myNode);
+	//addToHash(hash,myNode);
 
 
-	clrscr();
+	// clrscr();
 	
 	printf("          ");
 	printf("Welcome to chess\n");
 	srand(time(0));
-	bool userTurn = true;
+	bool userTurn = rand()%2;
 	printf("\n\n          ");
-	printf("Press any key to start the game");
-	getc(stdin);
+	// printf("Press any key to start the game");
+	// getc(stdin);
 
 	if(userTurn)
 	{
@@ -125,7 +125,7 @@ int main()
 		printMatrix(chessMatrix);
 		printf("\n\n          ");
 		printf("Computer Turn. Press any key to continue...");
-		getc(stdin);
+		//getc(stdin);
 
 		child = (unsigned char*)getKeyFromChessTable(chessMatrix);
 		upperLowerChange(&child);
@@ -143,7 +143,7 @@ int main()
 
 		if(userTurn == true)
 		{
-			clrscr();
+			// clrscr();
 			printf("          ");
 			printf("Game round %d",round++);
 			printMatrix(chessMatrix);
@@ -166,11 +166,6 @@ int main()
 			{
 				break;
 			}
-			//child = (unsigned char*)getKeyFromChessTable(chessMatrix);
-			//upperLowerChange(&child);	
-
-			//addChildToParent(hash, child, parentKey);
-			//parentKey = child;
 
 		}
 		else
@@ -189,7 +184,10 @@ int main()
 			{
 				Node *nod = getFromHash(hash, getKeyFromChessTable(oldChessMatrix));
 				unsigned char *heapExtreme = getExtreme(nod->info->heap);
+				
 				if(heapExtreme) {
+					printHeap(nod->info->heap);
+					
 					chessMatrix = getChessTableFromKey(heapExtreme);
 				}
 				else
@@ -219,8 +217,8 @@ int main()
 			printf("\n\n          ");
 			printf("Computer Turn. Press any key to continue...");
 
-			getc(stdin);
-			getc(stdin);
+			//getc(stdin);
+			//getc(stdin);
 
 			
 		
@@ -237,7 +235,7 @@ int main()
 
 	writeToFile(hash);
 	getc(stdin);
-	clrscr();
+	// clrscr();
 	printf("\n\n          ");
 	printf("If you want to exit, press X");
 	printf("\n\n          ");

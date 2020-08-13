@@ -160,6 +160,31 @@ void printAllHash(hashtable *hash) {
     }
 }
 
+void BFS(hashtable *hash, InfoNode *currentNode, int score) {
+	Node *currentParent;
+         
+         List *myQueue = createList();
+         
+         insertRear(myQueue, currentNode);
+         while ((myQueue->size) != 0)
+         {
+             currentNode = popList(myQueue);
+
+             for (int i = 0; i < currentNode->numberOfParents; i++)
+             {
+               currentParent = getFromHash(hash,currentNode->parents[i]);
+               // printf("gasit parinte:\n");
+               // printMatrix(getChessTableFromKey(currentParent->info->key));
+               currentParent->info->score += score;
+               heapifyFromPos(currentParent->info->heap, currentNode->key, score);
+               
+               // printHeap(currentParent->info->heap);
+               // printf("%d\n", currentParent->info->score);
+               insertRear(myQueue, currentParent->info);
+             }
+         }
+}
+
 int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned char* parentKey)
 {
     
@@ -214,7 +239,9 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
         }
         addInHeap(getFromHash(hash, parentKey)->info->heap, newHeapNode);
 
+
         addToHash(hash, newNode);
+        BFS(hash, newNode, newNode->score);
         //printAllHash(hash);
         //printf("%s\n", getFromHash(hash, chessMatrixKey)->info->key);
     } else {
@@ -266,34 +293,7 @@ int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned ch
 
          addInHeap(currentNode->heap, newHeapNode);
          
-         Node *currentParent;
-         
-         List *myQueue = createList();
-         
-         insertRear(myQueue, currentNode);
-         //printAllHash(hash);
-         while ((myQueue->size) != 0)
-         {
-             currentNode = popList(myQueue);
-             // printf("intra in while size: %d \n", myQueue->size);
-             // printf("%s\n", currentNode->key);
-             
-             // newHeapNode->key = currentNode->key;
-
-             // newHeapNode->score = currentNode->score;
-             
-             for (int i = 0; i < currentNode->numberOfParents; i++)
-             {
-               // printf("%d\n", currentNode->numberOfParents);
-               currentParent = getFromHash(hash,currentNode->parents[i]);
-               // printf("gasit parinte:\n");
-               // printMatrix(getChessTableFromKey(currentParent->info->key));
-               currentParent->info->score += newNode->score;
-               
-               //addInHeap(currentParent->info->heap, newHeapNode);
-               insertRear(myQueue, currentParent->info);
-             }
-         }
+         BFS(hash, currentNode, newNode->score);
          
          
     }

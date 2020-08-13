@@ -18,7 +18,11 @@ typedef struct Heap {
 
 Heap* createHeap();
 
+void printHeap(Heap *heap);
+
 void heapify(Heap*heap);
+
+void heapifyFromPos(Heap *heap, unsigned char *key, int score);
 
 unsigned char* getExtreme(Heap*heap);
 void addInHeap(Heap *heap, HeapNode *heapNode);

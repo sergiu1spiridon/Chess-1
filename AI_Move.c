@@ -45,15 +45,15 @@ coord* horizontalMove(int posX, int posY, unsigned char** matrix,unsigned char t
     {
         if(strchr(userPieces,matrix[posY][i]))
         {
-            returnValue->posX += i;
+            returnValue->posX = i;
             if(returnValue->posX > 7)
-                returnValue->posX -= i;
+                returnValue->posX = i;
             if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,typePiece)))
             {
                 possibleMovement[sizePossible++] = i;
                 possibleMovement[sizePossible++] = i;
             }
-            returnValue->posX -= i;
+            returnValue->posX = i;
         }
         else
         {
@@ -65,15 +65,15 @@ coord* horizontalMove(int posX, int posY, unsigned char** matrix,unsigned char t
     {
         if(strchr(userPieces,matrix[posY][i]))
         {
-            returnValue->posX += i;
+            returnValue->posX = i;
             if(returnValue->posX < 0)
-                returnValue->posX -= i;
+                returnValue->posX = i;
             if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,typePiece)))
             {
                 possibleMovement[sizePossible++] = i;
                 possibleMovement[sizePossible++] = i;
             }
-            returnValue->posX -= i;
+            returnValue->posX = i;
         }
         else
         {
@@ -113,15 +113,15 @@ coord* verticalMove(int posX, int posY, unsigned char** matrix,unsigned char typ
     {
         if(strchr(userPieces,matrix[i][posX]))
         {
-            returnValue->posY += i;
+            returnValue->posY = i;
             if(returnValue->posY>7)
-                returnValue->posY -=i;
+                returnValue->posY =i;
             if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,typePiece)))
             {
                 possibleMovement[sizePossible++] = i;
                 possibleMovement[sizePossible++] = i;
             }
-            returnValue->posY -= i;
+            returnValue->posY = i;
         }
         else
         {
@@ -134,15 +134,15 @@ coord* verticalMove(int posX, int posY, unsigned char** matrix,unsigned char typ
         if(strchr(userPieces,matrix[i][posX]) || 
             matrix[i][posX]=='*')
         {
-            returnValue->posY += i;
+            returnValue->posY = i;
             if(returnValue->posY < 0)
-                returnValue->posY -=i;
+                returnValue->posY =i;
             if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,typePiece)))
             {
                 possibleMovement[sizePossible++] = i;
                 possibleMovement[sizePossible++] = i;
             }
-            returnValue->posY -= i;
+            returnValue->posY = i;
         }
         else
         {
@@ -331,7 +331,7 @@ coord* pawnMovement(int posX, int posY, unsigned char** matrix)
     NULL_PARAM_STRUCT_VALIDATION(matrix)
 
     char* userPieces = "rhbqp";
-    char* aiPieces = "RHBQKP*";
+    char* aiPieces = "RHBQKP";
     
     coord* returnValue = malloc(sizeof(coord));
     NULL_PARAM_STRUCT_VALIDATION(returnValue)
@@ -371,16 +371,18 @@ coord* pawnMovement(int posX, int posY, unsigned char** matrix)
             returnValue->posY = returnValue->posY_initial;
     }
     //move two spaces
-    if(posY == 1 && strchr(aiPieces,matrix[3][posX])==NULL)
+    if(posY == 1 && matrix[2][posX] == '*')
     {
-        returnValue->posY = 3;
-        if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,'P')))
+        if(matrix[3][posX]=='*')
         {
+            returnValue->posY = 3;
+            if(isNotInCheckAI(getFutureMatrix(returnValue,matrix,'P')))
+            {
 
-               return returnValue;
-        }  
-        returnValue->posY = 1;
-
+                   return returnValue;
+            }  
+            returnValue->posY = 1;
+        } 
     }
 
     returnValue->posY++;

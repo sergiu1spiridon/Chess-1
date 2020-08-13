@@ -29,7 +29,7 @@
  * |B(bishop)|    03   |    04    |   05  |
  * |R(rook)  |    05   |    06    |   07  |
  * |Q(queen) |    09   |    10    |   13  |
- * |K(king)  |    00   |    01    |   01  |
+ * |K(king)  |    01   |    01    |   01  |
  *  
 */
 
@@ -41,6 +41,8 @@ unsigned char** getChessTableFromKey(unsigned char* key);
 int getStateScore(unsigned char *chessMatrixKey);
 
 void printAllHash(hashtable *hash);
+
+void BFS(hashtable *hash, InfoNode *currentNode, int score);
 
 // get the score of the state from the table
 int addChildToParent(hashtable *hash, unsigned char* chessMatrixKey, unsigned char* parentKey);
